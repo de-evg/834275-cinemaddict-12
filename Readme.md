@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Денис Минаев](https://up.htmlacademy.ru/ecmascript/12/user/834275).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
