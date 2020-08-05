@@ -20,8 +20,8 @@ import {createFilmsCountTemplate} from "./view/films-count.js";
 import {generateFilm} from "./mock/film.js";
 
 const ALL_FILMS_COUNT = 20;
-const EXTRA_FILMS_CONTAINER_COUNT = 2;
-const EXTRA_FILMS_COUNT = 2;
+const ALL_FILMS_STEP = 5;
+const EXTRA_FILMS_STEP = 2;
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
@@ -34,8 +34,8 @@ const generateFilms = () => {
   return films;
 };
 
-const allFilms = generateFilms();
-console.log(allFilms);
+const films = generateFilms();
+const allFilms = films.slice();
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -52,11 +52,14 @@ render(boardElement, createFilmsListTemplate(), `beforeend`);
 const allFilmsListElement = boardElement.querySelector(`.films-list`);
 render(allFilmsListElement, createAllFilmListTitleTemplate(), `afterbegin`);
 render(allFilmsListElement, createLoadingFilmsTitleTemplate(), `afterbegin`);
-render(boardElement, createNoDataTitleTemplate(), `afterbegin`);
+
+if (!films.length) {
+  render(boardElement, createNoDataTitleTemplate(), `afterbegin`)
+}
 
 const allFilmsListContainerElement = allFilmsListElement.querySelector(`.films-list__container`);
 
-allFilms.forEach((film) => {
+allFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
   render(allFilmsListContainerElement, createFilmTemplate(film), `beforeend`);
 });
 
@@ -69,8 +72,12 @@ const topRatedFilmsListElement = boardElement.querySelector(`.films-list--extra`
 const topRatedFilmsContainerElement = topRatedFilmsListElement.querySelector(`.films-list__container`);
 render(topRatedFilmsListElement, createTopRatedFilmListTitleTemplate(), `afterbegin`);
 
-const topRatedFilms = allFilms.filter((film) => film.rating > 8);
-topRatedFilms.forEach((film) => {
+const topRatedFilms = allFilms
+  .slice()
+  .filter((film) => film.rating > 8)
+  .sort((a, b) => b.rating - a.rating);
+
+topRatedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
   render(topRatedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
 });
 
@@ -78,8 +85,12 @@ const mostCommentedFilmsListElement = boardElement.querySelector(`.films-list--e
 const mostCommentedFilmsContainerElement = mostCommentedFilmsListElement.querySelector(`.films-list__container`);
 render(mostCommentedFilmsListElement, createMostCommentedFilmListTitleTemplate(), `afterbegin`);
 
-const mostCommentedFilms = allFilms.filter((film) => film.comments > 3);
-mostCommentedFilms.forEach((film) => {
+const mostCommentedFilms = allFilms
+  .slice()
+  .filter((film) => film.comments > 3)
+  .sort((a, b) => b.comments - a.comments);
+
+mostCommentedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
   render(mostCommentedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
 });
 
