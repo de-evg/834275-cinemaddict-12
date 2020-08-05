@@ -17,14 +17,16 @@ import {createStatisticFiltersTemplate} from "./view/statistic-filters.js";
 import {createStatisticContentTemplate} from "./view/statistic-content.js";
 import {createStatisticChart} from "./view/statistic-chart.js";
 import {createFilmsCountTemplate} from "./view/films-count.js";
+import {createFilmPopupTemplate} from "./view/film-popup.js";
 import {generateFilm} from "./mock/film.js";
 
 const ALL_FILMS_COUNT = 20;
 const ALL_FILMS_STEP = 5;
 const EXTRA_FILMS_STEP = 2;
-const siteHeaderElement = document.querySelector(`.header`);
-const siteMainElement = document.querySelector(`.main`);
-const siteFooterElement = document.querySelector(`.footer`);
+const siteBodyElement = document.querySelector(`body`);
+const siteHeaderElement = siteBodyElement.querySelector(`.header`);
+const siteMainElement = siteBodyElement.querySelector(`.main`);
+const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
 const generateFilms = () => {
   const films = [];
@@ -54,7 +56,7 @@ render(allFilmsListElement, createAllFilmListTitleTemplate(), `afterbegin`);
 render(allFilmsListElement, createLoadingFilmsTitleTemplate(), `afterbegin`);
 
 if (!films.length) {
-  render(boardElement, createNoDataTitleTemplate(), `afterbegin`)
+  render(boardElement, createNoDataTitleTemplate(), `afterbegin`);
 }
 
 const allFilmsListContainerElement = allFilmsListElement.querySelector(`.films-list__container`);
@@ -104,3 +106,5 @@ render(statisticElement, createStatisticChart(), `beforeend`);
 
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerStatisticElement, createFilmsCountTemplate(), `beforeend`);
+
+render(siteBodyElement, createFilmPopupTemplate(films[0]), `beforeend`);

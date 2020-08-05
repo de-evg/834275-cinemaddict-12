@@ -1,9 +1,12 @@
 import {getRandomInteger} from "../utils.js";
-import {DescCount, CommentCount, GanresCount, Year} from "../const.js";
+import {DescCount, CommentCount, GenresCount} from "../const.js";
 
-const Films = [`Harry Potter`, `Terminator 2`, `Interstellar`, `Alien`];
-const Ganres = [`Comedy`, `Horror`, `Fantastic`, `Drama`];
-
+const Films = [`Harry Potter`, `Terminator 2`, `Interstellar`, `Alien`, `Predator`];
+const Genres = [`Comedy`, `Horror`, `Fantasy`, `Drama`, `Science`];
+const Directors = [`Martin Scorsese`, `Peter Jackson`, `Steven Spielberg`, `Guy Ritchie`];
+const Countries = [`Russia`, `USA`, `France`, `Italy`, `UK`];
+const Writers = [`Fedor Bondarchuk`, `Quentin Tarantino`, `Daria Doncova`, `George R. R. Martin`];
+const Actors = [`Arnold Schwarzenegger`, `Danila Kozlovski`, `Pierre Richard`, `Louis de Funes`, `Rowan Sebastian Atkinson`];
 const Posters = [
   `made-for-each-other.png`,
   `popeye-meets-sinbad.png`,
@@ -19,6 +22,16 @@ const filmDuration = {
   MAX_HOUR: 24,
   MIN_MINUTES: 0,
   MAX_MINUTES: 59
+};
+
+const Age = {
+  MIN: 0,
+  MAX: 18
+};
+
+const generateReleaseDate = (start, end) => {
+  const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  return date;
 };
 
 const generateTitle = () => {
@@ -51,13 +64,33 @@ const generateRating = () => {
   return rating;
 };
 
-const generateGanres = () => {
-  const ganres = new Set();
-  for (let i = GanresCount.MIN; i < GanresCount.MAX; i++) {
-    const index = getRandomInteger(0, Ganres.length - 1);
-    ganres.add(Ganres[index]);
+const generateGenres = () => {
+  const genres = new Set();
+  for (let i = GenresCount.MIN; i < GenresCount.MAX; i++) {
+    const index = getRandomInteger(0, Genres.length - 1);
+    genres.add(Genres[index]);
   }
-  return ganres;
+  return genres;
+};
+
+const generateActors = () => {
+  const actors = new Set();
+  const maxActors = getRandomInteger(1, Actors.length);
+  for (let i = 0; i < maxActors; i++) {
+    const index = getRandomInteger(0, Actors.length - 1);
+    actors.add(Actors[index]);
+  }
+  return actors;
+};
+
+const generateWriters = () => {
+  const writers = new Set();
+  const maxWriters = getRandomInteger(1, Writers.length);
+  for (let i = 0; i < maxWriters; i++) {
+    const index = getRandomInteger(0, Writers.length - 1);
+    writers.add(Writers[index]);
+  }
+  return writers;
 };
 
 const generateDurations = (duration) => {
@@ -66,16 +99,26 @@ const generateDurations = (duration) => {
   return `${hour}h ${minutes}m`;
 };
 
+const generateAgeRaitng = () => {
+  return `${getRandomInteger(Age.MIN, Age.MAX)}+`;
+};
+
 const generateFilm = () => {
   return {
     title: generateTitle(),
+    originalTitle: generateTitle(),
     poster: generatePosterURL(),
     description: generateDescription(),
     comments: getRandomInteger(CommentCount.MIN, CommentCount.MAX),
     rating: generateRating(),
-    year: getRandomInteger(Year.MIN, Year.MAX),
-    ganres: Array.from(generateGanres()),
-    duration: generateDurations(filmDuration)
+    release: generateReleaseDate(new Date(1900, 1, 1), new Date()),
+    genres: Array.from(generateGenres()),
+    duration: generateDurations(filmDuration),
+    country: Countries[getRandomInteger(0, Countries.length - 1)],
+    ageRating: generateAgeRaitng(),
+    director: Directors[getRandomInteger(0, Directors.length - 1)],
+    actors: Array.from(generateActors()),
+    writers: Array.from(generateWriters())
   };
 };
 

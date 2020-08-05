@@ -1,8 +1,6 @@
-import {createAllFilmListTitleTemplate} from "./all-film-list-title";
-
 const createFilmTemplate = (film) => {
-  const {title, rating, year, duration, ganres, poster, description, comments} = film;
-
+  const {title, rating, release, duration, genres, poster, description, comments} = film;
+  const year = release.getFullYear();
   const shortDescription = description.length > 140
     ? `${description.slice(0, 138)}...`
     : description;
@@ -13,7 +11,7 @@ const createFilmTemplate = (film) => {
               <p class="film-card__info">
               <span class="film-card__year">${year}</span>
               <span class="film-card__duration">${duration}</span>
-              <span class="film-card__genre">${ganres[0]}</span>
+              <span class="film-card__genre">${genres[0]}</span>
               </p>
               <img src="./images/posters/${poster}" alt="" class="film-card__poster">
               <p class="film-card__description">${shortDescription}</p>

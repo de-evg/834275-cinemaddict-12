@@ -13,9 +13,9 @@ const Year = {
   MAX: 2020
 };
 
-const GanresCount = {
+const GenresCount = {
   MIN: 1,
   MAX: 3
 };
 
-export {DescCount, CommentCount, Year, GanresCount};
+export {DescCount, CommentCount, Year, GenresCount};
