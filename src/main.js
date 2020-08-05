@@ -83,7 +83,6 @@ mostCommentedFilms.forEach((film) => {
   render(mostCommentedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
 });
 
-
 render(siteMainElement, createStatisticTemplate(), `beforeend`);
 
 const statisticElement = siteMainElement.querySelector(`.statistic`);

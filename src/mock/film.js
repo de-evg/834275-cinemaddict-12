@@ -1,22 +1,34 @@
 import {getRandomInteger} from "../utils.js";
-import {FILMS, POSTERS_URLS, DescCount, CommentCount, Year, GANRES, GanresCount} from "../const.js";
+import {DescCount, CommentCount, GanresCount, Year} from "../const.js";
 
+const Films = [`Harry Potter`, `Terminator 2`, `Interstellar`, `Alien`];
+const Ganres = [`Comedy`, `Horror`, `Fantastic`, `Drama`];
+
+const Posters = [
+  `made-for-each-other.png`,
+  `popeye-meets-sinbad.png`,
+  `sagebrush-trail.jpg`,
+  `santa-claus-conquers-the-martians.jpg`,
+  `the-dance-of-life.jpg`,
+  `the-great-flamarion.jpg`,
+  `the-man-with-the-golden-arm.jpg`
+];
 
 const filmDuration = {
   MIN_HOUR: 0,
   MAX_HOUR: 24,
   MIN_MINUTES: 0,
   MAX_MINUTES: 59
-}
+};
 
 const generateTitle = () => {
-  const index = getRandomInteger(0, FILMS.length - 1);
-  return FILMS[index];
+  const index = getRandomInteger(0, Films.length - 1);
+  return Films[index];
 };
 
 const generatePosterURL = () => {
-  const index = getRandomInteger(0, POSTERS_URLS.length - 1);
-  return POSTERS_URLS[index];
+  const index = getRandomInteger(0, Posters.length - 1);
+  return Posters[index];
 };
 
 const generateDescription = () => {
@@ -42,8 +54,8 @@ const generateRating = () => {
 const generateGanres = () => {
   const ganres = new Set();
   for (let i = GanresCount.MIN; i < GanresCount.MAX; i++) {
-    const index = getRandomInteger(0, GANRES.length - 1);
-    ganres.add(GANRES[index]);
+    const index = getRandomInteger(0, Ganres.length - 1);
+    ganres.add(Ganres[index]);
   }
   return ganres;
 };
@@ -51,7 +63,7 @@ const generateGanres = () => {
 const generateDurations = (duration) => {
   const hour = getRandomInteger(duration.MIN_HOUR, duration.MAX_HOUR);
   const minutes = getRandomInteger(duration.MIN_MINUTES, duration.MAX_MINUTES);
-  return `${hour}h${minutes}m`;
+  return `${hour}h ${minutes}m`;
 };
 
 const generateFilm = () => {
@@ -62,7 +74,7 @@ const generateFilm = () => {
     comments: getRandomInteger(CommentCount.MIN, CommentCount.MAX),
     rating: generateRating(),
     year: getRandomInteger(Year.MIN, Year.MAX),
-    ganre: generateGanres(),
+    ganres: Array.from(generateGanres()),
     duration: generateDurations(filmDuration)
   };
 };
