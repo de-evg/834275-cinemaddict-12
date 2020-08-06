@@ -19,6 +19,8 @@ import {createStatisticChart} from "./view/statistic-chart.js";
 import {createFilmsCountTemplate} from "./view/films-count.js";
 import {createFilmPopupTemplate} from "./view/film-popup.js";
 import {generateFilm} from "./mock/film.js";
+import {generateProfileRang} from "./mock/user-profile.js";
+import {generateFilter} from "./mock/filter.js";
 
 const ALL_FILMS_COUNT = 20;
 const ALL_FILMS_STEP = 5;
@@ -31,7 +33,7 @@ const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 const generateFilms = () => {
   const films = [];
   for (let i = 0; i < ALL_FILMS_COUNT; i++) {
-    films.push(generateFilm());
+    films.push(generateFilm(i));
   }
   return films;
 };
@@ -43,8 +45,10 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(siteHeaderElement, createUserProfileTemplate(), `beforeend`);
-render(siteMainElement, createFilterTemplate(), `beforeend`);
+const profileRang = generateProfileRang();
+render(siteHeaderElement, createUserProfileTemplate(profileRang), `beforeend`);
+const filters = generateFilter(films);
+render(siteMainElement, createFilterTemplate(filters), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 render(siteMainElement, createFilmsBoardTemplate(), `beforeend`);
 
@@ -107,4 +111,15 @@ render(statisticElement, createStatisticChart(), `beforeend`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerStatisticElement, createFilmsCountTemplate(), `beforeend`);
 
-render(siteBodyElement, createFilmPopupTemplate(films[0]), `beforeend`);
+const onFilmClick = (evt) => {
+  console.log(evt.target);
+  const index = films.findIndex((film) => film.id === evt.target.id);
+  render(siteBodyElement, createFilmPopupTemplate(films[index]), `beforeend`);
+  const popupElement = siteBodyElement.querySelector(`.film-details`);
+  const popupCloseElement = popupElement.querySelector(`.film-details__close-btn`);
+  popupCloseElement.addEventListener(`click`, (evtClose) => {
+    evtClose.preventDefault();
+    popupElement.remove();
+  });
+};
+boardElement.addEventListener(`click`, onFilmClick);

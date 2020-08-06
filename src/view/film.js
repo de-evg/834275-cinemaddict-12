@@ -1,11 +1,11 @@
 const createFilmTemplate = (film) => {
-  const {title, rating, release, duration, genres, poster, description, comments} = film;
+  const {title, rating, release, duration, genres, poster, description, comments, id} = film;
   const year = release.getFullYear();
   const shortDescription = description.length > 140
     ? `${description.slice(0, 138)}...`
     : description;
   return (
-    `<article class="film-card">
+    `<article class="film-card" id="${id}">
               <h3 class="film-card__title">${title}</h3>
               <p class="film-card__rating">${rating}</p>
               <p class="film-card__info">

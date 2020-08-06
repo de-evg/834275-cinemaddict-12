@@ -103,8 +103,9 @@ const generateAgeRaitng = () => {
   return `${getRandomInteger(Age.MIN, Age.MAX)}+`;
 };
 
-const generateFilm = () => {
+const generateFilm = (filmID) => {
   return {
+    id: filmID,
     title: generateTitle(),
     originalTitle: generateTitle(),
     poster: generatePosterURL(),
@@ -118,7 +119,10 @@ const generateFilm = () => {
     ageRating: generateAgeRaitng(),
     director: Directors[getRandomInteger(0, Directors.length - 1)],
     actors: Array.from(generateActors()),
-    writers: Array.from(generateWriters())
+    writers: Array.from(generateWriters()),
+    inWatchlist: !!(Math.random() < 0.5),
+    isWatched: !!(Math.random() < 0.5),
+    isFavorite: !!(Math.random() < 0.5)
   };
 };
 
