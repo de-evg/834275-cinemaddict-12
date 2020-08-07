@@ -96,9 +96,11 @@ const topRatedFilms = allFilms
   .filter((film) => film.rating > 8)
   .sort((a, b) => b.rating - a.rating);
 
-topRatedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
-  render(topRatedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
-});
+if (topRatedFilms) {
+  topRatedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
+    render(topRatedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
+  });
+}
 
 const mostCommentedFilmsListElement = boardElement.querySelector(`.films-list--extra:nth-of-type(3)`);
 const mostCommentedFilmsContainerElement = mostCommentedFilmsListElement.querySelector(`.films-list__container`);
@@ -106,12 +108,14 @@ render(mostCommentedFilmsListElement, createMostCommentedFilmListTitleTemplate()
 
 const mostCommentedFilms = allFilms
   .slice()
-  .filter((film) => film.comments > 3)
-  .sort((a, b) => b.comments - a.comments);
+  .filter((film) => film.comments.length > 0)
+  .sort((a, b) => b.comments.length - a.comments.length);
 
-mostCommentedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
-  render(mostCommentedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
-});
+if (mostCommentedFilms.length) {
+  mostCommentedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
+    render(mostCommentedFilmsContainerElement, createFilmTemplate(film), `beforeend`);
+  });
+}
 
 render(siteMainElement, createStatisticTemplate(), `beforeend`);
 
