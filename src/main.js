@@ -21,6 +21,7 @@ import {createFilmPopupTemplate} from "./view/film-popup.js";
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
 import {generateFilter} from "./mock/filter.js";
+import {generateStaistic} from "./mock/statistic.js";
 
 const ALL_FILMS_COUNT = 20;
 const ALL_FILMS_STEP = 5;
@@ -47,6 +48,7 @@ const render = (container, template, place) => {
 
 const profileRang = generateProfileRang();
 render(siteHeaderElement, createUserProfileTemplate(profileRang), `beforeend`);
+
 const filters = generateFilter(films);
 render(siteMainElement, createFilterTemplate(filters), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
@@ -103,16 +105,16 @@ mostCommentedFilms.splice(0, EXTRA_FILMS_STEP).forEach((film) => {
 render(siteMainElement, createStatisticTemplate(), `beforeend`);
 
 const statisticElement = siteMainElement.querySelector(`.statistic`);
-render(statisticElement, createUserRankTemplate(), `beforeend`);
+const statistic = generateStaistic(films);
+render(statisticElement, createUserRankTemplate(statistic), `beforeend`);
 render(statisticElement, createStatisticFiltersTemplate(), `beforeend`);
-render(statisticElement, createStatisticContentTemplate(), `beforeend`);
+render(statisticElement, createStatisticContentTemplate(statistic), `beforeend`);
 render(statisticElement, createStatisticChart(), `beforeend`);
 
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerStatisticElement, createFilmsCountTemplate(), `beforeend`);
 
-const onFilmClick = (evt) => {
-  console.log(evt.target);
+const onFilmClick = (evt) => {  
   const index = films.findIndex((film) => film.id === evt.target.id);
   render(siteBodyElement, createFilmPopupTemplate(films[index]), `beforeend`);
   const popupElement = siteBodyElement.querySelector(`.film-details`);
