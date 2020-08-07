@@ -112,7 +112,7 @@ render(statisticElement, createStatisticContentTemplate(statistic), `beforeend`)
 render(statisticElement, createStatisticChart(), `beforeend`);
 
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
-render(footerStatisticElement, createFilmsCountTemplate(), `beforeend`);
+render(footerStatisticElement, createFilmsCountTemplate(films), `beforeend`);
 
 const onFilmClick = (evt) => {  
   const index = films.findIndex((film) => film.id === evt.target.id);
