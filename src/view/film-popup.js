@@ -13,30 +13,28 @@ const createFilmPopupTemplate = (film) => {
     description,
     ageRating,
     comments} = film;
-console.log(film);
+
   const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
   const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
 
   const createCommentTemplate = () => {
-    const commentsElements = [];
-    for (let i = 0; i < comments; i++) {
-      commentsElements.push(
-          `<li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-            </span>
-            <div>
-              <p class="film-details__comment-text">Interesting setting and a good cast</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">Tim Macoveev</span>
-                <span class="film-details__comment-day">2019/12/31 23:59</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>`
-      );
-    }
-    return commentsElements.join(``);
+    return comments
+      .map((comment) => {
+        return `<li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${comment.message}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">${comment.author}</span>
+            <span class="film-details__comment-day">${comment.date}</span>
+            <button class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`;
+      })
+      .join(``);
   };
 
   return `<section class="film-details">
@@ -116,7 +114,7 @@ console.log(film);
 
       <div class="form-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments}</span></h3>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
           <ul class="film-details__comments-list">
           ${createCommentTemplate()}

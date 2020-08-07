@@ -1,7 +1,7 @@
-const crateFilterItemTemplate = (filterName, count) => {  
+const crateFilterItemTemplate = (filterName, count) => {
   const title = `${filterName[0].toUpperCase()}${filterName.slice(1)}`;
   return `<a href="#${filterName}" class="main-navigation__item">${title} <span class="main-navigation__item-count">${count}</span></a>`;
-}
+};
 
 const createFilterTemplate = (filters) => {
   const filterItemsTemplate = filters

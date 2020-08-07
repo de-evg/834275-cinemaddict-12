@@ -1,5 +1,6 @@
 import {getRandomInteger} from "../utils.js";
 import {DescCount, CommentCount, GenresCount} from "../const.js";
+import {generateComment} from "./comment.js";
 
 const Films = [`Harry Potter`, `Terminator 2`, `Interstellar`, `Alien`, `Predator`];
 const Genres = [`Comedy`, `Horror`, `Fantasy`, `Drama`, `Science`];
@@ -103,14 +104,22 @@ const generateAgeRaitng = () => {
   return `${getRandomInteger(Age.MIN, Age.MAX)}+`;
 };
 
-const generateFilm = (filmID) => {
+const generateComments = () => {
+  const commentCount = getRandomInteger(CommentCount.MIN, CommentCount.MAX);
+  const commetns = [];
+  for (let i = 0; i < commentCount; i++) {
+    commetns.push(generateComment());    
+  }
+  return commetns;
+};
+
+const generateFilm = () => {
   return {
-    id: filmID,
     title: generateTitle(),
     originalTitle: generateTitle(),
     poster: generatePosterURL(),
     description: generateDescription(),
-    comments: getRandomInteger(CommentCount.MIN, CommentCount.MAX),
+    comments: generateComments(),
     rating: generateRating(),
     release: generateReleaseDate(new Date(1900, 1, 1), new Date()),
     genres: Array.from(generateGenres()),

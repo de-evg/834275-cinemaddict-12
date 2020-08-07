@@ -23,7 +23,7 @@ import {generateProfileRang} from "./mock/user-profile.js";
 import {generateFilter} from "./mock/filter.js";
 import {generateStaistic} from "./mock/statistic.js";
 
-const ALL_FILMS_COUNT = 20;
+const ALL_FILMS_COUNT = 23;
 const ALL_FILMS_STEP = 5;
 const EXTRA_FILMS_STEP = 2;
 const siteBodyElement = document.querySelector(`body`);
@@ -73,6 +73,17 @@ allFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
 
 render(allFilmsListElement, createLoadMoreBtnTemplate(), `beforeend`);
 
+const loadMoreBtnElement = allFilmsListElement.querySelector(`.films-list__show-more`);
+loadMoreBtnElement.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  allFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
+    render(allFilmsListContainerElement, createFilmTemplate(film), `beforeend`);
+  });
+  if (!allFilms.length) {
+    loadMoreBtnElement.remove();
+  }
+});
+
 render(boardElement, createExtraFilmsListTemplate(), `beforeend`);
 render(boardElement, createExtraFilmsListTemplate(), `beforeend`);
 
@@ -114,14 +125,10 @@ render(statisticElement, createStatisticChart(), `beforeend`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerStatisticElement, createFilmsCountTemplate(films), `beforeend`);
 
-const onFilmClick = (evt) => {  
-  const index = films.findIndex((film) => film.id === evt.target.id);
-  render(siteBodyElement, createFilmPopupTemplate(films[index]), `beforeend`);
-  const popupElement = siteBodyElement.querySelector(`.film-details`);
-  const popupCloseElement = popupElement.querySelector(`.film-details__close-btn`);
-  popupCloseElement.addEventListener(`click`, (evtClose) => {
-    evtClose.preventDefault();
-    popupElement.remove();
-  });
-};
-boardElement.addEventListener(`click`, onFilmClick);
+render(siteBodyElement, createFilmPopupTemplate(films[0]), `beforeend`);
+const popupElement = siteBodyElement.querySelector(`.film-details`);
+const popupCloseElement = popupElement.querySelector(`.film-details__close-btn`);
+popupCloseElement.addEventListener(`click`, (evtClose) => {
+  evtClose.preventDefault();
+  popupElement.remove();
+});
