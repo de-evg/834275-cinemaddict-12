@@ -1,5 +1,5 @@
 const createFilmTemplate = (film) => {
-  const {title, rating, release, duration, genres, poster, description, comments, id} = film;
+  const {title, rating, release, duration, genres, poster, description, comments} = film;
   const year = release.getFullYear();
   const shortDescription = description.length > 140
     ? `${description.slice(0, 138)}...`

@@ -108,7 +108,7 @@ const generateComments = () => {
   const commentCount = getRandomInteger(CommentCount.MIN, CommentCount.MAX);
   const commetns = [];
   for (let i = 0; i < commentCount; i++) {
-    commetns.push(generateComment());    
+    commetns.push(generateComment());
   }
   return commetns;
 };

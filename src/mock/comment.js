@@ -10,7 +10,7 @@ const messages = [
 
 const generateDate = (start, end) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  const checkOnLeadingZero = (someDate) => {    
+  const checkOnLeadingZero = (someDate) => {
     return someDate < 10 ? `0${someDate}` : someDate;
   };
   const year = date.getFullYear();
