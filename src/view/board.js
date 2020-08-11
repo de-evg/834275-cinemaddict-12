@@ -1,14 +1,12 @@
 import {createElement} from "../utils.js";
 
-class FilmList {
+class Board {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<section class="films-list">              
-              <div class="films-list__container"></div>            
-            </section>`;
+    return `<section class="films"></section>`
   }
 
   getElement() {
@@ -23,4 +21,5 @@ class FilmList {
     this._element = null;
   }
 }
-export default FilmList;
+
+export default Board;

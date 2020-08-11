@@ -1,17 +1,15 @@
 import {createElement} from "../utils.js";
 
-class FilmList {
+class LoadingFilms {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<section class="films-list">              
-              <div class="films-list__container"></div>            
-            </section>`;
+    return `<h2 class="films-list__title">Loading...</h2>`
   }
 
-  getElement() {
+  getElelment() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
@@ -19,8 +17,9 @@ class FilmList {
     return this._element;
   }
 
-  removeElement() {
+  removerElement() {
     this._element = null;
   }
 }
-export default FilmList;
+
+export default LoadingFilms;
