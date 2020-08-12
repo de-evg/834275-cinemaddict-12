@@ -1,12 +1,12 @@
 import {createElement} from "../utils";
 
-class NoDataTitle {
+class TopRatedListTitle {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<h2 class="films-list__title">There are no movies in our database</h2>`;
+    return `<h2 class="films-list__title">Top rated</h2>`;
   }
 
   getElement() {
@@ -16,6 +16,10 @@ class NoDataTitle {
 
     return this._element;
   }
+
+  removeElement() {
+    this._element = null;
+  }
 }
 
-export default NoDataTitle;
+export default TopRatedListTitle;

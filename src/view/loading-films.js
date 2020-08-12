@@ -1,15 +1,15 @@
 import {createElement} from "../utils.js";
 
-class AllFilmListTitle {
+class LoadingFilms {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>`;
+    return `<h2 class="films-list__title">Loading...</h2>`;
   }
 
-  getElement() {
+  getElelment() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
@@ -17,8 +17,9 @@ class AllFilmListTitle {
     return this._element;
   }
 
-  removeElement() {
+  removerElement() {
     this._element = null;
   }
 }
-export default AllFilmListTitle;
+
+export default LoadingFilms;

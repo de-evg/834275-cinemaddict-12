@@ -1,12 +1,12 @@
-import {createElement} from "../utils";
+import {createElement} from "../utils.js";
 
-class NoDataTitle {
+class Board {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<h2 class="films-list__title">There are no movies in our database</h2>`;
+    return `<section class="films"></section>`;
   }
 
   getElement() {
@@ -16,6 +16,10 @@ class NoDataTitle {
 
     return this._element;
   }
+
+  removeElement() {
+    this._element = null;
+  }
 }
 
-export default NoDataTitle;
+export default Board;
