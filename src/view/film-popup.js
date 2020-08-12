@@ -41,12 +41,12 @@ class FilmPopup {
       description,
       ageRating,
       comments,
-      inWatchlist, 
-      isWatched, 
+      inWatchlist,
+      isWatched,
       isFavorite} = this._film;
 
     const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
-    const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);    
+    const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
 
     return `<section class="film-details">
               <form class="film-details__inner" action="" method="get">
