@@ -7,7 +7,7 @@ class FilmsCount {
   }
 
   getTemplate() {
-    return `<p>${this._count} movies inside</p>`
+    return `<p>${this._count} movies inside</p>`;
   }
 
   getElement() {

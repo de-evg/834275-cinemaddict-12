@@ -7,7 +7,7 @@ import ExtraFilmsListView from "./view/extra-films-list.js";
 import AllFilmsListTitleView from "./view/all-film-list-title.js";
 import TopRatedListTitleView from "./view/top-rated-list-title.js";
 import MostCommentedListTitleView from "./view/most-commented-list-title.js";
-import {createNoDataTitleTemplate} from "./view/no-data-title.js";
+import NoDataTitleView from "./view/no-data-title.js";
 import LoadMoreBtnView from "./view/load-more-btn.js";
 import LoadingFilmsView from "./view/loading-films.js";
 import FilmView from "./view/film";
@@ -53,7 +53,7 @@ render(allFilmsListComponent.getElement(), new AllFilmsListTitleView().getElemen
 render(allFilmsListComponent.getElement(), new LoadingFilmsView().getElelment(), RenderPosition.AFTERBEGIN);
 
 if (!films.length) {
-  render(boardComponent.getElelment(), createNoDataTitleTemplate(), RenderPosition.AFTERBEGIN);
+  render(boardComponent.getElelment(), new NoDataTitleView().getElement(), RenderPosition.AFTERBEGIN);
 }
 const allFilmsListContainerElement = allFilmsListComponent.getElement().querySelector(`.films-list__container`);
 allFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
