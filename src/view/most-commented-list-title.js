@@ -1,14 +1,12 @@
 import {createElement} from "../utils";
 
-class StatisticChart {
+class MostCommentedListTitle {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return `<div class="statistic__chart-wrap">
-              <canvas class="statistic__chart" width="1000"></canvas>
-            </div>`;
+    return `<h2 class="films-list__title">Most commented</h2>`;
   }
 
   getElement() {
@@ -24,4 +22,4 @@ class StatisticChart {
   }
 }
 
-export default StatisticChart;
+export default MostCommentedListTitle;
