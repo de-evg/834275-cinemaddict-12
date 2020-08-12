@@ -39,10 +39,12 @@ const sortedFilmsBy = {
   all: films.slice(),
   rating: films
     .slice()
-    .sort((a, b) => b.rating - a.rating),
+    .sort((a, b) => b.rating - a.rating)
+    .filter((film) => film.rating),
   comments: films
     .slice()
     .sort((a, b) => b.comments.length - a.comments.length)
+    .filter((film) => film.comments.length)
 };
 const profileRang = generateProfileRang();
 const filters = generateFilter(films);

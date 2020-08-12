@@ -40,10 +40,13 @@ class FilmPopup {
       genres,
       description,
       ageRating,
-      comments} = this._film;
+      comments,
+      inWatchlist, 
+      isWatched, 
+      isFavorite} = this._film;
 
     const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
-    const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
+    const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);    
 
     return `<section class="film-details">
               <form class="film-details__inner" action="" method="get">
@@ -109,13 +112,13 @@ class FilmPopup {
                   </div>
 
                   <section class="film-details__controls">
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${inWatchlist ? `checked` : ``}>
                     <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
                     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+                    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
                     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                   </section>
                 </div>

@@ -7,8 +7,11 @@ class Film {
   }
 
   getTemplate() {
-    const {title, rating, release, duration, genres, poster, description, comments} = this._film;
+    const {title, rating, release, duration, genres, poster, description, comments, inWatchlist, isWatched, isFavorite} = this._film;
     const year = release.getFullYear();
+    const watchlistClassName = inWatchlist ? `film-card__controls-item--active` : null;
+    const watchedClassName = isWatched ? `film-card__controls-item--active` : null;
+    const favoriteClassName = isFavorite ? `film-card__controls-item--active` : null;
     const shortDescription = description.length > 140
       ? `${description.slice(0, 138)}...`
       : description;
@@ -25,9 +28,9 @@ class Film {
         <p class="film-card__description">${shortDescription}</p>
         <a class="film-card__comments">${comments.length} comments</a>
         <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClassName}">Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedClassName}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}">Mark as favorite</button>
         </form>
     </article>`;
   }
