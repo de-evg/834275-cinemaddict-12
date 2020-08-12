@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import {createElement} from "../utils.js";
 
 class ExtraFilmsList {
   constructor() {

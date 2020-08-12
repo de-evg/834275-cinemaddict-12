@@ -6,7 +6,7 @@ class Board {
   }
 
   getTemplate() {
-    return `<section class="films"></section>`
+    return `<section class="films"></section>`;
   }
 
   getElement() {

@@ -23,4 +23,5 @@ class FilmList {
     this._element = null;
   }
 }
+
 export default FilmList;
