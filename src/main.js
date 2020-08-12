@@ -59,7 +59,7 @@ const renderFilms = (filmListElement, film) => {
       target.classList.contains(`film-card__poster`) ||
       target.classList.contains(`film-card__comments`)) {
       evt.preventDefault();
-      render(siteBodyElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+      siteBodyElement.appendChild(filmPopupComponent.getElement());
       filmPopupComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, closePopupComponent);
       filmComponent.getElement().removeEventListener(`click`, showPopupComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
@@ -69,7 +69,7 @@ const renderFilms = (filmListElement, film) => {
 
   const closePopupComponent = (evt) => {
     evt.preventDefault();
-    filmPopupComponent.getElement().remove();
+    siteBodyElement.removeChild(filmPopupComponent.getElement());
     filmPopupComponent.removeElement();
     filmComponent.getElement().addEventListener(`click`, showPopupComponent);
     document.removeEventListener(`keydown`, onEscKeyDown);
@@ -88,7 +88,6 @@ const renderFilms = (filmListElement, film) => {
 
   render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 };
-
 
 const renderMainFilmList = (boardFilms) => {
   const allFilmsListComponent = new FilmListView();
