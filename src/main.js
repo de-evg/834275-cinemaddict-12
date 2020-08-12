@@ -64,20 +64,16 @@ const renderFilms = (filmListElement, film) => {
       filmComponent.getElement().removeEventListener(`click`, showPopupComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
     }
-
   };
 
-  const closePopupComponent = (evt) => {
-    evt.preventDefault();
+  const closePopupComponent = () => {    
     siteBodyElement.removeChild(filmPopupComponent.getElement());
     filmPopupComponent.removeElement();
-    filmComponent.getElement().addEventListener(`click`, showPopupComponent);
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
+    if (evt.key === `Escape` || evt.key === `Esc`) {      
       closePopupComponent();
       filmComponent.getElement().addEventListener(`click`, showPopupComponent);
       document.removeEventListener(`keydown`, onEscKeyDown);
