@@ -1,6 +1,6 @@
 import {createElement} from "../utils";
 
-class NoDataTitle {
+class NoData {
   constructor() {
     this._element = null;
   }
@@ -18,4 +18,4 @@ class NoDataTitle {
   }
 }
 
-export default NoDataTitle;
+export default NoData;
