@@ -1,4 +1,4 @@
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
 
 const userRank = [
   `Sci-Fighter`, `Sci-Defender`, `Sci-Finder`, `Sci-Minder`

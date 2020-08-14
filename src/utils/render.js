@@ -37,4 +37,25 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export {render, renderTemplate, createElement};
+const insert = (container, element) => {
+  if (element instanceof Abstract) {
+    element = element.getElement();
+  }
+
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+
+  container.appendChild(element);
+};
+
+const remove = (component) => {
+  if (component instanceof Abstract) {
+    component.getElement().remove();
+    component.removeElement();
+  } else {
+    throw new Error(`Can remove only components`);
+  }
+};
+
+export {RenderPosition, render, renderTemplate, createElement, insert, remove};

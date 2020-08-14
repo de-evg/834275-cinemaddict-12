@@ -4,6 +4,8 @@ class Film extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+    this._callback = {};
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
@@ -33,6 +35,20 @@ class Film extends AbstractView {
         <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}">Mark as favorite</button>
         </form>
     </article>`;
+  }
+
+  _clickHandler(evt) {
+    const target = evt.target;
+    if (target.classList.contains(`film-card__title`) || target.classList.contains(`film-card__poster`) || target.classList.contains(`film-card__comments`)) {
+      evt.preventDefault();
+      this._callback.click();
+    }
+
+  }
+
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }
 
