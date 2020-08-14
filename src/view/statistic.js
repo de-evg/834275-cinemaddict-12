@@ -1,24 +1,8 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class Statistic {
-  constructor() {
-    this._element = null;
-  }
-
+class Statistic extends AbstractView {
   getTemplate() {
     return `<section class="statistic"></section>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElment() {
-    this._element = null;
   }
 }
 

@@ -1,24 +1,8 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-class LoadingFilms {
-  constructor() {
-    this._element = null;
-  }
-
+class LoadingFilms extends AbstractView {
   getTemplate() {
     return `<h2 class="films-list__title">Loading...</h2>`;
-  }
-
-  getElelment() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removerElement() {
-    this._element = null;
   }
 }
 

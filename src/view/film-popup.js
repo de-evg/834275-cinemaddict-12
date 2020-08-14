@@ -1,12 +1,12 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class FilmPopup {
+class FilmPopup extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
 
-  createCommentTemplate(comments) {
+  _createCommentTemplate(comments) {
     return comments
     .map((comment) => {
       return `<li class="film-details__comment">
@@ -128,7 +128,7 @@ class FilmPopup {
                     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
                     <ul class="film-details__comments-list">
-                    ${this.createCommentTemplate(comments)}
+                    ${this._createCommentTemplate(comments)}
                     </ul>
 
                     <div class="film-details__new-comment">
@@ -164,18 +164,6 @@ class FilmPopup {
                 </div>
               </form>
             </section>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

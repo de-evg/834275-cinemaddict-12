@@ -1,10 +1,6 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class StatisticFilters {
-  constructor() {
-    this._element = null;
-  }
-
+class StatisticFilters extends AbstractView {
   getTemplate() {
     return `<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
               <p class="statistic__filters-description">Show stats:</p>
@@ -24,18 +20,6 @@ class StatisticFilters {
               <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
               <label for="statistic-year" class="statistic__filters-label">Year</label>
             </form>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

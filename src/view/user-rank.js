@@ -1,8 +1,8 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class UserRank {
+class UserRank extends AbstractView {
   constructor(rank) {
-    this._element = null;
+    super();
     this._rank = rank;
   }
 
@@ -12,18 +12,6 @@ class UserRank {
               <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
               <span class="statistic__rank-label">${this._rank}</span>
             </p>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
