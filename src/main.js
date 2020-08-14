@@ -7,7 +7,7 @@ import ExtraFilmsListView from "./view/extra-films-list.js";
 import AllFilmsListTitleView from "./view/all-film-list-title.js";
 import TopRatedListTitleView from "./view/top-rated-list-title.js";
 import MostCommentedListTitleView from "./view/most-commented-list-title.js";
-import NoDataTitleView from "./view/no-data-title.js";
+import NoDataView from "./view/no-data.js";
 import LoadMoreBtnView from "./view/load-more-btn.js";
 import LoadingFilmsView from "./view/loading-films.js";
 import FilmView from "./view/film";
@@ -64,20 +64,16 @@ const renderFilms = (filmListElement, film) => {
       filmComponent.getElement().removeEventListener(`click`, showPopupComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
     }
-
   };
 
-  const closePopupComponent = (evt) => {
-    evt.preventDefault();
+  const closePopupComponent = () => {    
     siteBodyElement.removeChild(filmPopupComponent.getElement());
     filmPopupComponent.removeElement();
-    filmComponent.getElement().addEventListener(`click`, showPopupComponent);
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
+    if (evt.key === `Escape` || evt.key === `Esc`) {      
       closePopupComponent();
       filmComponent.getElement().addEventListener(`click`, showPopupComponent);
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -92,28 +88,32 @@ const renderFilms = (filmListElement, film) => {
 const renderMainFilmList = (boardFilms) => {
   const allFilmsListComponent = new FilmListView();
   render(boardComponent.getElement(), allFilmsListComponent.getElement(), RenderPosition.BEFOREEND);
-  render(allFilmsListComponent.getElement(), new AllFilmsListTitleView().getElement(), RenderPosition.AFTERBEGIN);
-  render(allFilmsListComponent.getElement(), new LoadingFilmsView().getElelment(), RenderPosition.AFTERBEGIN);
-  if (!films.length) {
-    render(boardComponent.getElelment(), new NoDataTitleView().getElement(), RenderPosition.AFTERBEGIN);
-  }
-  const allFilmsListContainerElement = allFilmsListComponent.getElement().querySelector(`.films-list__container`);
-  boardFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
-    renderFilms(allFilmsListContainerElement, film);
-  });
-
-  const loadMoreBtnComponent = new LoadMoreBtnView();
-  loadMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
-    evt.preventDefault();
+  if (boardFilms.length) {
+    render(allFilmsListComponent.getElement(), new AllFilmsListTitleView().getElement(), RenderPosition.AFTERBEGIN);
+    const allFilmsListContainerElement = allFilmsListComponent.getElement().querySelector(`.films-list__container`);
+    const loadingFilmsComponent = new LoadingFilmsView();
+    render(allFilmsListComponent.getElement(), loadingFilmsComponent.getElelment(), RenderPosition.AFTERBEGIN);
     boardFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
-      render(allFilmsListContainerElement, new FilmView(film).getElement(), RenderPosition.BEFOREEND);
+      renderFilms(allFilmsListContainerElement, film);
     });
-    if (!boardFilms.length) {
-      loadMoreBtnComponent.getElement().remove();
-      loadMoreBtnComponent.removeElement();
-    }
-  });
-  render(allFilmsListComponent.getElement(), loadMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
+    loadingFilmsComponent.getElelment().remove();
+    const loadMoreBtnComponent = new LoadMoreBtnView();
+    loadMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      render(allFilmsListComponent.getElement(), loadingFilmsComponent.getElelment(), RenderPosition.AFTERBEGIN);
+      boardFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
+        render(allFilmsListContainerElement, new FilmView(film).getElement(), RenderPosition.BEFOREEND);
+      });
+      loadingFilmsComponent.getElelment().remove();
+      if (!boardFilms.length) {
+        loadMoreBtnComponent.getElement().remove();
+        loadMoreBtnComponent.removeElement();
+      }
+    });
+    render(allFilmsListComponent.getElement(), loadMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
+  } else {
+    render(allFilmsListComponent.getElement(), new NoDataView().getElement(), RenderPosition.AFTERBEGIN);
+  }
 };
 
 const renderExtraFilmList = (listTitleElement, boardFilms) => {

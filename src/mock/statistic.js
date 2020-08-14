@@ -23,24 +23,28 @@ const countDurationWatchedFilms = (films) => {
 };
 
 const findTopGenre = (films) => {
-  const generateGenreMap = () => {
-    const GenreMap = {};
-    films.map((film) => {
-      film.genres.forEach((genre) => {
-        if (film.isWatched) {
-          GenreMap[genre] = genre in GenreMap ? GenreMap[genre] + 1 : 0;
-        }
+  if (films.length) {
+    const generateGenreMap = () => {
+      const GenreMap = {};
+      films.map((film) => {
+        film.genres.forEach((genre) => {
+          if (film.isWatched) {
+            GenreMap[genre] = genre in GenreMap ? GenreMap[genre] + 1 : 0;
+          }
+        });
       });
-    });
-    return GenreMap;
-  };
-  const GenreMap = generateGenreMap();
-  const sortGenres = (genre) => {
-    return Object.entries(genre)
-      .sort((a, b) => b[1] - a[1]);
-  };
-  const topGanres = sortGenres(GenreMap);
-  return topGanres[0][0];
+      return GenreMap;
+    };
+    const GenreMap = generateGenreMap();
+    const sortGenres = (genre) => {
+      return Object.entries(genre)
+        .sort((a, b) => b[1] - a[1]);
+    };
+    const topGanres = sortGenres(GenreMap);
+    return topGanres[0][0];
+  } else {
+    return ``;
+  }
 };
 
 const generateStaistic = (films) => {
