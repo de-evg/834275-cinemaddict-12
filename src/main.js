@@ -88,9 +88,8 @@ const renderMainFilmList = (boardFilms) => {
       renderFilms(allFilmsListContainerElement, film);
     });
     loadingFilmsComponent.getElement().remove();
-    const loadMoreBtnComponent = new LoadMoreBtnView();
-    loadMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
+    const loadMoreBtnComponent = new LoadMoreBtnView();    
+    loadMoreBtnComponent.setClickHandler(() => {
       render(allFilmsListComponent, loadingFilmsComponent, RenderPosition.AFTERBEGIN);
       boardFilms.splice(0, ALL_FILMS_STEP).forEach((film) => {
         render(allFilmsListContainerElement, new FilmView(film), RenderPosition.BEFOREEND);
