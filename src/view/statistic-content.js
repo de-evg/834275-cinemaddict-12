@@ -1,8 +1,8 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class StaticticContent {
+class StaticticContent extends AbstractView {
   constructor(statistic) {
-    this._element = null;
+    super();
     this._statistic = statistic;
   }
 
@@ -24,18 +24,6 @@ class StaticticContent {
                   <p class="statistic__item-text">${genre}</p>
               </li>
             </ul>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,12 +1,14 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class FilmPopup {
+class FilmPopup extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
+    this._callback = {};
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
-  createCommentTemplate(comments) {
+  _createCommentTemplate(comments) {
     return comments
     .map((comment) => {
       return `<li class="film-details__comment">
@@ -24,6 +26,16 @@ class FilmPopup {
     </li>`;
     })
     .join(``);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setBtnCloseClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
   }
 
   getTemplate() {
@@ -128,7 +140,7 @@ class FilmPopup {
                     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
                     <ul class="film-details__comments-list">
-                    ${this.createCommentTemplate(comments)}
+                    ${this._createCommentTemplate(comments)}
                     </ul>
 
                     <div class="film-details__new-comment">
@@ -164,18 +176,6 @@ class FilmPopup {
                 </div>
               </form>
             </section>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

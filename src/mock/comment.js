@@ -1,4 +1,4 @@
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
 
 const authors = [
   `Tim Macoveev`, `Brad Pitt`, `Angelina Jolie`, `Leonardo DiKaprio`

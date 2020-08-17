@@ -1,20 +1,8 @@
-import {createElement} from "../utils";
+import AbstractView from "./abstract.js";
 
-class NoData {
-  constructor() {
-    this._element = null;
-  }
-
+class NoData extends AbstractView {
   getTemplate() {
     return `<h2 class="films-list__title">There are no movies in our database</h2>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 }
 

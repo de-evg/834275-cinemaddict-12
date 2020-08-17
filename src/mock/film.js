@@ -1,4 +1,4 @@
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
 import {DescCount, CommentCount, GenresCount} from "../const.js";
 import {generateComment} from "./comment.js";
 

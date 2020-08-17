@@ -1,9 +1,11 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-class Film {
+class Film extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
+    this._callback = {};
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
@@ -35,16 +37,18 @@ class Film {
     </article>`;
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
+  _clickHandler(evt) {
+    const target = evt.target;
+    if (target.classList.contains(`film-card__title`) || target.classList.contains(`film-card__poster`) || target.classList.contains(`film-card__comments`)) {
+      evt.preventDefault();
+      this._callback.click();
     }
 
-    return this._element;
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }
 
