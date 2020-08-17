@@ -4,9 +4,7 @@ import FilmListView from "../view/films-list.js";
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
-import LoadingFilmsView from "../view/loading-films.js";
 import {render, RenderPosition, insert, remove} from "../utils/render.js";
-
 
 const FILMS_STEP = 5;
 const siteBodyElement = document.querySelector(`body`);
@@ -39,6 +37,10 @@ class MovieList {
   }
 
   _renderFilters() {
+
+  }
+
+  _renderSort() {
 
   }
 
@@ -85,10 +87,6 @@ class MovieList {
 
   _renderNoData() {
     render(this._movieListContainer, this._noDataTitle, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderSort() {
-
   }
 
   _handleLoadMoreBtnClick() {

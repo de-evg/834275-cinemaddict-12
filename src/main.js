@@ -86,7 +86,9 @@ const renderExtraFilmList = (listTitleElement, boardFilms) => {
 
 render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilterView(filters), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
+
+const sortComponent = new SortView();
+render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardView();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);

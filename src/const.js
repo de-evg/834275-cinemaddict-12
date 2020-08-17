@@ -18,4 +18,10 @@ const GenresCount = {
   MAX: 3
 };
 
-export {DescCount, CommentCount, Year, GenresCount};
+const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
+export {DescCount, CommentCount, Year, GenresCount, SortType};
