@@ -1,23 +1,5 @@
-const sortFilmsByRelease = (films) => {
-  films.slice.sort((filmA, filmB) => {
-    return filmA.release - filmB.release;
-  });
-};
+const sortByRelease = (filmA, filmB) => filmB.release - filmA.release;
 
-const sortFilmsByRating = (films) => {
-  films.slice.sort((filmA, filmB) => {
-    return filmA.rating - filmB.rating;
-  });
-};
+const sortByRating = (filmA, filmB) => filmB.rating - filmA.rating;
 
-const SortingMap = {
-  default: (films) => films.slice(),
-  release: sortFilmsByRelease,
-  rating: sortFilmsByRating
-};
-
-const sortFilms = (films, sortType) => {
-  return SortingMap[sortType](films);
-};
-
-export {sortFilms};
+export {sortByRelease, sortByRating};

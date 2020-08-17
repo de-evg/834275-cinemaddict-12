@@ -10,9 +10,9 @@ class Sort extends AbstractView {
 
   getTemplate() {
     return `<ul class="sort">
-              <li><a href="#" class="sort__button sort__button--active data-sort-type="${SortType.default}"">Sort by default</a></li>
-              <li><a href="#" class="sort__button" data-sort-type=${SortType.date}>Sort by date</a></li>
-              <li><a href="#" class="sort__button" data-sort-type=${SortType.rating}>Sort by rating</a></li>
+              <li><a href="#" class="sort__button sort__button--active data-sort-type="${SortType.DEFAULT}"">Sort by default</a></li>
+              <li><a href="#" class="sort__button" data-sort-type=${SortType.RELEASE}>Sort by date</a></li>
+              <li><a href="#" class="sort__button" data-sort-type=${SortType.RATING}>Sort by rating</a></li>
             </ul>`;
   }
 
@@ -22,12 +22,12 @@ class Sort extends AbstractView {
     }
 
     evt.preventDefault();
-    this._callback.sortTypeChange();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortTypeChange = callback;
-    this._getElement().addEventListener(`click`, this._callback.sortTypeChange);
+    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
 export default Sort;
