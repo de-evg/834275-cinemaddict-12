@@ -1,7 +1,5 @@
-import UserProfileView from "./view/user-profile.js";
-import FilterView from "./view/filter.js";
-import SortView from "./view/sort.js";
 import BoardView from "./view/board.js";
+import UserProfileView from "./view/user-profile.js";
 import ExtraFilmsListView from "./view/extra-films-list.js";
 import TopRatedListTitleView from "./view/top-rated-list-title.js";
 import MostCommentedListTitleView from "./view/most-commented-list-title.js";
@@ -23,8 +21,8 @@ import {render, RenderPosition, insert, remove} from "./utils/render.js";
 const ALL_FILMS_COUNT = 23;
 const EXTRA_FILMS_STEP = 2;
 const siteBodyElement = document.querySelector(`body`);
+const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteHeaderElement = document.querySelector(`.header`);
-const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 
@@ -85,16 +83,12 @@ const renderExtraFilmList = (listTitleElement, boardFilms) => {
 };
 
 render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilterView(filters), RenderPosition.BEFOREEND);
-
-const sortComponent = new SortView();
-render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardView();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
-const mainMovieListPresenter = new MainMovieListPresenter(boardComponent);
-mainMovieListPresenter.init(sortedFilmsBy.default);
+const mainMovieListPresenter = new MainMovieListPresenter(siteMainElement);
+mainMovieListPresenter.init(films, filters);
 renderExtraFilmList(new TopRatedListTitleView(), sortedFilmsBy.rating);
 renderExtraFilmList(new MostCommentedListTitleView(), sortedFilmsBy.comments);
 

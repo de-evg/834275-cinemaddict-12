@@ -20,7 +20,7 @@ const GenresCount = {
 
 const SortType = {
   DEFAULT: `default`,
-  DATE: `date`,
+  RELEASE: `release`,
   RATING: `rating`
 };
 
