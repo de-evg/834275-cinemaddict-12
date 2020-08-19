@@ -7,6 +7,7 @@ import LoadMoreBtnView from "../view/load-more-btn.js";
 import FilterView from "../view/filter.js";
 import SortView from "../view/sort.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
+import {updateItems} from "../utils/common.js";
 import {sortByRelease, sortByRating} from "../utils/film.js";
 import {SortType} from "../const.js";
 
@@ -27,8 +28,11 @@ class MovieList {
     this._renderedFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
+    this._filmPresnter = {};
+
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(films, filters) {
@@ -82,9 +86,16 @@ class MovieList {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItems(this._films, updatedFilm);
+    this._sourcedFilms = updateItems(this._sourcedFilms, updatedFilm);
+    this._filmPresnter[updatedFilm.id].init(updatedFilm, this._filmsContainerElement);
+  }
+
   _renderFilm(film) {
-    this._filmPresenter = new Film(siteBodyElement);
-    this._filmPresenter.init(film, this._filmsContainerElement);
+    const filmPresenter = new Film(siteBodyElement, this. _handleFilmChange);
+    filmPresenter.init(film, this._filmsContainerElement);
+    this._filmPresnter[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {

@@ -170,6 +170,36 @@ class FilmPopup extends AbstractView {
             </section>`;
   }
 
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback._favoriteClickHandler();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback._watchedClickHandler();
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.whatchedClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
+  }
+
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback._watchlistClickHandler();
+  }
+
+  setWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+  }
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
