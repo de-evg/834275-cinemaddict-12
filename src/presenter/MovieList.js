@@ -1,12 +1,12 @@
-import FilmView from "../view/film";
-import FilmPopupView from "../view/film-popup.js";
+
+import Film from "./Film.js";
 import FilmListView from "../view/films-list.js";
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
 import FilterView from "../view/filter.js";
 import SortView from "../view/sort.js";
-import {render, RenderPosition, insert, remove} from "../utils/render.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortByRelease, sortByRating} from "../utils/film.js";
 import {SortType} from "../const.js";
 
@@ -23,6 +23,7 @@ class MovieList {
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noDataTitleComponent = new NoDataView();
     this._sortComponent = new SortView();
+
     this._renderedFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
@@ -82,30 +83,8 @@ class MovieList {
   }
 
   _renderFilm(film) {
-    const filmComponent = new FilmView(film);
-    const filmPopupComponent = new FilmPopupView(film);
-
-    const showPopupComponent = () => {
-      insert(siteBodyElement, filmPopupComponent);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const closePopupComponent = () => {
-      remove(filmPopupComponent);
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        closePopupComponent();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    filmComponent.setClickHandler(showPopupComponent);
-    filmPopupComponent.setBtnCloseClickHandler(closePopupComponent);
-
-    render(this._filmsContainerElement, filmComponent, RenderPosition.BEFOREEND);
+    this._filmPresenter = new Film(siteBodyElement);
+    this._filmPresenter.init(film, this._filmsContainerElement);
   }
 
   _renderFilms(from, to) {
