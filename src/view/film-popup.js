@@ -1,6 +1,6 @@
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 
-class FilmPopup extends AbstractView {
+class FilmPopup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
@@ -215,8 +215,7 @@ class FilmPopup extends AbstractView {
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
-  }
-  
+  }  
 }
 
 export default FilmPopup;
