@@ -12,7 +12,7 @@ import StatisticChartView from "./view/statistic-chart.js";
 import FilmsCountView from "./view/films-count.js";
 import FilmPopupView from "./view/film-popup.js";
 import MainMovieListPresenter from "./presenter/MovieList.js";
-import {generateFilter} from "./mock/filter.js";
+import {generateFilter} from "./utils/film.js";
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
 import {generateStaistic} from "./mock/statistic.js";

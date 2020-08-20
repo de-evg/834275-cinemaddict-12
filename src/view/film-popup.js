@@ -6,6 +6,9 @@ class FilmPopup extends AbstractView {
     this._film = film;
     this._callback = {};
     this._clickHandler = this._clickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -172,7 +175,7 @@ class FilmPopup extends AbstractView {
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    this._callback._favoriteClickHandler();
+    this._callback.favoriteClick();
   }
 
   setFavoriteClickHandler(callback) {
@@ -182,17 +185,17 @@ class FilmPopup extends AbstractView {
 
   _watchedClickHandler(evt) {
     evt.preventDefault();
-    this._callback._watchedClickHandler();
+    this._callback.watchedClick();
   }
 
   setWatchedClickHandler(callback) {
-    this._callback.whatchedClick = callback;
+    this._callback.watchedClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
   }
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    this._callback._watchlistClickHandler();
+    this._callback.watchlistClick();
   }
 
   setWatchlistClickHandler(callback) {

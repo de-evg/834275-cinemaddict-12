@@ -8,7 +8,7 @@ import FilterView from "../view/filter.js";
 import SortView from "../view/sort.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {updateItems} from "../utils/common.js";
-import {sortByRelease, sortByRating} from "../utils/film.js";
+import {sortByRelease, sortByRating, generateFilter} from "../utils/film.js";
 import {SortType} from "../const.js";
 
 const FILMS_STEP = 5;
@@ -28,7 +28,7 @@ class MovieList {
     this._renderedFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
-    this._filmPresnter = {};
+    this._filmPresenter = {};
 
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -40,6 +40,7 @@ class MovieList {
     this._sourcedFilms = films.slice();
     this._filters = filters.slice();
 
+    this._filterComponent = new FilterView(this._filters);
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderMovieList(this._films);
   }
@@ -49,7 +50,7 @@ class MovieList {
   }
 
   _renderFilters() {
-    render(this._mainElement, new FilterView(this._filters), RenderPosition.AFTERBEGIN);
+    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
   }
 
   _sortFilms(sortType) {
@@ -89,13 +90,22 @@ class MovieList {
   _handleFilmChange(updatedFilm) {
     this._films = updateItems(this._films, updatedFilm);
     this._sourcedFilms = updateItems(this._sourcedFilms, updatedFilm);
-    this._filmPresnter[updatedFilm.id].init(updatedFilm, this._filmsContainerElement);
+    this._udpateFilters(this._films);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm, this._filmsContainerElement);
+  }
+
+  _udpateFilters(films) {
+    const filmsToFilter = films.slice();
+    this._filters = generateFilter(filmsToFilter);
+    remove(this._filterComponent);
+    this._filterComponent = new FilterView(this._filters);
+    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderFilm(film) {
     const filmPresenter = new Film(siteBodyElement, this. _handleFilmChange);
     filmPresenter.init(film, this._filmsContainerElement);
-    this._filmPresnter[film.id] = filmPresenter;
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {
