@@ -2,7 +2,6 @@ import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
 import Comments from "../view/comments.js";
 import {render, RenderPosition, insert, remove, replace} from "../utils/render.js";
-import {EmojiSize} from "../const.js";
 
 class Film {
   constructor(popupContainer, changeData) {
@@ -109,24 +108,20 @@ class Film {
             }
         )
     );
-
   }
 
   _handleEmojiClick(emojiElement) {
-    const currentEmojiContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__add-emoji-label`);
     const parent = emojiElement.parentElement;
-    const inputElement = this._filmPopupComponent.getElement().querySelector(`#${parent.htmlFor}`);
-
-    if (currentEmojiContainer.querySelector(`img`)) {
-      currentEmojiContainer.querySelector(`img`).remove();
-    }
-
-    const clonedEmojiElement = emojiElement.cloneNode(false);
-    clonedEmojiElement.width = EmojiSize.WIDTH;
-    clonedEmojiElement.height = EmojiSize.HEIGHT;
-
-    inputElement.checked = true;
-    insert(currentEmojiContainer, clonedEmojiElement);
+    const emojyName = parent.htmlFor;
+    this._changeData(
+        Object.assign(
+            {},
+            this._film,
+            {
+              emoji: emojyName
+            }
+        )
+    );
   }
 
   _renderFilm() {

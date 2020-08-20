@@ -69,7 +69,9 @@ class MovieList {
   }
 
   _clearFilmList() {
-    this._filmsContainerElement.innerHTML = ``;
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
     this._renderedFilmsCount = FILMS_STEP;
   }
 
