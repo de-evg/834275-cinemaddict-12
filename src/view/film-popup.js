@@ -155,6 +155,18 @@ class FilmPopup extends SmartView {
             </section>`;
   }
 
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
+  }
+
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
@@ -192,10 +204,6 @@ class FilmPopup extends SmartView {
 
   setBtnCloseClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
-  }
-
-  _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
   }
 

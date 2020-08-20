@@ -40,6 +40,19 @@ class Film extends AbstractView {
     </article>`;
   }
 
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._watchedClickHandler);
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, this._clickHandler);
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, this._clickHandler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._clickHandler);
+  }
+
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
