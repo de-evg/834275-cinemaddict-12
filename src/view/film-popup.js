@@ -3,7 +3,7 @@ import SmartView from "./smart.js";
 class FilmPopup extends SmartView {
   constructor(film) {
     super();
-    this._film = film;
+    this._data = FilmPopup.parseFilmToData(film);
     this._callback = {};
     this._clickHandler = this._clickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
@@ -32,7 +32,7 @@ class FilmPopup extends SmartView {
       inWatchlist,
       isWatched,
       isFavorite,
-      emoji} = this._film;
+      emoji} = this._data;
 
     const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
@@ -217,6 +217,13 @@ class FilmPopup extends SmartView {
   setEmojiClickHandler(callback) {
     this._callback.emojiClick = callback;
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+        {},
+        film
+    );
   }
 }
 

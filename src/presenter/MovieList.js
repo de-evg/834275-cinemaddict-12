@@ -33,6 +33,7 @@ class MovieList {
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleOpenNewPopup = this._handleOpenNewPopup.bind(this);
   }
 
   init(films, filters) {
@@ -43,6 +44,12 @@ class MovieList {
     this._filterComponent = new FilterView(this._filters);
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderMovieList(this._films);
+  }
+
+  _handleOpenNewPopup() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.removeOpenedPopup());
   }
 
   _renderTitle() {
@@ -105,7 +112,7 @@ class MovieList {
   }
 
   _renderFilm(film) {
-    const filmPresenter = new Film(siteBodyElement, this. _handleFilmChange);
+    const filmPresenter = new Film(siteBodyElement, this. _handleFilmChange, this._handleOpenNewPopup);
     filmPresenter.init(film, this._filmsContainerElement);
     this._filmPresenter[film.id] = filmPresenter;
   }
