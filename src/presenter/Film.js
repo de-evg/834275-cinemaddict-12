@@ -15,6 +15,7 @@ class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleEmojiClick = this._handleEmojiClick.bind(this);
+    this._EscKeyDownHandler = this._EscKeyDownHandler.bind(this);
   }
 
   init(film, filmsContainer) {
@@ -61,18 +62,18 @@ class Film {
     this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmPopupComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmPopupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._filmPopupComponent.setEmojiClickHandler(this._handleEmojiClick);
+    this._filmPopupComponent.setEmojiClickHandler(this._handleEmojiClick);    
   }
 
   _showPopup() {
     this._changePopup();
     insert(this._popupContainerElement, this._filmPopupComponent);
-    document.addEventListener(`keydown`, this.__EscKeyDownHandler);
+    document.addEventListener(`keydown`, this._EscKeyDownHandler);
   }
 
   removeOpenedPopup() {
     remove(this._filmPopupComponent);
-    document.removeEventListener(`keydown`, this.__EscKeyDownHandler);
+    document.removeEventListener(`keydown`, this._EscKeyDownHandler);
     this._setFilmPopupHandlers();
   }
 
@@ -87,7 +88,7 @@ class Film {
   _EscKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._handleBtnCloseClick();
-      document.removeEventListener(`keydown`, this.__EscKeyDownHandler);
+      document.removeEventListener(`keydown`, this._EscKeyDownHandler);
     }
   }
 
