@@ -9,28 +9,9 @@ class FilmPopup extends SmartView {
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
 
     this._setInnerHandlers();
-  }
-
-  _createCommentTemplate(comments) {
-    return comments
-    .map((comment) => {
-      return `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${comment.message}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${comment.author}</span>
-          <span class="film-details__comment-day">${comment.date}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`;
-    })
-    .join(``);
   }
 
   getTemplate() {
@@ -46,8 +27,8 @@ class FilmPopup extends SmartView {
       country,
       genres,
       description,
-      ageRating,
       comments,
+      ageRating,
       inWatchlist,
       isWatched,
       isFavorite} = this._film;
@@ -132,10 +113,9 @@ class FilmPopup extends SmartView {
 
                 <div class="form-details__bottom-container">
                   <section class="film-details__comments-wrap">
-                    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+                    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>                   
 
                     <ul class="film-details__comments-list">
-                    ${this._createCommentTemplate(comments)}
                     </ul>
 
                     <div class="film-details__new-comment">
@@ -167,7 +147,7 @@ class FilmPopup extends SmartView {
                         </label>
                       </div>
                     </div>
-                  </section>
+                  </section>                  
                 </div>
               </form>
             </section>`;
@@ -215,7 +195,19 @@ class FilmPopup extends SmartView {
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
-  }  
+  }
+
+  _emojiClickHandler(evt) {
+    if (evt.target.tagName === `IMG`) {
+      evt.preventDefault();
+      this._callback.emojiClick(evt.target);
+    }
+  }
+
+  setEmojiClickHandler(callback) {
+    this._callback.emojiClick = callback;
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
+  }
 }
 
 export default FilmPopup;

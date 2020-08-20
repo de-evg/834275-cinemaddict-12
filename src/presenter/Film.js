@@ -1,6 +1,8 @@
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
+import Comments from "../view/comments.js";
 import {render, RenderPosition, insert, remove, replace} from "../utils/render.js";
+import {EmojiSize} from "../const.js";
 
 class Film {
   constructor(popupContainer, changeData) {
@@ -12,6 +14,7 @@ class Film {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleEmojiClick = this._handleEmojiClick.bind(this);
   }
 
   init(film, filmsContainer) {
@@ -22,9 +25,10 @@ class Film {
 
     this._filmComponent = new FilmView(film);
     this._filmPopupComponent = new FilmPopupView(film);
-
+    this._commentsComponent = new Comments(film.comments);
+    this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-list`);
     this._filmsContainerElement = filmsContainer;
-    
+
     this._filmComponent.setClickHandler(this._handleFilmClick);
     this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -34,6 +38,7 @@ class Film {
     this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmPopupComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmPopupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmPopupComponent.setEmojiClickHandler(this._handleEmojiClick);
 
     if (!this._prevFilmComponent || !this._prevFilmPopupComponent) {
       this._renderFilm();
@@ -41,7 +46,7 @@ class Film {
     }
 
     replace(this._filmComponent, this._prevFilmComponent);
-    replace(this._filmPopupComponent, this._prevFilmPopupComponent);    
+    replace(this._filmPopupComponent, this._prevFilmPopupComponent);
 
     remove(this._prevFilmComponent);
     remove(this._prevFilmPopupComponent);
@@ -107,7 +112,25 @@ class Film {
 
   }
 
+  _handleEmojiClick(emojiElement) {
+    const currentEmojiContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+    const parent = emojiElement.parentElement;
+    const inputElement = this._filmPopupComponent.getElement().querySelector(`#${parent.htmlFor}`);
+
+    if (currentEmojiContainer.querySelector(`img`)) {
+      currentEmojiContainer.querySelector(`img`).remove();
+    }
+
+    const clonedEmojiElement = emojiElement.cloneNode(false);
+    clonedEmojiElement.width = EmojiSize.WIDTH;
+    clonedEmojiElement.height = EmojiSize.HEIGHT;
+
+    inputElement.checked = true;
+    insert(currentEmojiContainer, clonedEmojiElement);
+  }
+
   _renderFilm() {
+    render(this._commentsContainer, this._commentsComponent, RenderPosition.BEFOREEND);
     render(this._filmsContainerElement, this._filmComponent, RenderPosition.BEFOREEND);
   }
 }

@@ -24,4 +24,9 @@ const SortType = {
   RATING: `rating`
 };
 
-export {DescCount, CommentCount, Year, GenresCount, SortType};
+const EmojiSize = {
+  WIDTH: 55,
+  HEIGHT: 55
+};
+
+export {DescCount, CommentCount, Year, GenresCount, SortType, EmojiSize};
