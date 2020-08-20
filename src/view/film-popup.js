@@ -89,7 +89,7 @@ class FilmPopup extends SmartView {
                           <td class="film-details__cell">${country}</td>
                         </tr>
                         <tr class="film-details__row">
-                          <td class="film-details__term">Genres</td>
+                          <td class="film-details__term">Genre${genreElements.length > 1 ? `s` : ``}</td>
                           <td class="film-details__cell">
                             ${genreElements.join(``)}</td>
                         </tr>
