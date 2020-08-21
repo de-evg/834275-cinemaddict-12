@@ -9,7 +9,6 @@ class FilmPopup extends SmartView {
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    this._emojiClickHandler = this._emojiClickHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -31,12 +30,10 @@ class FilmPopup extends SmartView {
       ageRating,
       inWatchlist,
       isWatched,
-      isFavorite,
-      emoji} = this._data;
+      isFavorite} = this._data;
 
     const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
-    const emojiTemplate = emoji ? `<img src="images/emoji/${emoji.slice(emoji.indexOf(`-`) + 1)}.png" width="55" height="55" alt="emoji-smile"></img>` : ``;
 
     return `<section class="film-details">
               <form class="film-details__inner" action="" method="get">
@@ -115,40 +112,7 @@ class FilmPopup extends SmartView {
 
                 <div class="form-details__bottom-container">
                   <section class="film-details__comments-wrap">
-                    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>                   
-
-                    <ul class="film-details__comments-list">
-                    </ul>
-
-                    <div class="film-details__new-comment">
-                      <div for="add-emoji" class="film-details__add-emoji-label">${emojiTemplate}</div>
-
-                      <label class="film-details__comment-label">
-                        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-                      </label>
-
-                      <div class="film-details__emoji-list">
-                        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${emoji === `emoji-smile` ? `checked` : ``}>
-                        <label class="film-details__emoji-label" for="emoji-smile">
-                          <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-                        </label>
-
-                        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${emoji === `emoji-sleeping` ? `checked` : ``}>
-                        <label class="film-details__emoji-label" for="emoji-sleeping">
-                          <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-                        </label>
-
-                        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${emoji === `emoji-puke` ? `checked` : ``}>
-                        <label class="film-details__emoji-label" for="emoji-puke">
-                          <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-                        </label>
-
-                        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${emoji === `emoji-angry` ? `checked` : ``}>
-                        <label class="film-details__emoji-label" for="emoji-angry">
-                          <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-                        </label>
-                      </div>
-                    </div>
+                    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
                   </section>                  
                 </div>
               </form>
@@ -164,7 +128,6 @@ class FilmPopup extends SmartView {
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
   }
 
   _favoriteClickHandler(evt) {
@@ -205,18 +168,6 @@ class FilmPopup extends SmartView {
   setBtnCloseClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
-  }
-
-  _emojiClickHandler(evt) {
-    if (evt.target.tagName === `IMG`) {
-      evt.preventDefault();
-      this._callback.emojiClick(evt.target);
-    }
-  }
-
-  setEmojiClickHandler(callback) {
-    this._callback.emojiClick = callback;
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
   }
 
   static parseFilmToData(film) {
