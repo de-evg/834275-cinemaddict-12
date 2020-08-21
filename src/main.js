@@ -6,7 +6,7 @@ import StatisticFiltersView from "./view/statistic-filters.js";
 import StaticticContentView from "./view/statistic-content.js";
 import StatisticChartView from "./view/statistic-chart.js";
 import FilmsCountView from "./view/films-count.js";
-import MainMovieListPresenter from "./presenter/MovieList.js";
+import MovieListPresenter from "./presenter/MovieList.js";
 import {generateFilter} from "./utils/film.js";
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
@@ -25,7 +25,7 @@ const footerStatisticElement = siteFooterElement.querySelector(`.footer__statist
 const films = new Array(ALL_FILMS_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
 
-const sortedFilmsMap = generateSortedFilms();
+const sortedFilmsMap = generateSortedFilms(films);
 const profileRang = generateProfileRang();
 
 render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
@@ -33,7 +33,7 @@ render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOR
 const boardComponent = new BoardView();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
-const mainMovieListPresenter = new MainMovieListPresenter(siteMainElement);
+const mainMovieListPresenter = new MovieListPresenter(siteMainElement);
 mainMovieListPresenter.init(sortedFilmsMap.default, filters);
 
 const statisticComponent = new StatisticView();
