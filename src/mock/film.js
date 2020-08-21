@@ -32,7 +32,7 @@ const Age = {
 
 const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
 
-const generateReleaseDate = (start, end) => {
+const generateDate = (start, end) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   return date;
 };
@@ -124,9 +124,9 @@ const generateFilm = () => {
     description: generateDescription(),
     comments: generateComments(),
     rating: generateRating(),
-    release: generateReleaseDate(new Date(1900, 1, 1), new Date()),
+    release: generateDate(new Date(1900, 1, 1), new Date()),
     genres: Array.from(generateGenres()),
-    duration: generateDurations(filmDuration),
+    duration: generateDate(new Date(1000), new Date(20000)),
     country: Countries[getRandomInteger(0, Countries.length - 1)],
     ageRating: generateAgeRaitng(),
     director: Directors[getRandomInteger(0, Directors.length - 1)],

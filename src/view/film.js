@@ -14,6 +14,12 @@ class Film extends AbstractView {
   getTemplate() {
     const {title, rating, release, duration, genres, poster, description, comments, inWatchlist, isWatched, isFavorite} = this._film;
     const year = release.getFullYear();
+    const generetionDuration = (duration) => {
+      const hours = duration.getHours();
+      const minutes = duration.getMinutes() > 10 ? `${duration.getMinutes()}` : `0${duration.getMinutes()}`;
+      return `${hours}h ${minutes}m`
+    }
+    const durationTime = generetionDuration(duration);
     const watchlistClassName = inWatchlist ? `film-card__controls-item--active` : null;
     const watchedClassName = isWatched ? `film-card__controls-item--active` : null;
     const favoriteClassName = isFavorite ? `film-card__controls-item--active` : null;
@@ -26,7 +32,7 @@ class Film extends AbstractView {
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${durationTime}</span>
         <span class="film-card__genre">${genres[0]}</span>
         </p>
         <img src="./images/posters/${poster}" alt="" class="film-card__poster">
