@@ -5,10 +5,7 @@ class FilmPopup extends SmartView {
     super();
     this._data = FilmPopup.parseFilmToData(film);
     this._callback = {};
-    this._clickHandler = this._clickHandler.bind(this);
-    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
-    this._watchedClickHandler = this._watchedClickHandler.bind(this);
-    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -27,10 +24,7 @@ class FilmPopup extends SmartView {
       genres,
       description,
       comments,
-      ageRating,
-      inWatchlist,
-      isWatched,
-      isFavorite} = this._data;
+      ageRating} = this._data;
 
     const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
@@ -97,22 +91,13 @@ class FilmPopup extends SmartView {
                       </p>
                     </div>
                   </div>
-
-                  <section class="film-details__controls">
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${inWatchlist ? `checked` : ``}>
-                    <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
-                    <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-                    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
-                    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
-                  </section>
+                  
                 </div>
 
                 <div class="form-details__bottom-container">
                   <section class="film-details__comments-wrap">
                     <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+                    <ul class="film-details__comments-list"></ul>                    
                   </section>                  
                 </div>
               </form>
@@ -125,49 +110,37 @@ class FilmPopup extends SmartView {
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
   }
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+    this.updateData({
+      isFavorite: !this._data.isFavorite
+    });
   }
 
   _watchedClickHandler(evt) {
     evt.preventDefault();
-    this._callback.watchedClick();
-  }
-
-  setWatchedClickHandler(callback) {
-    this._callback.watchedClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._watchedClickHandler);
+    this.updateData({
+      isWatched: !this._data.isWatched
+    });
   }
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    this._callback.watchlistClick();
+    this.updateData({
+      inWatchlist: !this._data.inWatchlist
+    });
   }
 
-  setWatchlistClickHandler(callback) {
-    this._callback.watchlistClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
-  }
-
-  _clickHandler(evt) {
+  _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.submit(FilmPopup.parseDataToFilm(this._data));
   }
 
-  setBtnCloseClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
+  setFormSubmitHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._submitHandler);
   }
 
   static parseFilmToData(film) {
@@ -175,6 +148,10 @@ class FilmPopup extends SmartView {
         {},
         film
     );
+  }
+
+  static parseDataToFilm(data) {
+    return Object.assign({}, data);
   }
 }
 

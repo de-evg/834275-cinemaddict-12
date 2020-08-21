@@ -27,7 +27,7 @@ class Smart extends Abstract {
       return;
     }
 
-    Object.assign(
+    this._data = Object.assign(
         {},
         this._data,
         update

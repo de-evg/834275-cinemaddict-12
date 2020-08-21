@@ -1,6 +1,9 @@
 
 import Film from "./Film.js";
 import FilmListView from "../view/films-list.js";
+import ExtraFilmsListView from "./view/extra-films-list.js";
+import TopRatedListTitleView from "./view/top-rated-list-title.js";
+import MostCommentedListTitleView from "./view/most-commented-list-title.js";
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
@@ -12,6 +15,7 @@ import {sortByRelease, sortByRating, generateFilter} from "../utils/film.js";
 import {SortType} from "../const.js";
 
 const FILMS_STEP = 5;
+const EXTRA_FILMS_STEP = 2;
 const siteBodyElement = document.querySelector(`body`);
 
 class MovieList {

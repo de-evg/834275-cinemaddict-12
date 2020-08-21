@@ -1,9 +1,9 @@
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
+import PopupControls from "../view/popup-controls.js";
 import Comment from "../view/comment.js";
-import {render, RenderPosition, remove, replace} from "../utils/render.js";
-import CommentList from "../view/comment-list.js";
 import NewCommentForm from "../view/new-comment.js";
+import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 class Film {
   constructor(popupContainer, changeData, closeAllPopup) {
@@ -12,11 +12,11 @@ class Film {
     this._closeAllPopup = closeAllPopup;
 
     this._handleFilmClick = this._handleFilmClick.bind(this);
-    this._handleBtnCloseClick = this._handleBtnCloseClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleEmojiClick = this._handleEmojiClick.bind(this);
+    this._handlePopupControlChange = this._handlePopupControlChange.bind(this);
     this._EscKeyDownHandler = this._EscKeyDownHandler.bind(this);
   }
 
@@ -42,53 +42,53 @@ class Film {
     remove(this._prevFilmPopupComponent);
   }
 
+  destroy() {
+    remove(this._filmComponent);
+    remove(this._filmPopupComponent);
+  }
+
   _initFilm() {
     this._filmComponent = new FilmView(this._film);
     this._setFilmHandlers();
   }
 
-  _renderCommentList() {
-    render(this._commentsContainer, this._commentListComponent, RenderPosition.BEFOREEND);
+  _renderNewCommentForm() {
+    render(this._commentsContainer, this._newCommentForm, RenderPosition.BEFOREEND);
+  }
+
+  _renderPopupControls() {
+    render(this._popupControlsContainer, this._popupControls, RenderPosition.BEFOREEND);
   }
 
   _renderComments(comments) {
     comments.forEach((comment) => {
-      render(this._commentListComponent, new Comment(comment), RenderPosition.BEFOREEND);
+      render(this._commentListContainer, new Comment(comment), RenderPosition.BEFOREEND);
     });
-  }
-
-  _renderNewCommentForm() {
-    render(this._commentsContainer, this._newCommentFormComponent, RenderPosition.BEFOREEND);
   }
 
   _initPopup() {
     this._filmPopupComponent = new FilmPopupView(this._film);
+    this._newCommentForm = new NewCommentForm(this._film);
+    this._popupControls = new PopupControls(this._film);
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
-    this._newCommentFormComponent = new NewCommentForm(this._film);
-    this._commentListComponent = new CommentList();
-    this._renderCommentList();
+    this._commentListContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-list`);
+    this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
+    this._renderPopupControls();
     this._renderNewCommentForm();
     this._renderComments(this._film.comments);
     this._setFilmPopupHandlers();
-    this._setNewCommentFormHandlers();
   }
 
   _setFilmHandlers() {
     this._filmComponent.setClickHandler(this._handleFilmClick);
-    this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
   }
 
   _setFilmPopupHandlers() {
-    this._filmPopupComponent.setBtnCloseClickHandler(this._handleBtnCloseClick);
-    this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmPopupComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._filmPopupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-  }
-
-  _setNewCommentFormHandlers() {
-    this._newCommentFormComponent.setEmojiClickHandler(this._handleEmojiClick);
+    this._filmPopupComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._popupControls.setChangeControlHandler(this._handlePopupControlChange);
   }
 
   _showPopup() {
@@ -101,22 +101,32 @@ class Film {
   removeOpenedPopup() {
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._EscKeyDownHandler);
-    this._setFilmPopupHandlers();
   }
 
   _handleFilmClick() {
     this._showPopup();
   }
 
-  _handleBtnCloseClick() {
+  _handleFormSubmit(film) {
+    this._changeData(film);
     this.removeOpenedPopup();
   }
 
   _EscKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this._handleBtnCloseClick();
+      this._handleFormSubmit(this._film);
       document.removeEventListener(`keydown`, this._EscKeyDownHandler);
     }
+  }
+
+  _handlePopupControlChange(update) {
+    this._changeData(
+        Object.assign(
+            {},
+            this._film,
+            update
+        )
+    );
   }
 
   _handleWatchlistClick() {
@@ -150,20 +160,6 @@ class Film {
             this._film,
             {
               isFavorite: !this._film.isFavorite
-            }
-        )
-    );
-  }
-
-  _handleEmojiClick(emojiElement) {
-    const parent = emojiElement.parentElement;
-    const emojyName = parent.htmlFor;
-    this._changeData(
-        Object.assign(
-            {},
-            this._film,
-            {
-              emoji: emojyName
             }
         )
     );

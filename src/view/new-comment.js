@@ -1,14 +1,17 @@
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 
-class NewComment extends AbstractView {
+class NewComment extends SmartView {
   constructor(film) {
     super();
-    this._film = film;
+    this._data = film;
+
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    const {emoji} = this._film;
+    const {emoji} = this._data;
     const emojiTemplate = emoji ? `<img src="images/emoji/${emoji.slice(emoji.indexOf(`-`) + 1)}.png" width="55" height="55" alt="emoji-smile"></img>` : ``;
     return `<div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label">${emojiTemplate}</div>
@@ -40,6 +43,9 @@ class NewComment extends AbstractView {
               </div>
             </div>`;
   }
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
@@ -48,13 +54,12 @@ class NewComment extends AbstractView {
   _emojiClickHandler(evt) {
     if (evt.target.tagName === `IMG`) {
       evt.preventDefault();
-      this._callback.emojiClick(evt.target);
+      const parent = evt.target.parentElement;
+      const emojyName = parent.htmlFor;
+      this.updateData({
+        emoji: emojyName
+      });
     }
-  }
-
-  setEmojiClickHandler(callback) {
-    this._callback.emojiClick = callback;
-    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
   }
 }
 
