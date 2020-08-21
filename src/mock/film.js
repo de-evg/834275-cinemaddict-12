@@ -30,6 +30,8 @@ const Age = {
   MAX: 18
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+
 const generateReleaseDate = (start, end) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   return date;
@@ -115,6 +117,7 @@ const generateComments = () => {
 
 const generateFilm = () => {
   return {
+    id: generateId(),
     title: generateTitle(),
     originalTitle: generateTitle(),
     poster: generatePosterURL(),
@@ -131,7 +134,8 @@ const generateFilm = () => {
     writers: Array.from(generateWriters()),
     inWatchlist: !!(Math.random() < 0.5),
     isWatched: !!(Math.random() < 0.5),
-    isFavorite: !!(Math.random() < 0.5)
+    isFavorite: !!(Math.random() < 0.5),
+    emoji: ``
   };
 };
 

@@ -24,4 +24,10 @@ const SortType = {
   RATING: `rating`
 };
 
-export {DescCount, CommentCount, Year, GenresCount, SortType};
+const Controls = {
+  WATCHLIST: `watchlist`,
+  WATCHED: `watched`,
+  FAVORITE: `favorite`
+};
+
+export {DescCount, CommentCount, Year, GenresCount, SortType, Controls};

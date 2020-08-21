@@ -1,13 +1,15 @@
-import FilmView from "../view/film";
-import FilmPopupView from "../view/film-popup.js";
+
+import Film from "./Film.js";
 import FilmListView from "../view/films-list.js";
+
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
 import FilterView from "../view/filter.js";
 import SortView from "../view/sort.js";
-import {render, RenderPosition, insert, remove} from "../utils/render.js";
-import {sortByRelease, sortByRating} from "../utils/film.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
+import {updateItems} from "../utils/common.js";
+import {sortByRelease, sortByRating, generateFilter} from "../utils/film.js";
 import {SortType} from "../const.js";
 
 const FILMS_STEP = 5;
@@ -23,11 +25,16 @@ class MovieList {
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noDataTitleComponent = new NoDataView();
     this._sortComponent = new SortView();
+
     this._renderedFilmsCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
+    this._filmPresenter = {};
+
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleOpenNewPopup = this._handleOpenNewPopup.bind(this);
   }
 
   init(films, filters) {
@@ -35,8 +42,15 @@ class MovieList {
     this._sourcedFilms = films.slice();
     this._filters = filters.slice();
 
+    this._filterComponent = new FilterView(this._filters);
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderMovieList(this._films);
+  }
+
+  _handleOpenNewPopup() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.removeOpenedPopup());
   }
 
   _renderTitle() {
@@ -44,7 +58,7 @@ class MovieList {
   }
 
   _renderFilters() {
-    render(this._mainElement, new FilterView(this._filters), RenderPosition.AFTERBEGIN);
+    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
   }
 
   _sortFilms(sortType) {
@@ -63,7 +77,9 @@ class MovieList {
   }
 
   _clearFilmList() {
-    this._filmsContainerElement.innerHTML = ``;
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
     this._renderedFilmsCount = FILMS_STEP;
   }
 
@@ -81,31 +97,25 @@ class MovieList {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItems(this._films, updatedFilm);
+    this._sourcedFilms = updateItems(this._sourcedFilms, updatedFilm);
+    this._udpateFilters(this._films);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm, this._filmsContainerElement);
+  }
+
+  _udpateFilters(films) {
+    const filmsToFilter = films.slice();
+    this._filters = generateFilter(filmsToFilter);
+    remove(this._filterComponent);
+    this._filterComponent = new FilterView(this._filters);
+    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderFilm(film) {
-    const filmComponent = new FilmView(film);
-    const filmPopupComponent = new FilmPopupView(film);
-
-    const showPopupComponent = () => {
-      insert(siteBodyElement, filmPopupComponent);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const closePopupComponent = () => {
-      remove(filmPopupComponent);
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        closePopupComponent();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    filmComponent.setClickHandler(showPopupComponent);
-    filmPopupComponent.setBtnCloseClickHandler(closePopupComponent);
-
-    render(this._filmsContainerElement, filmComponent, RenderPosition.BEFOREEND);
+    const filmPresenter = new Film(siteBodyElement, this. _handleFilmChange, this._handleOpenNewPopup);
+    filmPresenter.init(film, this._filmsContainerElement);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {
