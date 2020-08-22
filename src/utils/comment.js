@@ -2,7 +2,7 @@ import moment from "moment";
 
 const checkOnLeadingZero = (someDate) => {
   return someDate < 10 ? `0${someDate}` : someDate;
-};  
+};
 
 const formatCommentDate = (date) => {
   const year = date.getFullYear();

@@ -1,4 +1,3 @@
-import moment from "moment";
 import {getRandomInteger} from "../utils/common.js";
 
 const authors = [
