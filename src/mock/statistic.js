@@ -12,12 +12,8 @@ const countWatchedFilms = (films) => {
 const countDurationWatchedFilms = (films) => {
   const initialValue = 0;
   return films.reduce((count, film) => {
-    const filmDuration = film.duration.split(` `);
-    const hours = filmDuration[0].slice(0, filmDuration[0].length - 1);
-    const minutes = filmDuration[1].slice(0, filmDuration[1].length - 1);
-    const hoursToMinutes = hours * 60;
-    const duration = hoursToMinutes + +minutes;
-    count = film.isWatched ? count + duration : count;
+    count = film.isWatched ? count + film.duration : count;
+    count = new Date(count);
     return count;
   }, initialValue);
 };

@@ -1,8 +1,10 @@
 import SmartView from "./smart.js";
+import {formatReleaseDate, formatDuration} from "../utils/film.js";
 
 class FilmPopup extends SmartView {
   constructor(film) {
     super();
+    this._isFullDate = true;
     this._data = FilmPopup.parseFilmToData(film);
     this._callback = {};
     this._submitHandler = this._submitHandler.bind(this);
@@ -26,7 +28,8 @@ class FilmPopup extends SmartView {
       comments,
       ageRating} = this._data;
 
-    const releaseDate = `${release.getDate()} ${release.toLocaleString(`en-US`, {month: `long`})} ${release.getFullYear()}`;
+    const releaseDate = formatReleaseDate(release, this._isFullDate);
+    const filmDuration = formatDuration(duration);
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
 
     return `<section class="film-details">
@@ -73,7 +76,7 @@ class FilmPopup extends SmartView {
                         </tr>
                         <tr class="film-details__row">
                           <td class="film-details__term">Runtime</td>
-                          <td class="film-details__cell">${duration}</td>
+                          <td class="film-details__cell">${filmDuration}</td>
                         </tr>
                         <tr class="film-details__row">
                           <td class="film-details__term">Country</td>

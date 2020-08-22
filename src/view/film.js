@@ -1,4 +1,6 @@
 import AbstractView from "./abstract.js";
+import {formatReleaseDate, formatDuration} from "../utils/film.js";
+import {DescritptionRange} from "../const.js";
 
 class Film extends AbstractView {
   constructor(film) {
@@ -13,20 +15,20 @@ class Film extends AbstractView {
 
   getTemplate() {
     const {title, rating, release, duration, genres, poster, description, comments, inWatchlist, isWatched, isFavorite} = this._film;
-    const year = release.getFullYear();
+    const year = formatReleaseDate(release);
     const watchlistClassName = inWatchlist ? `film-card__controls-item--active` : null;
     const watchedClassName = isWatched ? `film-card__controls-item--active` : null;
     const favoriteClassName = isFavorite ? `film-card__controls-item--active` : null;
-    const shortDescription = description.length > 140
-      ? `${description.slice(0, 138)}...`
+    const shortDescription = description.length > DescritptionRange.MAX
+      ? `${description.slice(DescritptionRange.MIN, DescritptionRange.MAX)}...`
       : description;
-
+    const filmDuration = formatDuration(duration);
     return `<article class="film-card">
         <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${filmDuration}</span>
         <span class="film-card__genre">${genres[0]}</span>
         </p>
         <img src="./images/posters/${poster}" alt="" class="film-card__poster">
