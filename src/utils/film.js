@@ -33,4 +33,25 @@ const generateSortedFilms = (films) => {
   };
 };
 
-export {sortByRelease, sortByRating, generateFilter, generateSortedFilms};
+const formatReleaseDate = (date, isFullDate) => {
+  return isFullDate ? moment(date).format(`DD MMMM YYYY`) : moment(date).format(`YYYY`);
+};
+
+const formatDuration = (duration) => {
+  let hours = Math.trunc(duration / 60);
+  let minutes = duration % 60;
+  minutes = minutes > 10 ? minutes : `0${minutes}`
+  let time = moment(`${hours}${minutes}`, `hmm`).format(`H:mm`);
+  time = time.split(`:`);
+  const result = time.reduce((foramtedTime, value) => {
+    const format = foramtedTime.length
+      ? `m`
+      : `h `;
+    foramtedTime = `${foramtedTime}${value}${format}`;
+    return foramtedTime;
+  }, ``);
+
+  return result;
+};
+
+export {sortByRelease, sortByRating, generateFilter, generateSortedFilms, formatReleaseDate, formatDuration};

@@ -12,8 +12,8 @@ const countWatchedFilms = (films) => {
 const countDurationWatchedFilms = (films) => {
   const initialValue = 0;
   return films.reduce((count, film) => {
-    count = film.isWatched ? count + film.duration.getTime() : count;
-    count = new Date(count);    
+    count = film.isWatched ? count + film.duration : count;
+    count = new Date(count);
     return count;
   }, initialValue);
 };

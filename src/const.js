@@ -30,4 +30,9 @@ const Controls = {
   FAVORITE: `favorite`
 };
 
-export {DescCount, CommentCount, Year, GenresCount, SortType, Controls};
+const DescritptionRange = {
+  MIN: 0,
+  MAX: 139
+};
+
+export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls};

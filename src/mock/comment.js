@@ -1,3 +1,4 @@
+import moment from "moment";
 import {getRandomInteger} from "../utils/common.js";
 
 const authors = [
@@ -10,15 +11,7 @@ const messages = [
 
 const generateDate = (start, end) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  const checkOnLeadingZero = (someDate) => {
-    return someDate < 10 ? `0${someDate}` : someDate;
-  };
-  const year = date.getFullYear();
-  const month = checkOnLeadingZero(date.getMonth() + 1);
-  const day = checkOnLeadingZero(date.getDay() + 1);
-  const hours = checkOnLeadingZero(date.getHours());
-  const minutes = checkOnLeadingZero(date.getMinutes());
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
+  return date;
 };
 
 const generateComment = () => {

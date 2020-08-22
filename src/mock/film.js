@@ -19,10 +19,8 @@ const Posters = [
 ];
 
 const filmDuration = {
-  MIN_HOUR: 0,
-  MAX_HOUR: 24,
-  MIN_MINUTES: 0,
-  MAX_MINUTES: 59
+  MIN_MINUTES: 60,
+  MAX_MINUTES: 180
 };
 
 const Age = {
@@ -97,9 +95,8 @@ const generateWriters = () => {
 };
 
 const generateDurations = (duration) => {
-  const hour = getRandomInteger(duration.MIN_HOUR, duration.MAX_HOUR);
   const minutes = getRandomInteger(duration.MIN_MINUTES, duration.MAX_MINUTES);
-  return `${hour}h ${minutes}m`;
+  return minutes.toString();
 };
 
 const generateAgeRaitng = () => {
@@ -126,7 +123,7 @@ const generateFilm = () => {
     rating: generateRating(),
     release: generateDate(new Date(1900, 1, 1), new Date()),
     genres: Array.from(generateGenres()),
-    duration: generateDate(new Date(1000), new Date(20000)),
+    duration: generateDurations(filmDuration),
     country: Countries[getRandomInteger(0, Countries.length - 1)],
     ageRating: generateAgeRaitng(),
     director: Directors[getRandomInteger(0, Directors.length - 1)],
