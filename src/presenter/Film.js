@@ -10,7 +10,7 @@ import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 class Film {
   constructor(popupContainer, changeData, closeAllPopup) {
-    this._popupContainerElement = popupContainer;
+    this._popupContainer = popupContainer;
     this._changeData = changeData;
     this._closeAllPopup = closeAllPopup;
 
@@ -25,7 +25,7 @@ class Film {
 
   init(film, filmsContainer) {
     this._film = film;
-    this._filmsContainerElement = filmsContainer;
+    this._filmsContainer = filmsContainer;
 
     this._prevFilmComponent = this._filmComponent;
     this._prevFilmPopupComponent = this._filmPopupComponent;

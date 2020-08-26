@@ -1,14 +1,12 @@
-
 import Film from "./Film.js";
 import FilmListView from "../view/films-list.js";
 
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
-import FilterView from "../view/filter.js";
 import SortView from "../view/sort.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {sortByRelease, sortByRating, generateFilter} from "../utils/film.js";
+import {sortByRelease, sortByRating} from "../utils/film.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 
 const FILMS_STEP = 5;
@@ -41,10 +39,7 @@ class FilmList {
     this._filmsModel.addObserver(this._handleModelEvent);
   }
 
-  init(filters) {
-    this._filters = filters.slice();
-
-    this._filterComponent = new FilterView(this._filters);
+  init() {
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderMovieList(this._filmsModel.getFilms());
   }
@@ -137,14 +132,6 @@ class FilmList {
     this._filmPresenter[updatedFilm.id].init(updatedFilm, this._filmsContainerElement);
   }
 
-  _udpateFilters(films) {
-    const filmsToFilter = films.slice();
-    this._filters = generateFilter(filmsToFilter);
-    remove(this._filterComponent);
-    this._filterComponent = new FilterView(this._filters);
-    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
-  }
-
   _renderFilm(film) {
     const filmPresenter = new Film(siteBodyElement, this._handleViewAction, this._handleModeChange);
     filmPresenter.init(film, this._filmsContainerElement);
@@ -183,8 +170,7 @@ class FilmList {
 
   _renderMovieList() {
     const films = this._filmsModel.getFilms();
-    const filmsCount = films.length;
-    this._renderFilters();
+    const filmsCount = films.length;    
 
     if (!films.length) {
       this._renderNoData();
