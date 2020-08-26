@@ -15,10 +15,11 @@ import {SortType} from "../const.js";
 const FILMS_STEP = 5;
 const siteBodyElement = document.querySelector(`body`);
 
-class MovieList {
-  constructor(mainElement) {
+class FilmList {
+  constructor(mainElement, filmsModel) {
     this._mainElement = mainElement;
     this._boardElement = this._mainElement.querySelector(`.films`);
+    this._filmsModel = filmsModel;
     this._mainMovieListComponent = new FilmListView();
     this._filmsContainerElement = this._mainMovieListComponent.getElement().querySelector(`.films-list__container`);
     this._titleMainListComponent = new AllFilmsListTitleView();
@@ -37,14 +38,23 @@ class MovieList {
     this._handleOpenNewPopup = this._handleOpenNewPopup.bind(this);
   }
 
-  init(films, filters) {
-    this._films = films.slice();
-    this._sourcedFilms = films.slice();
+  init(filters) {    
     this._filters = filters.slice();
 
     this._filterComponent = new FilterView(this._filters);
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
-    this._renderMovieList(this._films);
+    this._renderMovieList(this._filmsModel.getFilms());
+  }
+  
+  _getFilms() {
+    const films = this._filmsModel.getFilms();
+    switch (this._currentSortType) {
+      case SortType.RELEASE:
+        return this._filmsModel.getFilms().sort(sortByRelease);        
+      case SortType.RATING:
+        return this._filmsModel.getFilms().sort(sortByRating);        
+      default:
+        return this._filmsModel.getFilms();
   }
 
   _handleOpenNewPopup() {
@@ -62,15 +72,7 @@ class MovieList {
   }
 
   _sortFilms(sortType) {
-    switch (sortType) {
-      case SortType.RELEASE:
-        this._films.sort(sortByRelease);
-        break;
-      case SortType.RATING:
-        this._films.sort(sortByRating);
-        break;
-      default:
-        this._films = this._sourcedFilms.slice();
+    
     }
 
     this._currentSortType = sortType;
@@ -151,9 +153,10 @@ class MovieList {
   }
 
   _renderMovieList() {
-    this._renderSort();
+    const films = this._getFilms();
     this._renderFilters();
-    if (this._films.length) {
+
+    if (films.length) {
       this._renderTitle();
       this._renderMainFilmList(this._films);
     } else {
@@ -162,4 +165,4 @@ class MovieList {
   }
 }
 
-export default MovieList;
+export default FilmList;
