@@ -1,5 +1,5 @@
 import SmartView from "./smart.js";
-import {Controls} from "../const.js";
+import {Controls, UserAction} from "../const.js";
 
 class PopupControl extends SmartView {
   constructor(film) {
@@ -12,13 +12,28 @@ class PopupControl extends SmartView {
   getTemplate() {
     const {inWatchlist, isWatched, isFavorite} = this._data;
     return `<section class="film-details__controls">
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${inWatchlist ? `checked` : ``}>
+              <input 
+                type="checkbox" 
+                class="film-details__control-input visually-hidden" 
+                id="watchlist" name="watchlist" 
+                value="${UserAction.ADD_TO_WATCHLIST}" 
+                ${inWatchlist ? `checked` : ``}>
               <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
+              <input 
+                type="checkbox" 
+                class="film-details__control-input visually-hidden" 
+                id="watched" name="watched" 
+                value="${UserAction.ADD_TO_WATCHED}" 
+                ${isWatched ? `checked` : ``}>
               <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
+              <input type="checkbox" 
+                class="film-details__control-input visually-hidden" 
+                id="favorite" 
+                name="favorite" 
+                value="${UserAction.ADD_TO_FAVORITES}" 
+                ${isFavorite ? `checked` : ``}>
               <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
             </section>`;
   }
@@ -34,6 +49,7 @@ class PopupControl extends SmartView {
   _changeHandler(evt) {
     if (evt.target.classList.contains(`film-details__control-input`)) {
       evt.preventDefault();
+      const actionType = evt.target.value;
       let update;
       switch (evt.target.id) {
         case Controls.WATCHLIST:
@@ -47,7 +63,7 @@ class PopupControl extends SmartView {
           break;
       }
       this.updateData(update);
-      this._callback.change(update);
+      this._callback.change(actionType, update);
     }
   }
 

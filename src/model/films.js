@@ -24,7 +24,7 @@ class Film extends Observer {
     this._films = [
       ...this._films.slice(0, index),
       update,
-      ...this._films.slcie(index + 1)
+      ...this._films.slice(index + 1)
     ];
 
     this._notify(updateType, update);

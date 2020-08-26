@@ -3,6 +3,9 @@ import FilmPopupView from "../view/film-popup.js";
 import PopupControls from "../view/popup-controls.js";
 import Comment from "../view/comment.js";
 import NewCommentForm from "../view/new-comment.js";
+
+import {UpdateType, UserAction} from "../const.js";
+
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 class Film {
@@ -98,7 +101,11 @@ class Film {
     document.addEventListener(`keydown`, this._EscKeyDownHandler);
   }
 
-  removeOpenedPopup() {
+  resetView() {
+    this._removeOpenedPopup();
+  }
+
+  _removeOpenedPopup() {
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._EscKeyDownHandler);
   }
@@ -109,7 +116,7 @@ class Film {
 
   _handleFormSubmit(film) {
     this._changeData(film);
-    this.removeOpenedPopup();
+    this._removeOpenedPopup();
   }
 
   _EscKeyDownHandler(evt) {
@@ -119,8 +126,10 @@ class Film {
     }
   }
 
-  _handlePopupControlChange(update) {
+  _handlePopupControlChange(actionType, update) {
     this._changeData(
+        actionType,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -131,6 +140,8 @@ class Film {
 
   _handleWatchlistClick() {
     this._changeData(
+        UserAction.ADD_TO_WATCHLIST,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -143,6 +154,8 @@ class Film {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.ADD_TO_WATCHED,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -155,6 +168,8 @@ class Film {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.ADD_TO_FAVORITES,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,

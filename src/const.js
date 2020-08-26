@@ -35,4 +35,23 @@ const DescritptionRange = {
   MAX: 139
 };
 
-export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls};
+const UserAction = {
+  ADD_TO_WATCHLIST: `ADD_TO_WATCHLIST`,
+  ADD_TO_WATCHED: `ADD_TO_WATCHED`,
+  ADD_TO_FAVORITES: `ADD_TO_FAVORITES`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
+export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType};
