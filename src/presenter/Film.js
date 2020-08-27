@@ -181,11 +181,11 @@ class Film {
   }
 
   _renderPopup() {
-    render(this._popupContainerElement, this._filmPopupComponent, RenderPosition.BEFOREEND);
+    render(this._popupContainer, this._filmPopupComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilm() {
-    render(this._filmsContainerElement, this._filmComponent, RenderPosition.BEFOREEND);
+    render(this._filmsContainer, this._filmComponent, RenderPosition.BEFOREEND);
   }
 }
 

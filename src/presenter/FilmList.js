@@ -41,7 +41,7 @@ class FilmList {
 
   init() {
     render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
-    this._renderMovieList(this._filmsModel.getFilms());
+    this._renderMovieList();
   }
 
   _getFilms() {
@@ -155,10 +155,14 @@ class FilmList {
   }
 
   _handleLoadMoreBtnClick() {
-    this._renderFilms(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_STEP);
-    this._renderedFilmsCount += FILMS_STEP;
+    const filmsCount = this._filmsModel.getFilms().length;
+    const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_STEP);
+    const films = this._filmsModel.getFilms().slice(this._renderedFilmsCount, newRenderedFilmsCount);
 
-    if (this._renderedFilmsCount >= this._films.length) {
+    this._renderFilms(films);
+    this._renderedFilmsCount = newRenderedFilmsCount;
+
+    if (this._renderedFilmsCount >= filmsCount) {
       remove(this._loadingMoreBtnComponent);
     }
   }
@@ -170,7 +174,7 @@ class FilmList {
 
   _renderMovieList() {
     const films = this._filmsModel.getFilms();
-    const filmsCount = films.length;    
+    const filmsCount = films.length;
 
     if (!films.length) {
       this._renderNoData();
