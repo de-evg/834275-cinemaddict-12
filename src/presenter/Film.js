@@ -1,3 +1,6 @@
+import CommentListPresenter from "./CommentList.js";
+import CommentModel from "../model/comments.js";
+
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
 import PopupControls from "../view/popup-controls.js";
@@ -14,6 +17,8 @@ class Film {
     this._changeData = changeData;
     this._closeAllPopup = closeAllPopup;
 
+    this._commentPresenter = {}
+
     this._handleFilmClick = this._handleFilmClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
@@ -25,7 +30,7 @@ class Film {
 
   init(film, filmsContainer) {
     this._film = film;
-    this._filmsContainer = filmsContainer;
+    this._filmsContainer = filmsContainer;    
 
     this._prevFilmComponent = this._filmComponent;
     this._prevFilmPopupComponent = this._filmPopupComponent;

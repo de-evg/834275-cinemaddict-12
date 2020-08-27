@@ -17,7 +17,7 @@ const generateComment = () => {
   return {
     author: authors[getRandomInteger(0, authors.length - 1)],
     message: messages[getRandomInteger(0, messages.length - 1)],
-    date: generateDate(new Date(1900, 1, 1), new Date())
+    date: generateDate(new Date(1900, 1, 1), new Date())    
   };
 };
 
