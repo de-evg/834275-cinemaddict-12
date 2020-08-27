@@ -54,4 +54,11 @@ const FilterType = {
   FAVORITES: `favorites`
 };
 
-export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType};
+const Emoji = {
+  [`EMOJI-ANGRY`]: `angry`,
+  [`EMOJI-PUKE`]: `puke`,
+  [`EMOJI-SLEEPING`]: `sleeping`,
+  [`EMOJI-SMILE`]: `smile`,
+};
+
+export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji};

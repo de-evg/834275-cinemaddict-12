@@ -1,4 +1,5 @@
 import SmartView from "./smart.js";
+import {Emoji} from "../const.js";
 
 class NewComment extends SmartView {
   constructor(film) {
@@ -13,7 +14,7 @@ class NewComment extends SmartView {
 
   getTemplate() {
     const {emoji, comentDetails} = this._data;
-    const emojiTemplate = emoji ? `<img src="images/emoji/${emoji.slice(emoji.indexOf(`-`) + 1)}.png" width="55" height="55" alt="emoji-smile"></img>` : ``;
+    const emojiTemplate = emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile"></img>` : ``;
     return `<div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label">${emojiTemplate}</div>
 
@@ -65,9 +66,9 @@ class NewComment extends SmartView {
     if (evt.target.tagName === `IMG`) {
       evt.preventDefault();
       const parent = evt.target.parentElement;
-      const emojyName = parent.htmlFor;
+      const emojyName = parent.htmlFor.toUpperCase();
       this.updateData({
-        emoji: emojyName
+        emoji: Emoji[emojyName]
       });
     }
   }
