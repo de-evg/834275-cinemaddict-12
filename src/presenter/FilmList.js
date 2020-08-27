@@ -1,22 +1,27 @@
 import Film from "./Film.js";
-import FilmListView from "../view/films-list.js";
 
+import BoardView from "../view/board.js";
+import FilmListView from "../view/films-list.js";
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoDataView from "../view/no-data.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
 import SortView from "../view/sort.js";
+
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {sortByRelease, sortByRating} from "../utils/film.js";
+import {sortByRelease, sortByRating} from "../utils/sort.js";
+import {filter} from "../utils/filter.js";
+
 import {SortType, UpdateType, UserAction} from "../const.js";
 
 const FILMS_STEP = 5;
 const siteBodyElement = document.querySelector(`body`);
 
 class FilmList {
-  constructor(mainElement, filmsModel) {
-    this._mainElement = mainElement;
-    this._boardElement = this._mainElement.querySelector(`.films`);
+  constructor(siteMainElement, filmsModel, filterModel) {
+    this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
+    this._filterModel = filterModel;
+    this._boardComponent = new BoardView();
     this._mainMovieListComponent = new FilmListView();
     this._filmsContainerElement = this._mainMovieListComponent.getElement().querySelector(`.films-list__container`);
     this._titleMainListComponent = new AllFilmsListTitleView();
@@ -40,19 +45,23 @@ class FilmList {
   }
 
   init() {
-    render(this._boardElement, this._mainMovieListComponent, RenderPosition.BEFOREEND);
-    this._renderMovieList();
+    render(this._boardComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
+    this._renderSort();
+    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
+    this._renderFilmList();
   }
 
   _getFilms() {
+    const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
+    const filtredFilms = filter[filterType](films);
     switch (this._currentSortType) {
       case SortType.RELEASE:
-        return films.sort(sortByRelease);
+        return filtredFilms.slice().sort(sortByRelease);
       case SortType.RATING:
-        return films.sort(sortByRating);
+        return filtredFilms.slice().sort(sortByRating);
       default:
-        return films;
+        return filtredFilms;
     }
   }
 
@@ -118,11 +127,11 @@ class FilmList {
     }
     this._sortFilms(sortType);
     this._clearFilmList();
-    this._renderMainFilmList(this._filmsModel.getFilms());
+    this._renderMainFilmList();
   }
 
   _renderSort() {
-    render(this._mainElement, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
@@ -142,8 +151,17 @@ class FilmList {
     films.forEach((film) => this._renderFilm(film));
   }
 
-  _renderMainFilmList(films) {
-    this._renderFilms(films);
+  _renderMainFilmList() {
+    const films = this._getFilms();
+    const filmsCount = films.length;
+
+    if (!films.length) {
+      this._renderNoData();
+    }
+
+    this._renderTitle();
+
+    this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
     if (films.length >= this._renderedFilmsCount) {
       this._renderLoadMoreBtn();
@@ -172,16 +190,8 @@ class FilmList {
     this._loadingMoreBtnComponent.setClickHandler(this._handleLoadMoreBtnClick);
   }
 
-  _renderMovieList() {
-    const films = this._filmsModel.getFilms();
-    const filmsCount = films.length;
-
-    if (!films.length) {
-      this._renderNoData();
-    }
-
-    this._renderTitle();
-    this._renderMainFilmList(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
+  _renderFilmList() {
+    this._renderMainFilmList();
   }
 }
 

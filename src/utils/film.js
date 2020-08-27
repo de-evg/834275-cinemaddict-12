@@ -1,9 +1,5 @@
 import moment from "moment";
 
-const sortByRelease = (filmA, filmB) => filmB.release - filmA.release;
-
-const sortByRating = (filmA, filmB) => filmB.rating - filmA.rating;
-
 const generateSortedFilms = (films) => {
   return {
     default: films.slice(),
@@ -39,4 +35,4 @@ const formatDuration = (duration) => {
   return result;
 };
 
-export {sortByRelease, sortByRating, generateSortedFilms, formatReleaseDate, formatDuration};
+export {generateSortedFilms, formatReleaseDate, formatDuration};

@@ -1,6 +1,6 @@
 import FilterView from "../view/filter.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {filmsToFilterMap} from "../utils/filter.js";
+import {filter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
 
 class Filter {
@@ -23,7 +23,7 @@ class Filter {
     // this._filterComponent.setFilterTypeChangeHandler(this._handleFiltertypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       return;
     }
 
@@ -43,17 +43,17 @@ class Filter {
       {
         type: FilterType.WATCHLIST,
         name: `Watchlist`,
-        count: filmsToFilterMap[FilterType.WATCHLIST](films).length
+        count: filter[FilterType.WATCHLIST](films).length
       },
       {
         type: FilterType.HISTORY,
         name: `History`,
-        count: filmsToFilterMap[FilterType.HISTORY](films).length
+        count: filter[FilterType.HISTORY](films).length
       },
       {
         type: FilterType.FAVORITES,
         name: `Favorites`,
-        count: filmsToFilterMap[FilterType.FAVORITES](films).length
+        count: filter[FilterType.FAVORITES](films).length
       }
     ];
   }
