@@ -1,7 +1,7 @@
 import FilterView from "../view/filter.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {filter} from "../utils/filter.js";
-import {FilterType} from "../const.js";
+import {FilterType, UpdateType} from "../const.js";
 
 class Filter {
   constructor(filterContainer, filterModel, filmsModel) {
@@ -10,7 +10,12 @@ class Filter {
     this._filmsModel = filmsModel;
     this._currentFilter = null;
     this._filterComponent = null;
-    // this._handleFiltertypeChange = this._handleFiltertypeChange.bind(this);
+
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -20,7 +25,7 @@ class Filter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
-    // this._filterComponent.setFilterTypeChangeHandler(this._handleFiltertypeChange);
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
@@ -29,6 +34,18 @@ class Filter {
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._currentFilter === filterType) {
+      return;
+    }
+
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
