@@ -195,7 +195,7 @@ class FilmList {
     }
   }
 
-  _renderNoFIlms() {
+  _renderNoFilms() {
     render(this._movieListContainer, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
 

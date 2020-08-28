@@ -2,9 +2,9 @@ import SmartView from "./smart.js";
 import {Emoji} from "../const.js";
 
 class NewComment extends SmartView {
-  constructor(film) {
+  constructor(comment) {
     super();
-    this._data = film;
+    this._data = comment;
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentDetailsChangeHandler = this._commentDetailsChangeHandler.bind(this);

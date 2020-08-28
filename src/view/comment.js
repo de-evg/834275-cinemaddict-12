@@ -5,6 +5,8 @@ class Comment extends SmartView {
   constructor(comment) {
     super();
     this._comment = comment;
+
+    this._deleteBtnClickHandler = this._deleteBtnClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -22,6 +24,16 @@ class Comment extends SmartView {
       </p>
     </div>
   </li>`;
+  }
+
+  _deleteBtnClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick();
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
   }
 }
 
