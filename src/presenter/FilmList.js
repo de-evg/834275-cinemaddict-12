@@ -17,10 +17,11 @@ const FILMS_STEP = 5;
 const siteBodyElement = document.querySelector(`body`);
 
 class FilmList {
-  constructor(siteMainElement, filmsModel, filterModel) {
+  constructor(siteMainElement, filmsModel, filterModel, commentModel) {
     this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._commentModel = commentModel;
     this._boardComponent = new BoardView();
     this._mainMovieListComponent = new FilmListView();
     this._titleMainListComponent = new AllFilmsListTitleView();
@@ -42,6 +43,7 @@ class FilmList {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._commentModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -106,6 +108,8 @@ class FilmList {
       case UserAction.ADD_TO_FAVORITES:
         this._filmsModel.updateFilm(updateType, update);
         break;
+      case UserAction.DELETE_COMMENT:
+        this._filmsModel.updateFilm(updateType, update);
     }
   }
 
@@ -128,7 +132,7 @@ class FilmList {
   _handleModeChange() {
     Object
       .values(this._filmPresenter)
-      .forEach((presenter) => presenter.resetView());
+      .forEach((presenter) => presenter.resetPopupView());
   }
 
   _renderTitle() {
@@ -171,7 +175,7 @@ class FilmList {
   }
 
   _renderFilm(film) {
-    const filmPresenter = new FilmPresenter(siteBodyElement, this._handleViewAction, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
     filmPresenter.init(film, this._filmsContainer);
     this._filmPresenter[film.id] = filmPresenter;
   }

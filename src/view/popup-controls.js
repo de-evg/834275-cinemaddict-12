@@ -69,7 +69,8 @@ class PopupControl extends SmartView {
 
   setChangeControlHandler(callback) {
     this._callback.change = callback;
-    this.getElement().addEventListener(`change`, this._changeHandler);
+    const controls = this.getElement();
+    controls.addEventListener(`change`, this._changeHandler);
   }
 }
 

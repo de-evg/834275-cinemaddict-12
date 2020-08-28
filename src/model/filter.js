@@ -11,9 +11,9 @@ class Filter extends Observer {
     return this._activeFilter;
   }
 
-  setFilter(updateType, filter) {
+  setFilter(actionType, filter) {
     this._activeFilter = filter;
-    this._notify(updateType, filter);
+    this._notify(actionType, filter);
   }
 }
 

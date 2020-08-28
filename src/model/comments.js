@@ -3,7 +3,7 @@ import Observer from "../utils/observer.js";
 class Comment extends Observer {
   constructor() {
     super();
-    this._films = [];
+    this._comments = [];
   }
 
   getComments() {
@@ -14,12 +14,12 @@ class Comment extends Observer {
     this._comments = comments.slice();
   }
 
-  addComment(updateType, update) {
+  addComment(actionType, update) {
     this._comments.push(update);
-    this._notify(updateType, update);
+    this._notify(actionType, update);
   }
 
-  deleteComment(updateType, update) {
+  deleteComment(actionType, update) {
     const index = this._comments.findIndex((comment) => comment.id === update.id);
 
     if (index === -1) {
@@ -27,11 +27,11 @@ class Comment extends Observer {
     }
 
     this._comments = [
-      ...this.comments.slice(0, index),
-      ...this._comments.slcie(index + 1)
+      ...this._comments.slice(0, index),
+      ...this._comments.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this._notify(actionType, update);
   }
 }
 

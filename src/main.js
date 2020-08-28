@@ -1,5 +1,6 @@
 import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
+import CommentModel from "./model/comments.js";
 
 import UserProfileView from "./view/user-profile.js";
 import StatisticView from "./view/statistic.js";
@@ -36,7 +37,9 @@ const filterModel = new FilterModel();
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 filterPresenter.init();
 
-const mainFilmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel);
+const commentModel = new CommentModel();
+
+const mainFilmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
 mainFilmListPresenter.init();
 
 // const statisticComponent = new StatisticView();

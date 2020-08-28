@@ -1,5 +1,5 @@
 import CommentListPresenter from "./CommentList.js";
-import CommentModel from "../model/comments.js";
+
 
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
@@ -11,12 +11,13 @@ import {UpdateType, UserAction} from "../const.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 class Film {
-  constructor(popupContainer, changeData, resetView) {
+  constructor(popupContainer, commentModel, changeData, resetView) {
     this._popupContainer = popupContainer;
+    this._commentModel = commentModel;
     this._changeData = changeData;
     this._resetView = resetView;
     this._commentPresenter = {};
-    this._commentModel = new CommentModel();
+
 
     this._handleFilmClick = this._handleFilmClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -29,7 +30,7 @@ class Film {
 
   init(film, filmsContainer) {
     this._film = film;
-    this._filmsContainer = filmsContainer;    
+    this._filmsContainer = filmsContainer;
 
     this._prevFilmComponent = this._filmComponent;
     this._prevFilmPopupComponent = this._filmPopupComponent;
@@ -64,7 +65,7 @@ class Film {
   }
 
   _renderPopupControls() {
-    render(this._popupControlsContainer, this._popupControls, RenderPosition.BEFOREEND);
+    render(this._popupControlsContainer, this._popupControlsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderComments(comments) {
@@ -73,16 +74,22 @@ class Film {
     });
   }
 
+  _renderPopupComponents() {
+    this._renderPopupControls();
+    this._renderNewCommentFormComponent();
+  }
+
   _initPopup() {
     this._filmPopupComponent = new FilmPopupView(this._film);
-    this._popupControls = new PopupControls(this._film);
+    this._popupControlsComponent = new PopupControls(this._film);
     this._newCommetFormComponent = new NewCommentFormView(this._film);
+
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
-    this._renderPopupControls();
-    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._commentModel, _handleDeleteComment);
+    
+    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData);
     this._commentListPresenter.init(this._film.comments);
-    this._renderNewCommentFormComponent();
+    this._renderPopupComponents();
     this._setFilmPopupHandlers();
   }
 
@@ -95,18 +102,23 @@ class Film {
 
   _setFilmPopupHandlers() {
     this._filmPopupComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._popupControls.setChangeControlHandler(this._handlePopupControlChange);
+    this._popupControlsComponent.setChangeControlHandler(this._handlePopupControlChange);
   }
 
   _showPopup() {
-    this._resetView();
-    this._initPopup(this._film);
+    this.resetPopupView();
     this._renderPopup();
     document.addEventListener(`keydown`, this._EscKeyDownHandler);
   }
 
-  resetView() {
+  resetPopupView() {
     this._removeOpenedPopup();
+    this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
+    this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
+    this._renderPopupComponents();
+    this._setFilmPopupHandlers();
+    this._renderPopup();
+    document.addEventListener(`keydown`, this._EscKeyDownHandler);
   }
 
   _removeOpenedPopup() {
@@ -182,19 +194,6 @@ class Film {
             }
         )
     );
-
-    _handleDeleteComment(newComments) {
-      this._changeData(
-          UserAction.DELETE_COMMENT,
-          UpdateType.MAJOR,
-          Object.assign(
-              {},
-              this._film,
-              {
-                comments: newComments
-              }
-          )
-      )
   }
 
   _renderPopup() {

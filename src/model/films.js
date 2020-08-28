@@ -14,7 +14,7 @@ class Film extends Observer {
     this._films = films.slice();
   }
 
-  updateFilm(updateType, update) {
+  updateFilm(actionType, update) {
     const index = this._films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
@@ -27,7 +27,7 @@ class Film extends Observer {
       ...this._films.slice(index + 1)
     ];
 
-    this._notify(updateType, update);
+    this._notify(actionType, update);
   }
 }
 

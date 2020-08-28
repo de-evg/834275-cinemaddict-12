@@ -6,6 +6,9 @@ class Comment {
   constructor(commentContainer, changeData) {
     this._commentContainer = commentContainer;
     this._changeData = changeData;
+    this._comment = null;
+
+    this._handelDeleteClick = this._handelDeleteClick.bind(this);
   }
 
   init(comment) {
@@ -24,7 +27,7 @@ class Comment {
   }
 
   _handelDeleteClick() {
-    this._changeData(UpdateType.DELETE_COMMENT, this.comment);
+    this._changeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment);
   }
 
   _renderComment() {
