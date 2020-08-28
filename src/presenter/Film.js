@@ -76,6 +76,7 @@ class Film {
 
   _renderPopupComponents() {
     this._renderPopupControls();
+    this._commentListPresenter.renderUpdatedComments();
     this._renderNewCommentFormComponent();
   }
 
@@ -86,7 +87,7 @@ class Film {
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
-    
+
     this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData);
     this._commentListPresenter.init(this._film.comments);
     this._renderPopupComponents();

@@ -14,11 +14,11 @@ class Comment {
   init(comment) {
     this._comment = comment;
     this._commentComponent = new CommentView(this._comment);
-    this._setCommentHanders();
+    this._setCommentHandlers();
     this._renderComment(this._comment);
   }
 
-  _setCommentHanders() {
+  _setCommentHandlers() {
     this._commentComponent.setDeleteClickHandler(this._handelDeleteClick);
   }
 

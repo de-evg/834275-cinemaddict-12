@@ -17,6 +17,10 @@ class CommentList {
     this._renderCommentList();
   }
 
+  renderUpdatedComments() {
+    this._renderCommentList();
+  }
+
   _renderComment(comment) {
     this._comment = comment;
     const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteCommentClick);
