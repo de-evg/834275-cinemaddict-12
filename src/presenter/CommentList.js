@@ -9,7 +9,7 @@ class CommentList {
     this._changeData = changeData;
     this._commentPresenter = {};
 
-    this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
+    this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
   }
 
   init(comments) {
@@ -23,7 +23,7 @@ class CommentList {
 
   _renderComment(comment) {
     this._comment = comment;
-    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteCommentClick);
+    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._handleCommentSubmit);
     commentPresenter.init(this._comment);
     this._commentPresenter[this._comment.id] = commentPresenter;
   }
@@ -32,7 +32,7 @@ class CommentList {
     comments.forEach((comment) => this._renderComment(comment));
   }
 
-  _handleDeleteCommentClick(actionType, updateType, update) {
+  _handleDeleteBtnClick(actionType, updateType, update) {
     this._commentModel.deleteComment(actionType, update);
     this._commentPresenter[this._comment.id].destroy();
     this._changeData(
@@ -47,6 +47,22 @@ class CommentList {
         )
     );
   }
+
+  _handleCommentSubmit(actionType, updateType, update) {
+    this._commentModel.addComment(actionType, update);
+    this._changeData(
+        actionType,
+        updateType,
+        Object.assign(
+            {},
+            this._film,
+            {
+              comments: this._commentModel.getComments()
+            }
+        )
+    );
+  }
+
   _renderCommentList() {
     const comments = this._commentModel.getComments();
     this._renderComments(comments);

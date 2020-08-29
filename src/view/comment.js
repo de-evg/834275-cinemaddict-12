@@ -4,21 +4,21 @@ import {formatCommentDate} from "../utils/comment.js";
 class Comment extends SmartView {
   constructor(comment) {
     super();
-    this._comment = comment;
+    this._data = Comment.parseCommentToData(comment);
 
     this._deleteBtnClickHandler = this._deleteBtnClickHandler.bind(this);
   }
 
   getTemplate() {
-    const date = formatCommentDate(this._comment.date);
+    const date = formatCommentDate(this._data.date);
     return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
+      <img src="./images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-${this._data.emoji}">
     </span>
     <div>
-      <p class="film-details__comment-text">${this._comment.message}</p>
+      <p class="film-details__comment-text">${this._data.message}</p>
       <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${this._comment.author}</span>
+        <span class="film-details__comment-author">${this._data.author}</span>
         <span class="film-details__comment-day">${date}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
@@ -34,6 +34,13 @@ class Comment extends SmartView {
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
+  }
+
+  static parseCommentToData(comment) {
+    return Object.assign(
+        {},
+        comment
+    );
   }
 }
 

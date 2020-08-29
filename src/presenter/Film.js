@@ -31,6 +31,7 @@ class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handlePopupControlChange = this._handlePopupControlChange.bind(this);
     this._EscKeyDownHandler = this._EscKeyDownHandler.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   init(film, filmsContainer) {
@@ -112,15 +113,13 @@ class Film {
   _setFilmPopupHandlers() {
     this._filmPopupComponent.setBtnCloseClickHandler(this._handleCloseBtnClick);
     this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlChange);
-    // this._popupControlsComponent.setWatchlistChangeHandler(this._handlePopupControlChange);
+    this._filmPopupComponent.setSubmitHandler(this._handleFormSubmit);
   }
 
   _showPopup() {
     this._resetView();
     this._initPopup();
     this._renderPopup();
-    const x = document.querySelectorAll(`#watched`);
-    console.log(x);
     document.addEventListener(`keydown`, this._EscKeyDownHandler);
     this._mode = Mode.DETAILS;
   }
@@ -204,6 +203,23 @@ class Film {
             }
         )
     );
+  }
+
+  _handleFormSubmit() {
+    if (this._newCommetFormComponent.getComment().emoji) {
+      this._commentModel.addComment(UserAction.ADD_COMMENT, this._newCommetFormComponent.getComment());    
+      this._changeData(
+          UserAction.ADD_COMMENT,
+          UpdateType.PATCH,
+          Object.assign(
+              {},
+              this._film,
+              {
+                comments: this._commentModel.getComments()
+              }
+          )
+      );
+    }
   }
 
   _renderPopup() {

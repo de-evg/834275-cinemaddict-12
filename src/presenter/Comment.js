@@ -3,9 +3,10 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {UpdateType, UserAction} from "../const.js";
 
 class Comment {
-  constructor(commentContainer, changeData) {
+  constructor(commentContainer, removeData, addData) {
     this._commentContainer = commentContainer;
-    this._changeData = changeData;
+    this._removeData = removeData;
+    this._addData = addData;
     this._comment = null;
 
     this._handelDeleteClick = this._handelDeleteClick.bind(this);
@@ -27,7 +28,11 @@ class Comment {
   }
 
   _handelDeleteClick() {
-    this._changeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment);
+    this._removeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment);
+  }
+
+  _handleAddBtnPress() {
+    this._addData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._newComment);
   }
 
   _renderComment() {

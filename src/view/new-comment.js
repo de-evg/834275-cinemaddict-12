@@ -1,10 +1,12 @@
 import SmartView from "./smart.js";
 import {Emoji} from "../const.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+
 class NewComment extends SmartView {
   constructor(comment) {
     super();
-    this._data = comment;
+    this._data = NewComment.parseCommentToData(comment);
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentDetailsChangeHandler = this._commentDetailsChangeHandler.bind(this);
@@ -49,6 +51,16 @@ class NewComment extends SmartView {
     this._setInnerHandlers();
   }
 
+  getComment() {
+    return NewComment.parseDataToComment({
+      id: generateId(),
+      author: `User`,
+      message: this.getElement().querySelector(`.film-details__comment-input`).value,
+      date: (new Date().getTime()),
+      emoji: this._data.emoji
+    });
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`change`, this._commentDetailsChangeHandler);
@@ -71,6 +83,19 @@ class NewComment extends SmartView {
         emoji: Emoji[emojyName]
       });
     }
+  }
+
+  static parseCommentToData(comment) {
+    return Object.assign(
+        {},
+        comment
+    );
+  }
+
+  static parseDataToComment(comment) {
+    return Object.assign(
+        {},
+        comment);
   }
 }
 

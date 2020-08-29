@@ -10,6 +10,7 @@ class FilmPopup extends SmartView {
     this._callback = {};
     this._btnCloseClickHandler = this._btnCloseClickHandler.bind(this);
     this._changeHandler = this._changeHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -145,28 +146,8 @@ class FilmPopup extends SmartView {
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._btnCloseClickHandler);
     this.getElement().querySelector(`.film-details__inner`).addEventListener(`change`, this._changeHandler);
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, this._submitHandler);
   }
-
-  // _favoriteClickHandler(evt) {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     isFavorite: !this._data.isFavorite
-  //   });
-  // }
-
-  // _watchedClickHandler(evt) {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     isWatched: !this._data.isWatched
-  //   });
-  // }
-
-  // _watchlistClickHandler(evt) {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     inWatchlist: !this._data.inWatchlist
-  //   });
-  // }
 
   _changeHandler(evt) {
     if (evt.target.classList.contains(`film-details__control-input`)) {
@@ -202,6 +183,18 @@ class FilmPopup extends SmartView {
   setBtnCloseClickHandler(callback) {
     this._callback.close = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._btnCloseClickHandler);
+  }
+
+  _submitHandler(evt) {
+    if (evt.ctrlKey && evt.key === `Enter`) {
+      evt.preventDefault();
+      this._callback.submit();
+    }
+  }
+
+  setSubmitHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`keydown`, this._submitHandler);
   }
 
   static parseFilmToData(film) {

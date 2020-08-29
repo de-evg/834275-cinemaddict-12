@@ -5,11 +5,12 @@ const checkOnLeadingZero = (someDate) => {
 };
 
 const formatCommentDate = (date) => {
-  const year = date.getFullYear();
-  const month = checkOnLeadingZero(date.getMonth() + 1);
-  const day = checkOnLeadingZero(date.getDay() + 1);
-  const hours = checkOnLeadingZero(date.getHours());
-  const minutes = checkOnLeadingZero(date.getMinutes());
+  const updatedDate = new Date(date);
+  const year = updatedDate.getFullYear();
+  const month = checkOnLeadingZero(updatedDate.getMonth() + 1);
+  const day = checkOnLeadingZero(updatedDate.getDay() + 1);
+  const hours = checkOnLeadingZero(updatedDate.getHours());
+  const minutes = checkOnLeadingZero(updatedDate.getMinutes());
   return moment(`${year}${month}${day} ${hours}${minutes}`).format(`YYYY/MM/DD H:mm`);
 };
 

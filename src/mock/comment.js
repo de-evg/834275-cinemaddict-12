@@ -1,4 +1,5 @@
 import {getRandomInteger} from "../utils/common.js";
+import {Emoji} from "../const.js";
 
 const authors = [
   `Tim Macoveev`, `Brad Pitt`, `Angelina Jolie`, `Leonardo DiKaprio`
@@ -9,18 +10,24 @@ const messages = [
 ];
 
 const generateDate = (start, end) => {
-  const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  const date = start.getTime() + Math.random() * (end.getTime() - start.getTime());
   return date;
 };
 
 const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+
+const generateEmoji = () => {
+  const emojies = Object.values(Emoji)
+  return emojies[getRandomInteger(0, emojies.length - 1)];   
+}
 
 const generateComment = () => {
   return {
     id: generateId(),
     author: authors[getRandomInteger(0, authors.length - 1)],
     message: messages[getRandomInteger(0, messages.length - 1)],
-    date: generateDate(new Date(1900, 1, 1), new Date())
+    date: generateDate(new Date(1900, 1, 1), new Date()),
+    emoji: generateEmoji()
   };
 };
 
