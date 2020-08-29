@@ -10,17 +10,23 @@ import {UpdateType, UserAction} from "../const.js";
 
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  DETAILS: `details`
+};
+
 class Film {
   constructor(popupContainer, commentModel, changeData, resetView) {
     this._popupContainer = popupContainer;
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._resetView = resetView;
+    this._mode = Mode.DEFAULT;
     this._commentPresenter = {};
 
 
     this._handleFilmClick = this._handleFilmClick.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleCloseBtnClick = this._handleCloseBtnClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -76,11 +82,10 @@ class Film {
 
   _renderPopupComponents() {
     this._renderPopupControls();
-    this._commentListPresenter.renderUpdatedComments();
     this._renderNewCommentFormComponent();
   }
 
-  _initPopup() {
+  _createPopupComponents() {
     this._filmPopupComponent = new FilmPopupView(this._film);
     this._popupControlsComponent = new PopupControls(this._film);
     this._newCommetFormComponent = new NewCommentFormView(this._film);
@@ -90,6 +95,10 @@ class Film {
 
     this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData);
     this._commentListPresenter.init(this._film.comments);
+  }
+
+  _initPopup() {
+    this._createPopupComponents();
     this._renderPopupComponents();
     this._setFilmPopupHandlers();
   }
@@ -102,43 +111,41 @@ class Film {
   }
 
   _setFilmPopupHandlers() {
-    this._filmPopupComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._filmPopupComponent.setFormSubmitHandler(this._handleCloseBtnClick);
     this._popupControlsComponent.setChangeControlHandler(this._handlePopupControlChange);
   }
 
   _showPopup() {
-    this.resetPopupView();
+    this._resetView();
+    this._initPopup();
     this._renderPopup();
     document.addEventListener(`keydown`, this._EscKeyDownHandler);
+    this._mode = Mode.DETAILS;
   }
 
   resetPopupView() {
     this._removeOpenedPopup();
-    this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
-    this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
-    this._renderPopupComponents();
-    this._setFilmPopupHandlers();
-    this._renderPopup();
-    document.addEventListener(`keydown`, this._EscKeyDownHandler);
   }
 
   _removeOpenedPopup() {
-    remove(this._filmPopupComponent);
-    document.removeEventListener(`keydown`, this._EscKeyDownHandler);
+    if (this._mode === Mode.DETAILS) {
+      remove(this._filmPopupComponent);
+      document.removeEventListener(`keydown`, this._EscKeyDownHandler);
+      this._mode = Mode.DEFAULT;
+    }
   }
 
   _handleFilmClick() {
     this._showPopup();
   }
 
-  _handleFormSubmit(film) {
-    this._changeData(film);
+  _handleCloseBtnClick() {
     this._removeOpenedPopup();
   }
 
   _EscKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this._handleFormSubmit(this._film);
+      this._handleCloseBtnClick(this._film);
       document.removeEventListener(`keydown`, this._EscKeyDownHandler);
     }
   }
