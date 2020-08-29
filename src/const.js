@@ -25,7 +25,7 @@ const SortType = {
 };
 
 const Controls = {
-  WATCHLIST: `watchlist`,
+  LIST: `list`,
   WATCHED: `watched`,
   FAVORITE: `favorite`
 };

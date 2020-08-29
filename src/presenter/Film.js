@@ -1,9 +1,8 @@
 import CommentListPresenter from "./CommentList.js";
 
-
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
-import PopupControls from "../view/popup-controls.js";
+// import PopupControls from "../view/popup-controls.js";
 import NewCommentFormView from "../view/new-comment.js";
 
 import {UpdateType, UserAction} from "../const.js";
@@ -81,13 +80,13 @@ class Film {
   }
 
   _renderPopupComponents() {
-    this._renderPopupControls();
+    // this._renderPopupControls();
     this._renderNewCommentFormComponent();
   }
 
   _createPopupComponents() {
     this._filmPopupComponent = new FilmPopupView(this._film);
-    this._popupControlsComponent = new PopupControls(this._film);
+    // this._popupControlsComponent = new PopupControls(this._film);
     this._newCommetFormComponent = new NewCommentFormView(this._film);
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
@@ -111,14 +110,17 @@ class Film {
   }
 
   _setFilmPopupHandlers() {
-    this._filmPopupComponent.setFormSubmitHandler(this._handleCloseBtnClick);
-    this._popupControlsComponent.setChangeControlHandler(this._handlePopupControlChange);
+    this._filmPopupComponent.setBtnCloseClickHandler(this._handleCloseBtnClick);
+    this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlChange);
+    // this._popupControlsComponent.setWatchlistChangeHandler(this._handlePopupControlChange);
   }
 
   _showPopup() {
     this._resetView();
     this._initPopup();
     this._renderPopup();
+    const x = document.querySelectorAll(`#watched`);
+    console.log(x);
     document.addEventListener(`keydown`, this._EscKeyDownHandler);
     this._mode = Mode.DETAILS;
   }
