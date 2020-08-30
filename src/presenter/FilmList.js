@@ -227,8 +227,6 @@ class FilmList {
 
   _renderFilmList() {
     this._renderMainFilmList();
-
-    //рендер экстра-филмс
   }
 }
 

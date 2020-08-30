@@ -133,7 +133,7 @@ const generateFilm = () => {
     isWatched: !!(Math.random() < 0.5),
     isFavorite: !!(Math.random() < 0.5),
     emoji: ``,
-    comentDetails: ``
+    message: ``
   };
 };
 

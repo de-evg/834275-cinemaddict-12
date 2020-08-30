@@ -42,13 +42,13 @@ const commentModel = new CommentModel();
 const mainFilmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
 mainFilmListPresenter.init();
 
-// const statisticComponent = new StatisticView();
-// render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
+const statisticComponent = new StatisticView();
+render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
 
-// const statistic = generateStaistic(films);
-// render(statisticComponent, new UserRankView(statistic.rank), RenderPosition.BEFOREEND);
-// render(statisticComponent, new StatisticFiltersView(), RenderPosition.BEFOREEND);
-// render(statisticComponent, new StaticticContentView(statistic), RenderPosition.BEFOREEND);
-// render(statisticComponent, new StatisticChartView(), RenderPosition.BEFOREEND);
+const statistic = generateStaistic(films);
+render(statisticComponent, new UserRankView(statistic.rank), RenderPosition.BEFOREEND);
+render(statisticComponent, new StatisticFiltersView(), RenderPosition.BEFOREEND);
+render(statisticComponent, new StaticticContentView(statistic), RenderPosition.BEFOREEND);
+render(statisticComponent, new StatisticChartView(), RenderPosition.BEFOREEND);
 
 render(footerStatisticElement, new FilmsCountView(films.length), RenderPosition.BEFOREEND);

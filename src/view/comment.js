@@ -1,3 +1,4 @@
+import he from "he";
 import SmartView from "./smart.js";
 import {formatCommentDate} from "../utils/comment.js";
 
@@ -16,7 +17,7 @@ class Comment extends SmartView {
       <img src="./images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-${this._data.emoji}">
     </span>
     <div>
-      <p class="film-details__comment-text">${this._data.message}</p>
+      <p class="film-details__comment-text">${he.encode(this._data.message)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${this._data.author}</span>
         <span class="film-details__comment-day">${date}</span>

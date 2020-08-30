@@ -17,9 +17,9 @@ const generateDate = (start, end) => {
 const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
 
 const generateEmoji = () => {
-  const emojies = Object.values(Emoji)
-  return emojies[getRandomInteger(0, emojies.length - 1)];   
-}
+  const emojies = Object.values(Emoji);
+  return emojies[getRandomInteger(0, emojies.length - 1)];
+};
 
 const generateComment = () => {
   return {

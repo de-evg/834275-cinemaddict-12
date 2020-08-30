@@ -146,7 +146,7 @@ class Film {
 
   _EscKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this._handleCloseBtnClick(this._film);
+      this._handleCloseBtnClick();
       document.removeEventListener(`keydown`, this._EscKeyDownHandler);
     }
   }
@@ -205,21 +205,20 @@ class Film {
     );
   }
 
-  _handleFormSubmit() {
-    if (this._newCommetFormComponent.getComment().emoji) {
-      this._commentModel.addComment(UserAction.ADD_COMMENT, this._newCommetFormComponent.getComment());    
-      this._changeData(
-          UserAction.ADD_COMMENT,
-          UpdateType.PATCH,
-          Object.assign(
-              {},
-              this._film,
-              {
-                comments: this._commentModel.getComments()
-              }
-          )
-      );
+  _handleFormSubmit(update) {
+    if (this._newCommetFormComponent.getComment()) {
+      this._commentModel.addComment(UserAction.ADD_COMMENT, this._newCommetFormComponent.getComment());
     }
+    update.comments = this._commentModel.getComments();
+    this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._film,
+            update
+        )
+    );
   }
 
   _renderPopup() {
