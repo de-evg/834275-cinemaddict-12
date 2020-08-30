@@ -186,6 +186,7 @@ class FilmPopup extends SmartView {
   _submitHandler(evt) {
     if (evt.ctrlKey && evt.key === `Enter`) {
       evt.preventDefault();
+      document.removeEventListener(`keydown`, this._submitHandler);
       this._callback.submit(FilmPopup.parseDataToFilm({
         inWatchlist: this._data.inWatchlist,
         isWatched: this._data.isWatched,
