@@ -2,7 +2,6 @@ import CommentListPresenter from "./comment-list.js";
 
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
-// import PopupControls from "../view/popup-controls.js";
 import NewCommentFormView from "../view/new-comment.js";
 
 import {UpdateType, UserAction} from "../const.js";

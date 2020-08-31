@@ -1,4 +1,4 @@
-import FilmPresenter from "./film.js";
+import MoviePresenter from "./movie.js";
 
 import BoardView from "../view/board.js";
 import FilmListView from "../view/films-list.js";
@@ -117,9 +117,9 @@ class FilmList {
   }
 
   _renderFilm(film) {
-    const filmPresenter = new FilmPresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
-    filmPresenter.init(film, this._filmsContainer);
-    this._filmPresenter[film.id] = filmPresenter;
+    const moviePresenter = new MoviePresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
+    moviePresenter.init(film, this._filmsContainer);
+    this._filmPresenter[film.id] = moviePresenter;
   }
 
   _renderFilms(films) {

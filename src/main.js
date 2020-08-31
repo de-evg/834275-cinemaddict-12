@@ -10,7 +10,7 @@ import StaticticContentView from "./view/statistic-content.js";
 import StatisticChartView from "./view/statistic-chart.js";
 import FilmsCountView from "./view/films-count.js";
 
-import FilmListPresenter from "./presenter/film-list.js";
+import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 
 import {generateFilm} from "./mock/film.js";
@@ -39,8 +39,8 @@ filterPresenter.init();
 
 const commentModel = new CommentModel();
 
-const mainFilmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
-mainFilmListPresenter.init();
+const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
+movieListPresenter.init();
 
 const statisticComponent = new StatisticView();
 render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
