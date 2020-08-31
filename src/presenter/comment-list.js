@@ -1,4 +1,4 @@
-import CommentPresenter from "./comment.js";
+import CommentPresenter from "./comment-item.js";
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData) {
