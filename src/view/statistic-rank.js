@@ -1,6 +1,6 @@
 import AbstractView from "./abstract.js";
 
-class UserRank extends AbstractView {
+class StatisticRank extends AbstractView {
   constructor(rank) {
     super();
     this._rank = rank;
@@ -15,4 +15,4 @@ class UserRank extends AbstractView {
   }
 }
 
-export default UserRank;
+export default StatisticRank;

@@ -56,6 +56,14 @@ const FilterType = {
   FAVORITES: `favorites`
 };
 
+const StatisticFilterType = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
 const MenuItem = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
@@ -71,4 +79,4 @@ const Emoji = {
   [`EMOJI-SMILE`]: `smile`,
 };
 
-export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji};
+export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType};

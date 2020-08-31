@@ -112,7 +112,17 @@ const generateComments = () => {
   return commetns;
 };
 
+const generateWatchedData = () => {
+  const maxYearsGap = 2;
+  const yearsGap = getRandomInteger(-maxYearsGap, maxYearsGap);
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getFullYear() + yearsGap);
+  return new Date(currentDate);
+}
+
 const generateFilm = () => {
+  const isWatchedFilm = !!(Math.random() < 0.5);
+  const watchedFilmDate = isWatchedFilm ? generateWatchedData() : null;
   return {
     id: generateId(),
     title: generateTitle(),
@@ -130,10 +140,11 @@ const generateFilm = () => {
     actors: Array.from(generateActors()),
     writers: Array.from(generateWriters()),
     inWatchlist: !!(Math.random() < 0.5),
-    isWatched: !!(Math.random() < 0.5),
+    isWatched: isWatchedFilm,
     isFavorite: !!(Math.random() < 0.5),
     emoji: ``,
-    message: ``
+    message: ``,
+    watchedDate: watchedFilmDate
   };
 };
 
