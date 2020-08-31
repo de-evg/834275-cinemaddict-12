@@ -54,11 +54,12 @@ class FilmList {
     this._renderFilmList();
   }
 
-  _destroy() {
+  destroy() {
     this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
 
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
+    this._commentModel.removeObserver(this._handleModelEvent);
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {

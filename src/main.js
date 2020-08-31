@@ -2,6 +2,7 @@ import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
 import CommentModel from "./model/comments.js";
 
+import SiteMenuView from "./view/site-menu.js"
 import UserProfileView from "./view/user-profile.js";
 import StatisticView from "./view/statistic.js";
 import UserRankView from "./view/user-rank.js";
@@ -16,7 +17,9 @@ import FilterPresenter from "./presenter/filter.js";
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
 import {generateStaistic} from "./mock/statistic.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
+
+import {MenuItem, FilterType, UpdateType} from "./const.js";
 
 const ALL_FILMS_COUNT = 23;
 
@@ -30,25 +33,59 @@ const films = new Array(ALL_FILMS_COUNT).fill().map(generateFilm);
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);
 
+let statisticComponent = null;
+const handleSiteMenuClick = (menuItem) => {
+  siteMenuComponent.setActiveMenuItem(menuItem);
+  switch (menuItem) {
+    case MenuItem.All:
+      if (statisticComponent) {
+        remove(statisticComponent);
+      }
+      break;
+    case (MenuItem.WATCHLIST):
+      if (statisticComponent) {
+        remove(statisticComponent);
+      }
+      break;
+    case (MenuItem.HISTORY):
+      if (statisticComponent) {
+
+        remove(statisticComponent);
+      }
+      break;
+    case (MenuItem.FAVORITES):
+      if (statisticComponent) {
+        remove(statisticComponent);
+      }
+      break;
+    case (MenuItem.STATISTIC):
+      movieListPresenter.destroy();
+      statisticComponent = new StatisticView();
+      render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
+      const statistic = generateStaistic(filmsModel.getFilms());
+      render(statisticComponent, new UserRankView(statistic.rank), RenderPosition.BEFOREEND);
+      render(statisticComponent, new StatisticFiltersView(), RenderPosition.BEFOREEND);
+      render(statisticComponent, new StaticticContentView(statistic), RenderPosition.BEFOREEND);
+      render(statisticComponent, new StatisticChartView(), RenderPosition.BEFOREEND);
+      break;
+  }
+};
+
+const siteMenuComponent = new SiteMenuView(MenuItem.ALL);
+siteMenuComponent.setMenuTypeChangeHandler(handleSiteMenuClick);
+render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
+
 const profileRang = generateProfileRang();
 render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
 
 const filterModel = new FilterModel();
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
-filterPresenter.init();
 
 const commentModel = new CommentModel();
 
+const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, filmsModel, handleSiteMenuClick);
+filterPresenter.init();
+
 const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
 movieListPresenter.init();
-
-const statisticComponent = new StatisticView();
-render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
-
-const statistic = generateStaistic(films);
-render(statisticComponent, new UserRankView(statistic.rank), RenderPosition.BEFOREEND);
-render(statisticComponent, new StatisticFiltersView(), RenderPosition.BEFOREEND);
-render(statisticComponent, new StaticticContentView(statistic), RenderPosition.BEFOREEND);
-render(statisticComponent, new StatisticChartView(), RenderPosition.BEFOREEND);
 
 render(footerStatisticElement, new FilmsCountView(films.length), RenderPosition.BEFOREEND);
