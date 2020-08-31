@@ -1,4 +1,5 @@
 import SmartView from "./smart.js";
+import {Controls, UserAction} from "../const.js";
 import {formatReleaseDate, formatDuration} from "../utils/film.js";
 
 class FilmPopup extends SmartView {
@@ -7,6 +8,8 @@ class FilmPopup extends SmartView {
     this._isFullDate = true;
     this._data = FilmPopup.parseFilmToData(film);
     this._callback = {};
+    this._btnCloseClickHandler = this._btnCloseClickHandler.bind(this);
+    this._changeHandler = this._changeHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
 
     this._setInnerHandlers();
@@ -26,7 +29,10 @@ class FilmPopup extends SmartView {
       genres,
       description,
       comments,
-      ageRating} = this._data;
+      ageRating,
+      inWatchlist,
+      isWatched,
+      isFavorite} = this._data;
 
     const releaseDate = formatReleaseDate(release, this._isFullDate);
     const filmDuration = formatDuration(duration);
@@ -94,7 +100,33 @@ class FilmPopup extends SmartView {
                       </p>
                     </div>
                   </div>
-                  
+                  <section class="film-details__controls">
+                    <input 
+                      type="checkbox" 
+                      class="film-details__control-input visually-hidden" 
+                      id="list" 
+                      name="watchlist" 
+                      value="${UserAction.ADD_TO_WATCHED}" 
+                      ${inWatchlist ? `checked` : ``}>
+                    <label for="list" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+
+                    <input 
+                      type="checkbox" 
+                      class="film-details__control-input visually-hidden" 
+                      id="watched" 
+                      name="watched" 
+                      value="${UserAction.ADD_TO_WATCHED}" 
+                      ${isWatched ? `checked` : ``}>
+                    <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+      
+                    <input type="checkbox" 
+                      class="film-details__control-input visually-hidden" 
+                      id="favorite" 
+                      name="favorite" 
+                      value="${UserAction.ADD_TO_FAVORITES}" 
+                      ${isFavorite ? `checked` : ``}>
+                    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+                  </section>
                 </div>
 
                 <div class="form-details__bottom-container">
@@ -107,43 +139,65 @@ class FilmPopup extends SmartView {
             </section>`;
   }
 
+  setChangeControlHandler(callback) {
+    this._callback.change = callback;
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`change`, this._changeHandler);
+  }
+
+  setBtnCloseClickHandler(callback) {
+    this._callback.close = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._btnCloseClickHandler);
+  }
+
+  setSubmitHandler(callback) {
+    this._callback.submit = callback;
+    document.addEventListener(`keydown`, this._submitHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._clickHandler);
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._btnCloseClickHandler);
+    this.getElement().querySelector(`.film-details__inner`).addEventListener(`change`, this._changeHandler);
+    document.addEventListener(`keydown`, this._submitHandler);
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this.updateData({
-      isFavorite: !this._data.isFavorite
-    });
+  _changeHandler(evt) {
+    if (evt.target.classList.contains(`film-details__control-input`)) {
+      evt.preventDefault();
+      let update;
+      switch (evt.target.id) {
+        case Controls.LIST:
+          update = {inWatchlist: !this._data.inWatchlist};
+          break;
+        case Controls.WATCHED:
+          update = {isWatched: !this._data.isWatched};
+          break;
+        case Controls.FAVORITE:
+          update = {isFavorite: !this._data.isFavorite};
+          break;
+      }
+      this.updateData(update, true);
+    }
   }
 
-  _watchedClickHandler(evt) {
+  _btnCloseClickHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      isWatched: !this._data.isWatched
-    });
-  }
-
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
-    this.updateData({
-      inWatchlist: !this._data.inWatchlist
-    });
+    this._callback.close();
   }
 
   _submitHandler(evt) {
-    evt.preventDefault();
-    this._callback.submit(FilmPopup.parseDataToFilm(this._data));
-  }
-
-  setFormSubmitHandler(callback) {
-    this._callback.submit = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._submitHandler);
+    if (evt.ctrlKey && evt.key === `Enter`) {
+      evt.preventDefault();
+      document.removeEventListener(`keydown`, this._submitHandler);
+      this._callback.submit(FilmPopup.parseDataToFilm({
+        inWatchlist: this._data.inWatchlist,
+        isWatched: this._data.isWatched,
+        isFavorite: this._data.isFavorite
+      }));
+    }
   }
 
   static parseFilmToData(film) {

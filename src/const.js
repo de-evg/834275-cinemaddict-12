@@ -25,7 +25,7 @@ const SortType = {
 };
 
 const Controls = {
-  WATCHLIST: `watchlist`,
+  LIST: `list`,
   WATCHED: `watched`,
   FAVORITE: `favorite`
 };
@@ -35,4 +35,32 @@ const DescritptionRange = {
   MAX: 139
 };
 
-export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls};
+const UserAction = {
+  ADD_TO_WATCHLIST: `ADD_TO_WATCHLIST`,
+  ADD_TO_WATCHED: `ADD_TO_WATCHED`,
+  ADD_TO_FAVORITES: `ADD_TO_FAVORITES`,
+  DELETE_COMMENT: `DELETE_COMMENT`,
+  ADD_COMMENT: `ADD_COMMENT`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
+const Emoji = {
+  [`EMOJI-ANGRY`]: `angry`,
+  [`EMOJI-PUKE`]: `puke`,
+  [`EMOJI-SLEEPING`]: `sleeping`,
+  [`EMOJI-SMILE`]: `smile`,
+};
+
+export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji};
