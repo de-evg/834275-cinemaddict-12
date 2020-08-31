@@ -19,12 +19,16 @@ class Comment {
     this._renderComment(this._comment);
   }
 
+  destroy() {
+    remove(this._commentComponent);
+  }
+
   _setCommentHandlers() {
     this._commentComponent.setDeleteClickHandler(this._handelDeleteClick);
   }
 
-  destroy() {
-    remove(this._commentComponent);
+  _renderComment() {
+    render(this._commentContainer, this._commentComponent, RenderPosition.BEFOREEND);
   }
 
   _handelDeleteClick() {
@@ -33,10 +37,6 @@ class Comment {
 
   _handleAddBtnPress() {
     this._addData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._newComment);
-  }
-
-  _renderComment() {
-    render(this._commentContainer, this._commentComponent, RenderPosition.BEFOREEND);
   }
 }
 

@@ -1,4 +1,4 @@
-import CommentListPresenter from "./CommentList.js";
+import CommentListPresenter from "./commentList.js";
 
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";
@@ -29,7 +29,6 @@ class Film {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handlePopupControlChange = this._handlePopupControlChange.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
@@ -61,6 +60,10 @@ class Film {
     remove(this._filmPopupComponent);
   }
 
+  resetPopupView() {
+    this._removeOpenedPopup();
+  }
+
   _initFilm() {
     this._filmComponent = new FilmView(this._film);
     this._setFilmHandlers();
@@ -81,13 +84,11 @@ class Film {
   }
 
   _renderPopupComponents() {
-    // this._renderPopupControls();
     this._renderNewCommentFormComponent();
   }
 
   _createPopupComponents() {
     this._filmPopupComponent = new FilmPopupView(this._film);
-    // this._popupControlsComponent = new PopupControls(this._film);
     this._newCommetFormComponent = new NewCommentFormView(this._film);
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
@@ -124,16 +125,20 @@ class Film {
     this._mode = Mode.DETAILS;
   }
 
-  resetPopupView() {
-    this._removeOpenedPopup();
-  }
-
   _removeOpenedPopup() {
     if (this._mode === Mode.DETAILS) {
       remove(this._filmPopupComponent);
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
       this._mode = Mode.DEFAULT;
     }
+  }
+
+  _renderPopup() {
+    render(this._popupContainer, this._filmPopupComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderFilm() {
+    render(this._filmsContainer, this._filmComponent, RenderPosition.BEFOREEND);
   }
 
   _handleFilmClick() {
@@ -149,18 +154,6 @@ class Film {
       this._handleCloseBtnClick();
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
     }
-  }
-
-  _handlePopupControlChange(actionType, update) {
-    this._changeData(
-        actionType,
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._film,
-            update
-        )
-    );
   }
 
   _handleWatchlistClick() {
@@ -219,14 +212,6 @@ class Film {
             update
         )
     );
-  }
-
-  _renderPopup() {
-    render(this._popupContainer, this._filmPopupComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderFilm() {
-    render(this._filmsContainer, this._filmComponent, RenderPosition.BEFOREEND);
   }
 }
 

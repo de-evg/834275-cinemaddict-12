@@ -10,8 +10,8 @@ import StaticticContentView from "./view/statistic-content.js";
 import StatisticChartView from "./view/statistic-chart.js";
 import FilmsCountView from "./view/films-count.js";
 
-import FilmListPresenter from "./presenter/FilmList.js";
-import SiteFilterPresenter from "./presenter/SiteFilter.js";
+import FilmListPresenter from "./presenter/filmList.js";
+import FilterPresenter from "./presenter/filter.js";
 
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
@@ -34,7 +34,7 @@ const profileRang = generateProfileRang();
 render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
 
 const filterModel = new FilterModel();
-const filterPresenter = new SiteFilterPresenter(siteMainElement, filterModel, filmsModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 filterPresenter.init();
 
 const commentModel = new CommentModel();

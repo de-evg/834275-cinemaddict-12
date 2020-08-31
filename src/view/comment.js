@@ -27,14 +27,14 @@ class Comment extends SmartView {
   </li>`;
   }
 
-  _deleteBtnClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.deleteClick();
-  }
-
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
+  }
+
+  _deleteBtnClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick();
   }
 
   static parseCommentToData(comment) {

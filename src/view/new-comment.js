@@ -67,13 +67,14 @@ class NewComment extends SmartView {
     return newComment;
   }
 
-  _checkCommentReady() {
-    return this._data.emoji && this._data.message;
-  }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._commentMessageChangeHandler);
+  }
+
+  _checkCommentReady() {
+    return this._data.emoji && this._data.message;
   }
 
   _commentMessageChangeHandler(evt) {

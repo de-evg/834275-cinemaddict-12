@@ -1,4 +1,4 @@
-import FilmPresenter from "./Film.js";
+import FilmPresenter from "./film.js";
 
 import BoardView from "../view/board.js";
 import FilmListView from "../view/films-list.js";
@@ -97,6 +97,63 @@ class FilmList {
     }
   }
 
+  _renderTitle() {
+    render(this._mainMovieListComponent, this._titleMainListComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderFilters() {
+    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _sortFilms(sortType) {
+    this._currentSortType = sortType;
+  }
+
+  _clearFilmList() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._renderedFilmCount = FILMS_STEP;
+  }
+
+  _renderFilm(film) {
+    const filmPresenter = new FilmPresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
+    filmPresenter.init(film, this._filmsContainer);
+    this._filmPresenter[film.id] = filmPresenter;
+  }
+
+  _renderFilms(films) {
+    films.forEach((film) => this._renderFilm(film));
+  }
+
+  _renderMainFilmList() {
+    const films = this._getFilms();
+    const filmsCount = films.length;
+
+    if (!films.length) {
+      this._renderNoFilms();
+    }
+
+    this._renderTitle();
+    this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
+    if (films.length >= this._renderedFilmCount) {
+      this._renderLoadMoreBtn();
+    }
+  }
+
+  _renderNoFilms() {
+    render(this._movieListContainer, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderLoadMoreBtn() {
+    render(this._mainMovieListComponent, this._loadingMoreBtnComponent, RenderPosition.BEFOREEND);
+    this._loadingMoreBtnComponent.setClickHandler(this._handleLoadMoreBtnClick);
+  }
+
+  _renderFilmList() {
+    this._renderMainFilmList();
+  }
+
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.ADD_TO_WATCHLIST:
@@ -139,25 +196,6 @@ class FilmList {
       .forEach((presenter) => presenter.resetPopupView());
   }
 
-  _renderTitle() {
-    render(this._mainMovieListComponent, this._titleMainListComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderFilters() {
-    render(this._mainElement, this._filterComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  _sortFilms(sortType) {
-    this._currentSortType = sortType;
-  }
-
-  _clearFilmList() {
-    Object
-      .values(this._filmPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._renderedFilmCount = FILMS_STEP;
-  }
-
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
@@ -178,35 +216,6 @@ class FilmList {
     this._filmPresenter[updatedFilm.id].init(updatedFilm, this._filmsContainer);
   }
 
-  _renderFilm(film) {
-    const filmPresenter = new FilmPresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
-    filmPresenter.init(film, this._filmsContainer);
-    this._filmPresenter[film.id] = filmPresenter;
-  }
-
-  _renderFilms(films) {
-    films.forEach((film) => this._renderFilm(film));
-  }
-
-  _renderMainFilmList() {
-    const films = this._getFilms();
-    const filmsCount = films.length;
-
-    if (!films.length) {
-      this._renderNoFilms();
-    }
-
-    this._renderTitle();
-    this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
-    if (films.length >= this._renderedFilmCount) {
-      this._renderLoadMoreBtn();
-    }
-  }
-
-  _renderNoFilms() {
-    render(this._movieListContainer, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
-  }
-
   _handleLoadMoreBtnClick() {
     const filmsCount = this._getFilms().length;
     const newRenderedFilmCount = Math.min(filmsCount, this._renderedFilmCount + FILMS_STEP);
@@ -218,15 +227,6 @@ class FilmList {
     if (this._renderedFilmCount >= filmsCount) {
       remove(this._loadingMoreBtnComponent);
     }
-  }
-
-  _renderLoadMoreBtn() {
-    render(this._mainMovieListComponent, this._loadingMoreBtnComponent, RenderPosition.BEFOREEND);
-    this._loadingMoreBtnComponent.setClickHandler(this._handleLoadMoreBtnClick);
-  }
-
-  _renderFilmList() {
-    this._renderMainFilmList();
   }
 }
 

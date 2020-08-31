@@ -1,4 +1,4 @@
-import CommentPresenter from "./Comment.js";
+import CommentPresenter from "./comment.js";
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData) {
@@ -17,10 +17,6 @@ class CommentList {
     this._renderCommentList();
   }
 
-  renderUpdatedComments() {
-    this._renderCommentList();
-  }
-
   _renderComment(comment) {
     this._comment = comment;
     const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._handleCommentSubmit);
@@ -30,6 +26,11 @@ class CommentList {
 
   _renderComments(comments) {
     comments.forEach((comment) => this._renderComment(comment));
+  }
+
+  _renderCommentList() {
+    const comments = this._commentModel.getComments();
+    this._renderComments(comments);
   }
 
   _handleDeleteBtnClick(actionType, updateType, update) {
@@ -61,11 +62,6 @@ class CommentList {
             }
         )
     );
-  }
-
-  _renderCommentList() {
-    const comments = this._commentModel.getComments();
-    this._renderComments(comments);
   }
 }
 
