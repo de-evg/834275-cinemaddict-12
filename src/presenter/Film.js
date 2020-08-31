@@ -1,4 +1,4 @@
-import CommentListPresenter from "./commentList.js";
+import CommentListPresenter from "./comment-list.js";
 
 import FilmView from "../view/film";
 import FilmPopupView from "../view/film-popup.js";

@@ -10,7 +10,7 @@ import StaticticContentView from "./view/statistic-content.js";
 import StatisticChartView from "./view/statistic-chart.js";
 import FilmsCountView from "./view/films-count.js";
 
-import FilmListPresenter from "./presenter/filmList.js";
+import FilmListPresenter from "./presenter/film-list.js";
 import FilterPresenter from "./presenter/filter.js";
 
 import {generateFilm} from "./mock/film.js";
