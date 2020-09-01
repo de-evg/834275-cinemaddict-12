@@ -16,7 +16,11 @@ import {render, RenderPosition} from "./utils/render.js";
 
 import {MenuItem} from "./const.js";
 
+import Api from "./api.js";
+
 const ALL_FILMS_COUNT = 23;
+const AUTHORIZATION = `Basic aS2dfgSfer3fbrb3fw`;
+const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
@@ -25,6 +29,11 @@ const siteFooterElement = document.querySelector(`.footer`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 
 const films = new Array(ALL_FILMS_COUNT).fill().map(generateFilm);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+api.getFilms().then((films1) => {
+  console.log(films1);
+});
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);
 

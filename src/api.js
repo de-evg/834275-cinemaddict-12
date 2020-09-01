@@ -1,3 +1,5 @@
+import FilmsModel from "./model/films.js";
+
 const Method = {
   GET: `GET`,
   PUT: `PUT`
@@ -10,23 +12,25 @@ const SuccessHTTPStatusRange = {
 
 class Api {
   constructor(endPoint, authorization) {
-    this._emdPoint = endPoint;
+    this._endPoint = endPoint;
     this._authorization = authorization;
   }
 
-  getFilmss() {
+  getFilms() {
     return this._load({url: `movies`})
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
   updateFilm(film) {
     return this._load({
       url: `movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(film),
+      body: JSON.stringify(FilmsModel.adaptToServfer(film)),
       headers: new Headers({"Content-Type": `application/json`})
     })
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then(FilmsModel.adaptToClient);
   }
 
   _load({
