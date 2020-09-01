@@ -112,17 +112,9 @@ const generateComments = () => {
   return commetns;
 };
 
-const generateWatchedData = () => {
-  const maxYearsGap = 2;
-  const yearsGap = getRandomInteger(-maxYearsGap, maxYearsGap);
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getFullYear() + yearsGap);
-  return new Date(currentDate);
-}
-
 const generateFilm = () => {
   const isWatchedFilm = !!(Math.random() < 0.5);
-  const watchedFilmDate = isWatchedFilm ? generateWatchedData() : null;
+  const watchedFilmDate = isWatchedFilm ? generateDate(new Date(2020, 0, 1), new Date()) : null;
   return {
     id: generateId(),
     title: generateTitle(),

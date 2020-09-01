@@ -39,37 +39,28 @@ const findTopGenre = (films) => {
   }
 };
 
-const generateStaistic = (films) => {
-  return {
-    watched: countWatchedFilms(films),
-    duration: countDurationWatchedFilms(films),
-    genre: findTopGenre(films),
-    rank: userRanks[getRandomInteger(0, userRanks.length - 1)]
-  };
-};
-
 const statisticFilter = {
   [`all-time`]: (films) => films,
   [`today`]: (films) => films.filter((film) => {
-    return film.watched && (
-      moment(film.watchetData).isSameOrBefore(new Date(), `day`) ||
-      moment(film.watchetData).isSameOrAfter(new Date(), `day`));
+    return film.isWatched && (
+      moment(film.watchedDate).isSameOrBefore(new Date(), `day`) ||
+      moment(film.watchedDate).isSameOrAfter(new Date(), `day`));
   }),
   [`week`]: (films) => films.filter((film) => {
-    return film.watched && (
-      moment(film.watchetData).isSameOrBefore(new Date(), `week`) ||
-      moment(film.watchetData).isSameOrAfter(new Date(), `week`));
+    return film.isWatched && (
+      moment(film.watchedDate).isSameOrBefore(new Date(), `week`) ||
+      moment(film.watchedDate).isSameOrAfter(new Date(), `week`));
   }),
   [`month`]: (films) => films.filter((film) => {
-    return film.watched && (
-      moment(film.watchetData).isSameOrBefore(new Date(), `month`) ||
-      moment(film.watchetData).isSameOrAfter(new Date(), `month`));
+    return film.isWatched && (
+      moment(film.watchedDate).isSameOrBefore(new Date(), `month`) ||
+      moment(film.watchedDate).isSameOrAfter(new Date(), `month`));
   }),
   [`year`]: (films) => films.filter((film) => {
-    return film.watched && (
-      moment(film.watchetData).isSameOrBefore(new Date(), `year`) ||
-      moment(film.watchetData).isSameOrAfter(new Date(), `year`));
+    return film.isWatched && (
+      moment(film.watchedDate).isSameOrBefore(new Date(), `year`) ||
+      moment(film.watchedDate).isSameOrAfter(new Date(), `year`));
   }),
 };
 
-export {generateStaistic, statisticFilter, findTopGenre, countDurationWatchedFilms, countWatchedFilms};
+export {statisticFilter, findTopGenre, countDurationWatchedFilms, countWatchedFilms};

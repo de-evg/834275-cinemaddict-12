@@ -7,7 +7,7 @@ import StatisticChartView from "../view/statistic-chart";
 import {statisticFilter, countDurationWatchedFilms, findTopGenre} from "../utils/statistic.js";
 
 import {StatisticFilterType} from "../const.js";
-import {render, RenderPosition, remove} from "../utils/render.js";
+import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {getRandomInteger} from "../utils/common.js";
 
 const userRanks = [
@@ -27,12 +27,10 @@ class Staitstics {
   init() {
     this._statisticComponent = new StaitsticView();
     this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);    
-    this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
-    this._statisticContentComponent = new StatisticContentView(this._getStatistic(this._statisics));
+    this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);    
     this._statisticChartView = new StatisticChartView();
-
     this._statisticFiltersComponent.setPeriodChandeHandler(this._handelerChangePeriod);
-    this._renderStatistics();
+    this._initContent();
   }
 
   destroy() {
@@ -51,6 +49,20 @@ class Staitstics {
     render(this._statisticContainer, this._statisticComponent, RenderPosition.BEFOREEND);
   }
 
+  _initContent() {
+    this._prevStatisticContentComponent = this._statisticContentComponent;
+
+    this._statisticContentComponent = new StatisticContentView(this._getStatistic(this._statisics));
+    if (!this._prevStatisticContentComponent) {
+      this._renderStatistics();
+      return;
+    }
+
+    replace(this._statisticContentComponent, this._prevStatisticContentComponent);    
+
+    remove(this._prevStatisticContentComponent);
+  }
+
   _getStatistic() {
     return this._statisics;
   }
@@ -67,6 +79,7 @@ class Staitstics {
 
   _handelerChangePeriod(filterType) {
     this._setStatistic(filterType);
+    this._initContent();
   }
 }
 
