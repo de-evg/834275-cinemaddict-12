@@ -6,6 +6,7 @@ import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoFilmsView from "../view/no-films.js";
 import LoadMoreBtnView from "../view/load-more-btn.js";
 import SortView from "../view/sort.js";
+import LoadingFilmsView from "../view/loading-films.js";
 
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortByRelease, sortByRating} from "../utils/sort.js";
@@ -26,11 +27,13 @@ class FilmList {
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
+    this._loadingFilmsComponent = new LoadingFilmsView();
 
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
 
     this._filmPresenter = {};
+    this._isLoading = true;
 
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -52,6 +55,11 @@ class FilmList {
     render(this._boardComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderSort();
     render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+    this._renderTitle();
     this._renderFilmList();
   }
 
@@ -134,17 +142,19 @@ class FilmList {
 
     if (!films.length) {
       this._renderNoFilms();
-    }
-
-    this._renderTitle();
+    }    
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
     if (films.length > this._renderedFilmCount) {
       this._renderLoadMoreBtn();
     }
   }
 
+  _renderLoading() {
+    render(this._mainMovieListComponent, this._loadingFilmsComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderNoFilms() {
-    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
+    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoadMoreBtn() {
@@ -181,6 +191,11 @@ class FilmList {
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+        this.init();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingFilmsComponent);
         this.init();
         break;
     }

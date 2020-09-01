@@ -10,15 +10,13 @@ import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
 
-import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
 import {render, RenderPosition} from "./utils/render.js";
 
-import {MenuItem} from "./const.js";
+import {MenuItem, UpdateType} from "./const.js";
 
 import Api from "./api.js";
 
-const ALL_FILMS_COUNT = 23;
 const AUTHORIZATION = `Basic aS2dfgSfer3fbrb3fw`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
@@ -28,15 +26,15 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 
-const films = new Array(ALL_FILMS_COUNT).fill().map(generateFilm);
-
-const api = new Api(END_POINT, AUTHORIZATION);
-api.getFilms().then((films1) => {
-  console.log(films1);
-});
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
-
+const api = new Api(END_POINT, AUTHORIZATION);
+api.getFilms()
+.then((films) => {
+  filmsModel.setFilms(UpdateType.INIT, films);
+})
+.catch(() => {
+  filmsModel.setFilms(UpdateType.INIT, []);
+});
 
 const handleSiteMenuClick = (menuItem) => {
   siteMenuComponent.setActiveMenuItem(menuItem);
@@ -68,7 +66,7 @@ const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, film
 filterPresenter.init();
 
 const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
-const statisticPresenter = new StatisticPresenter(siteMainElement, films);
+const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel.getFilms());
 movieListPresenter.init();
 
-render(footerStatisticElement, new FilmsCountView(films.length), RenderPosition.BEFOREEND);
+render(footerStatisticElement, new FilmsCountView(filmsModel.getFilms().length, RenderPosition.BEFOREEND));

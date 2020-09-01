@@ -10,8 +10,10 @@ class Film extends Observer {
     return this._films;
   }
 
-  setFilms(films) {
+  setFilms(actionType, films) {
     this._films = films.slice();
+
+    this._notify(actionType);
   }
 
   updateFilm(actionType, update) {

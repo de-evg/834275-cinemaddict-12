@@ -1,7 +1,12 @@
+import Api from "../api";
 import CommentPresenter from "./comment-item.js";
+
+const AUTHORIZATION = `Basic aS2dfgSfer3fbrb3fw`;
+const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict/`;
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData) {
+    this._api = new Api(END_POINT, AUTHORIZATION);
     this._popupComponent = popupComponent;
     this._film = film;
     this._commentListContainer = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
@@ -15,6 +20,11 @@ class CommentList {
   init(comments) {
     this._commentModel.setComments(comments);
     this._renderCommentList();
+  }
+
+  _getComments() {
+    this._api.getComments(this._film.id)
+      .then((comments) => this._commentModel.setComments(comments));      
   }
 
   _renderComment(comment) {
