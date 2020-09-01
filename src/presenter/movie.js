@@ -30,6 +30,7 @@ class Film {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handlePopupControlsChange = this._handlePopupControlsChange.bind(this);
   }
 
   init(film, filmsContainer) {
@@ -87,7 +88,7 @@ class Film {
   }
 
   _createPopupComponents() {
-    this._filmPopupComponent = new FilmPopupView(this._film);
+    this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
     this._newCommetFormComponent = new NewCommentFormView(this._film);
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
@@ -155,10 +156,22 @@ class Film {
     }
   }
 
+  _handlePopupControlsChange(update) {
+    this._changeData(
+        UserAction.CHANGE_CONTROL,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._film,
+            update
+        )
+    );
+  }
+
   _handleWatchlistClick() {
     this._changeData(
-        UserAction.ADD_TO_WATCHLIST,
-        UpdateType.PATCH,
+        UserAction.CHANGE_CONTROL,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -171,8 +184,8 @@ class Film {
 
   _handleWatchedClick() {
     this._changeData(
-        UserAction.ADD_TO_WATCHED,
-        UpdateType.PATCH,
+        UserAction.CHANGE_CONTROL,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -185,8 +198,8 @@ class Film {
 
   _handleFavoriteClick() {
     this._changeData(
-        UserAction.ADD_TO_FAVORITES,
-        UpdateType.PATCH,
+        UserAction.CHANGE_CONTROL,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -197,20 +210,23 @@ class Film {
     );
   }
 
-  _handleFormSubmit(update) {
+  _handleFormSubmit() {
     if (this._newCommetFormComponent.getComment()) {
       this._commentModel.addComment(UserAction.ADD_COMMENT, this._newCommetFormComponent.getComment());
     }
-    update.comments = this._commentModel.getComments();
+    const update = this._commentModel.getComments();
     this._changeData(
         UserAction.ADD_COMMENT,
         UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
-            update
+            {
+              comments: update
+            }
         )
     );
+
   }
 }
 

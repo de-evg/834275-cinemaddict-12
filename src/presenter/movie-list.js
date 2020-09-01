@@ -22,12 +22,10 @@ class FilmList {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentModel = commentModel;
-    this._boardComponent = new BoardView();
-    this._mainMovieListComponent = new FilmListView();
+
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
-    this._sortComponent = new SortView();
 
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -47,6 +45,9 @@ class FilmList {
   }
 
   init() {
+    this._boardComponent = new BoardView();
+    this._sortComponent = new SortView();
+    this._mainMovieListComponent = new FilmListView();
     this._filmsContainer = this._mainMovieListComponent.getElement().querySelector(`.films-list__container`);
     render(this._boardComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderSort();
@@ -54,11 +55,12 @@ class FilmList {
     this._renderFilmList();
   }
 
-  _destroy() {
+  destroy() {
     this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
 
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
+    this._commentModel.removeObserver(this._handleModelEvent);
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
@@ -136,13 +138,13 @@ class FilmList {
 
     this._renderTitle();
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
-    if (films.length >= this._renderedFilmCount) {
+    if (films.length > this._renderedFilmCount) {
       this._renderLoadMoreBtn();
     }
   }
 
   _renderNoFilms() {
-    render(this._movieListContainer, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
+    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderLoadMoreBtn() {
@@ -156,13 +158,7 @@ class FilmList {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case UserAction.ADD_TO_WATCHLIST:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_TO_WATCHED:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_TO_FAVORITES:
+      case UserAction.CHANGE_CONTROL:
         this._filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
@@ -181,7 +177,7 @@ class FilmList {
         break;
       case UpdateType.MINOR:
         this._clearBoard();
-        this._renderFilmList();
+        this.init();
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});

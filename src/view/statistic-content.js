@@ -7,13 +7,13 @@ class StaticticContent extends AbstractView {
   }
 
   getTemplate() {
-    const {watched, duration, genre} = this._statistic;
+    const {count, duration, genre} = this._statistic;
     const minutes = (duration % 60);
     const hours = (duration / 60).toFixed();
     return `<ul class="statistic__text-list">
               <li class="statistic__text-item">
                   <h4 class="statistic__item-title">You watched</h4>
-                  <p class="statistic__item-text">${watched} <span class="statistic__item-description">movies</span></p>
+                  <p class="statistic__item-text">${count} <span class="statistic__item-description">movies</span></p>
               </li>
               <li class="statistic__text-item">
                   <h4 class="statistic__item-title">Total duration</h4>

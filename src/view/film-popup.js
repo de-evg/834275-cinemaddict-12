@@ -3,11 +3,13 @@ import {Controls, UserAction} from "../const.js";
 import {formatReleaseDate, formatDuration} from "../utils/film.js";
 
 class FilmPopup extends SmartView {
-  constructor(film) {
+  constructor(film, changeData) {
     super();
     this._isFullDate = true;
     this._data = FilmPopup.parseFilmToData(film);
+    this._changeData = changeData;
     this._callback = {};
+
     this._btnCloseClickHandler = this._btnCloseClickHandler.bind(this);
     this._changeHandler = this._changeHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
@@ -180,6 +182,7 @@ class FilmPopup extends SmartView {
           break;
       }
       this.updateData(update, true);
+      this._changeData(update);
     }
   }
 
@@ -192,11 +195,7 @@ class FilmPopup extends SmartView {
     if (evt.ctrlKey && evt.key === `Enter`) {
       evt.preventDefault();
       document.removeEventListener(`keydown`, this._submitHandler);
-      this._callback.submit(FilmPopup.parseDataToFilm({
-        inWatchlist: this._data.inWatchlist,
-        isWatched: this._data.isWatched,
-        isFavorite: this._data.isFavorite
-      }));
+      this._callback.submit();
     }
   }
 
@@ -205,10 +204,6 @@ class FilmPopup extends SmartView {
         {},
         film
     );
-  }
-
-  static parseDataToFilm(data) {
-    return Object.assign({}, data);
   }
 }
 

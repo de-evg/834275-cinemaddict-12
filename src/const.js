@@ -36,9 +36,7 @@ const DescritptionRange = {
 };
 
 const UserAction = {
-  ADD_TO_WATCHLIST: `ADD_TO_WATCHLIST`,
-  ADD_TO_WATCHED: `ADD_TO_WATCHED`,
-  ADD_TO_FAVORITES: `ADD_TO_FAVORITES`,
+  CHANGE_CONTROL: `CHANGE_CONTROL`,
   DELETE_COMMENT: `DELETE_COMMENT`,
   ADD_COMMENT: `ADD_COMMENT`
 };
@@ -56,6 +54,22 @@ const FilterType = {
   FAVORITES: `favorites`
 };
 
+const StatisticFilterType = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+const MenuItem = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+  STATISTIC: `stats`
+};
+
 const Emoji = {
   [`EMOJI-ANGRY`]: `angry`,
   [`EMOJI-PUKE`]: `puke`,
@@ -63,4 +77,4 @@ const Emoji = {
   [`EMOJI-SMILE`]: `smile`,
 };
 
-export {DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji};
+export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType};

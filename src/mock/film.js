@@ -113,6 +113,8 @@ const generateComments = () => {
 };
 
 const generateFilm = () => {
+  const isWatchedFilm = !!(Math.random() < 0.5);
+  const watchedFilmDate = isWatchedFilm ? generateDate(new Date(2020, 0, 1), new Date()) : null;
   return {
     id: generateId(),
     title: generateTitle(),
@@ -130,10 +132,11 @@ const generateFilm = () => {
     actors: Array.from(generateActors()),
     writers: Array.from(generateWriters()),
     inWatchlist: !!(Math.random() < 0.5),
-    isWatched: !!(Math.random() < 0.5),
+    isWatched: isWatchedFilm,
     isFavorite: !!(Math.random() < 0.5),
     emoji: ``,
-    message: ``
+    message: ``,
+    watchedDate: watchedFilmDate
   };
 };
 

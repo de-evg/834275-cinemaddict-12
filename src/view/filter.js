@@ -14,12 +14,9 @@ class Filter extends AbstractView {
     const filterItemsTemplate = this._filters
       .map((filter) => this._createFilterItemTemplate(filter.type, filter.name, filter.count))
       .join(``);
-    return `<nav class="main-navigation">
-              <div class="main-navigation__items">                
-                ${filterItemsTemplate}
-              </div>
-              <a href="#stats" class="main-navigation__additional">Stats</a>
-            </nav>`;
+    return `<div class="main-navigation__items">                
+              ${filterItemsTemplate}
+            </div>`;
   }
 
   setFilterTypeChangeHandler(callback) {
@@ -30,16 +27,15 @@ class Filter extends AbstractView {
   _createFilterItemTemplate(type, name, count) {
     return `<a href="#${type}" class="main-navigation__item ${this.activeFilterType === type ? `main-navigation__item--active` : ``}" id="${type}">
               ${name}
-              ${type !== FilterType.ALL
-    ? `<span class="main-navigation__item-count">${count}</span>`
-    : ``
-}              
+              ${type !== FilterType.ALL ? `<span class="main-navigation__item-count">${count}</span>` : ``}              
             </a>`;
   }
 
   _filterTypeChangeHandler(evt) {
-    evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.id);
+    if (evt.target.tagName === `A`) {
+      evt.preventDefault();
+      this._callback.filterTypeChange(evt.target.id);
+    }
   }
 }
 

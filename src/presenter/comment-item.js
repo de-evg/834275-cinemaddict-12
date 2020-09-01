@@ -34,10 +34,6 @@ class Comment {
   _handelDeleteClick() {
     this._removeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment);
   }
-
-  _handleAddBtnPress() {
-    this._addData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._newComment);
-  }
 }
 
 export default Comment;

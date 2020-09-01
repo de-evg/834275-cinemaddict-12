@@ -4,18 +4,23 @@ import {filter} from "../utils/filter.js";
 import {FilterType, UpdateType} from "../const.js";
 
 class SiteFilter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, menuChangeHandler) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._menuChangeHandler = menuChangeHandler;
     this._currentFilter = null;
     this._filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleFilterChange);
+    this._filmsModel.addObserver(this._handleFilterChange);
+  }
+
+  setCurrentFilterDisabled() {
+    this._currentFilter = null;
   }
 
   init() {
@@ -63,7 +68,7 @@ class SiteFilter {
     ];
   }
 
-  _handleModelEvent() {
+  _handleFilterChange() {
     this.init();
   }
 
@@ -73,6 +78,7 @@ class SiteFilter {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._handleFilterChange();
   }
 
 }
