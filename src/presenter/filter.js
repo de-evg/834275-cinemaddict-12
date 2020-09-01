@@ -16,6 +16,7 @@ class SiteFilter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._filterModel.addObserver(this._handleFilterChange);
+    this._filmsModel.addObserver(this._handleFilterChange);
   }
 
   init() {

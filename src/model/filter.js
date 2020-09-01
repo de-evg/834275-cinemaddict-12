@@ -13,6 +13,7 @@ class Filter extends Observer {
 
   setFilter(actionType, filter) {
     this._activeFilter = filter;
+
     this._notify(actionType, filter);
   }
 }

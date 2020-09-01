@@ -12,6 +12,7 @@ class NewComment extends SmartView {
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentMessageChangeHandler = this._commentMessageChangeHandler.bind(this);
+    this._checkCommentReady = this._checkCommentReady.bind(this);
 
     this._setInnerHandlers();
   }

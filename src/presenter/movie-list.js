@@ -137,13 +137,13 @@ class FilmList {
 
     this._renderTitle();
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
-    if (films.length >= this._renderedFilmCount) {
+    if (films.length > this._renderedFilmCount) {
       this._renderLoadMoreBtn();
     }
   }
 
   _renderNoFilms() {
-    render(this._movieListContainer, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
+    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderLoadMoreBtn() {
@@ -157,13 +157,7 @@ class FilmList {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case UserAction.ADD_TO_WATCHLIST:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_TO_WATCHED:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_TO_FAVORITES:
+      case UserAction.CHANGE_CONTROL:
         this._filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
@@ -182,7 +176,7 @@ class FilmList {
         break;
       case UpdateType.MINOR:
         this._clearBoard();
-        this._renderFilmList();
+        this.init();
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
