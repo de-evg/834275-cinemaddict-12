@@ -1,5 +1,4 @@
 import moment from "moment";
-import {getRandomInteger} from "../utils/common.js";
 
 const countWatchedFilms = (films) => {
   const initialValue = 0;

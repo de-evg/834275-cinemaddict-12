@@ -20,7 +20,7 @@ class Staitstics {
     this._films = films.slice();
     this._statisticContainer = statisticContainer;
     this._isStatisticInit = false;
-    
+
     this._handelerChangePeriod = this._handelerChangePeriod.bind(this);
     this._setStatistic(StatisticFilterType.ALL);
   }

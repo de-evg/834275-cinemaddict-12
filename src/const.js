@@ -68,7 +68,7 @@ const MenuItem = {
   HISTORY: `history`,
   FAVORITES: `favorites`,
   STATISTIC: `stats`
-}
+};
 
 const Emoji = {
   [`EMOJI-ANGRY`]: `angry`,

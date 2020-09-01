@@ -22,11 +22,10 @@ class FilmList {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentModel = commentModel;
-    
+
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
-    
 
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;

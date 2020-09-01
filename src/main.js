@@ -2,9 +2,8 @@ import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
 import CommentModel from "./model/comments.js";
 
-import SiteMenuView from "./view/site-menu.js"
+import SiteMenuView from "./view/site-menu.js";
 import UserProfileView from "./view/user-profile.js";
-import StatisticView from "./view/statistic.js";
 import FilmsCountView from "./view/films-count.js";
 
 import MovieListPresenter from "./presenter/movie-list.js";

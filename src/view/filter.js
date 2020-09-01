@@ -7,7 +7,7 @@ class Filter extends AbstractView {
     this._filters = filters;
     this.activeFilterType = activeFilterType;
 
-    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);    
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
