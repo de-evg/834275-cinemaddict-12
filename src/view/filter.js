@@ -32,8 +32,10 @@ class Filter extends AbstractView {
   }
 
   _filterTypeChangeHandler(evt) {
-    evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.id);
+    if (evt.target.tagName === `A`) {
+      evt.preventDefault();
+      this._callback.filterTypeChange(evt.target.id);
+    }
   }
 }
 

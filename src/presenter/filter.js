@@ -19,6 +19,10 @@ class SiteFilter {
     this._filmsModel.addObserver(this._handleFilterChange);
   }
 
+  setCurrentFilterDisabled() {
+    this._currentFilter = null;
+  }
+
   init() {
     this._currentFilter = this._filterModel.getFilter();
 
@@ -72,7 +76,7 @@ class SiteFilter {
     if (this._currentFilter === filterType) {
       return;
     }
-        
+
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
     this._handleFilterChange();
   }

@@ -22,12 +22,11 @@ class FilmList {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentModel = commentModel;
-    this._boardComponent = new BoardView();
-    this._mainMovieListComponent = new FilmListView();
+    
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
-    this._sortComponent = new SortView();
+    
 
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -47,6 +46,9 @@ class FilmList {
   }
 
   init() {
+    this._boardComponent = new BoardView();
+    this._sortComponent = new SortView();
+    this._mainMovieListComponent = new FilmListView();
     this._filmsContainer = this._mainMovieListComponent.getElement().querySelector(`.films-list__container`);
     render(this._boardComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
     this._renderSort();

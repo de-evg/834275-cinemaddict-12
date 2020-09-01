@@ -13,7 +13,7 @@ import StatisticPresenter from "./presenter/statistics.js";
 
 import {generateFilm} from "./mock/film.js";
 import {generateProfileRang} from "./mock/user-profile.js";
-import {render, RenderPosition, remove} from "./utils/render.js";
+import {render, RenderPosition} from "./utils/render.js";
 
 import {MenuItem} from "./const.js";
 
@@ -33,22 +33,15 @@ filmsModel.setFilms(films);
 const handleSiteMenuClick = (menuItem) => {
   siteMenuComponent.setActiveMenuItem(menuItem);
   switch (menuItem) {
-    case MenuItem.All:
-      statisticPresenter.destroy();
-      break;
-    case (MenuItem.WATCHLIST):
-      statisticPresenter.destroy();
-      break;
-    case (MenuItem.HISTORY):
-      statisticPresenter.destroy();
-      break;
-    case (MenuItem.FAVORITES):
-      statisticPresenter.destroy();
-      break;
     case (MenuItem.STATISTIC):
+      filterPresenter.setCurrentFilterDisabled();
       movieListPresenter.destroy();
       statisticPresenter.init();
       break;
+    default:
+      if (statisticPresenter.getStatisticInitStatus()) {
+        statisticPresenter.destroy();
+      }
   }
 };
 
@@ -67,8 +60,7 @@ const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, film
 filterPresenter.init();
 
 const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
-movieListPresenter.init();
-
 const statisticPresenter = new StatisticPresenter(siteMainElement, films);
+movieListPresenter.init();
 
 render(footerStatisticElement, new FilmsCountView(films.length), RenderPosition.BEFOREEND);

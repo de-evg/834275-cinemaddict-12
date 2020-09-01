@@ -19,18 +19,25 @@ class Staitstics {
     this._statisics = null;
     this._films = films.slice();
     this._statisticContainer = statisticContainer;
+    this._isStatisticInit = false;
     
     this._handelerChangePeriod = this._handelerChangePeriod.bind(this);
     this._setStatistic(StatisticFilterType.ALL);
   }
 
+  getStatisticInitStatus() {
+    return this._isStatisticInit;
+  }
+
   init() {
     this._statisticComponent = new StaitsticView();
-    this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);    
-    this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);    
+    this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);
+    this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
     this._statisticChartView = new StatisticChartView();
     this._statisticFiltersComponent.setPeriodChandeHandler(this._handelerChangePeriod);
     this._initContent();
+    this._renderStatistics();
+    this._isStatisticInit = true;
   }
 
   destroy() {
@@ -58,7 +65,7 @@ class Staitstics {
       return;
     }
 
-    replace(this._statisticContentComponent, this._prevStatisticContentComponent);    
+    replace(this._statisticContentComponent, this._prevStatisticContentComponent);
 
     remove(this._prevStatisticContentComponent);
   }
