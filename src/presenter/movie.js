@@ -20,7 +20,7 @@ class Film {
     this._changeData = changeData;
     this._resetView = resetView;
     this._mode = Mode.DEFAULT;
-    this._commentPresenter = {};
+    this._commentListPresenter = {};
 
 
     this._handleFilmClick = this._handleFilmClick.bind(this);
@@ -89,13 +89,12 @@ class Film {
 
   _createPopupComponents() {
     this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
-    this._newCommetFormComponent = new NewCommentFormView(this._film);
+    this._newCommetFormComponent = new NewCommentFormView(this._commentModel);
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
 
     this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData);
-    this._commentListPresenter.init(this._film.comments);
   }
 
   _initPopup() {
@@ -120,6 +119,7 @@ class Film {
   _showPopup() {
     this._resetView();
     this._initPopup();
+    this._commentListPresenter.init();
     this._renderPopup();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DETAILS;

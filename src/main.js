@@ -65,9 +65,6 @@ footerStatisticPresenter.init();
 const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
 api.getFilms()
 .then((films) => {
-  console.log(films[0]);
-  const release = films[0].release;
-  console.log(moment(release, `YYYY-MM-DDTHH:mm:ss.SSSSZ`).format());
   filmsModel.setFilms(UpdateType.INIT, films);
 })
 .catch(() => {

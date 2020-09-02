@@ -1,5 +1,6 @@
 import Api from "../api";
 import CommentPresenter from "./comment-item.js";
+import {UpdateType, UserAction} from "../const.js";
 import {Socket} from "../const.js";
 
 class CommentList {
@@ -11,18 +12,30 @@ class CommentList {
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._commentPresenter = {};
-
+    this._comments = [];
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
+    this._handleCommentModelChange = this._handleCommentModelChange.bind(this);    
   }
 
   init() {
+    
     this._getComments();
     this._renderCommentList();
   }
 
+  _clearCommentsBoard() {
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.destroy());
+  }
+
   _getComments() {
+    this._commentModel.setComments(this._film.id, this._comments);
     this._api.getComments(this._film.id)
-      .then((comments) => this._commentModel.setComments(comments));
+      .then((comments) => {
+        this._commentModel.setComments(this._film.id, comments);
+        this._handleCommentModelChange();
+      });
   }
 
   _renderComment(comment) {
@@ -37,8 +50,8 @@ class CommentList {
   }
 
   _renderCommentList() {
-    const comments = this._commentModel.getComments();
-    this._renderComments(comments);
+    this._comments = this._commentModel.getComments(this._film.id);
+    this._renderComments(this._comments);
   }
 
   _handleDeleteBtnClick(actionType, updateType, update) {
@@ -70,6 +83,11 @@ class CommentList {
             }
         )
     );
+  }
+
+  _handleCommentModelChange() {
+    this._clearCommentsBoard();
+    this._renderCommentList();
   }
 }
 

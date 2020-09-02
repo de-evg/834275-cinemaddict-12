@@ -3,15 +3,39 @@ import Observer from "../utils/observer.js";
 class Comment extends Observer {
   constructor() {
     super();
-    this._comments = [];
+    this._comments = new Map();
+    this._newComment = {
+      currentEmoji: ``,
+      currentComment: ``
+    };
   }
 
-  getComments() {
-    return this._comments;
+  getComments(filmID) {
+    return this._comments.get(filmID);
   }
 
-  setComments(comments) {
-    this._comments = comments.slice();
+  getNewComment() {
+    return this._newComment;
+  }
+
+  setNewComment(update) {
+    this._newComment = Object.assign(
+        {},
+        this._newComment,
+        update
+    );
+  }
+
+  resetNewComment() {
+    this._newComment = {
+      currentEmoji: ``,
+      currentComment: ``
+    };
+  }
+
+  setComments(filmID, comments) {
+    this._comments.set(filmID, comments);
+    this._notify();
   }
 
   addComment(actionType, update) {
@@ -39,7 +63,7 @@ class Comment extends Observer {
         {},
         comment,
         {
-          emoji: comment.emotion
+          emoji: comment.emotion,
         }
     );
 
