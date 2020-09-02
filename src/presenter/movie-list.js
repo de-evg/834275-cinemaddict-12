@@ -142,7 +142,7 @@ class FilmList {
 
     if (!films.length) {
       this._renderNoFilms();
-    }    
+    }
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
     if (films.length > this._renderedFilmCount) {
       this._renderLoadMoreBtn();
@@ -196,6 +196,7 @@ class FilmList {
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingFilmsComponent);
+        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.init();
         break;
     }

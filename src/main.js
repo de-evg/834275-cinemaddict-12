@@ -3,22 +3,21 @@ import FilterModel from "./model/filter.js";
 import CommentModel from "./model/comments.js";
 
 import SiteMenuView from "./view/site-menu.js";
-import UserProfileView from "./view/user-profile.js";
-import FilmsCountView from "./view/films-count.js";
+
+
 
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
+import FooterStatisticPresenter from "./presenter/footer-statistic.js";
+import ProfileRangPresenter from "./presenter/profile-rang.js";
 
 import {generateProfileRang} from "./mock/user-profile.js";
 import {render, RenderPosition} from "./utils/render.js";
 
-import {MenuItem, UpdateType} from "./const.js";
+import {MenuItem, UpdateType, Socket} from "./const.js";
 
 import Api from "./api.js";
-
-const AUTHORIZATION = `Basic aS2dfgSfer3fbrb3fw`;
-const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
@@ -27,14 +26,6 @@ const siteFooterElement = document.querySelector(`.footer`);
 const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 
 const filmsModel = new FilmsModel();
-const api = new Api(END_POINT, AUTHORIZATION);
-api.getFilms()
-.then((films) => {
-  filmsModel.setFilms(UpdateType.INIT, films);
-})
-.catch(() => {
-  filmsModel.setFilms(UpdateType.INIT, []);
-});
 
 const handleSiteMenuClick = (menuItem) => {
   siteMenuComponent.setActiveMenuItem(menuItem);
@@ -55,8 +46,8 @@ const siteMenuComponent = new SiteMenuView(MenuItem.ALL);
 siteMenuComponent.setMenuTypeChangeHandler(handleSiteMenuClick);
 render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
 
-const profileRang = generateProfileRang();
-render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
+const profileRangPresenter = new ProfileRangPresenter(siteHeaderElement, filmsModel);
+profileRangPresenter.init();
 
 const filterModel = new FilterModel();
 
@@ -69,4 +60,14 @@ const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, f
 const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel.getFilms());
 movieListPresenter.init();
 
-render(footerStatisticElement, new FilmsCountView(filmsModel.getFilms().length, RenderPosition.BEFOREEND));
+const footerStatisticPresenter = new FooterStatisticPresenter(footerStatisticElement, filmsModel);
+footerStatisticPresenter.init();
+
+const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
+api.getFilms()
+.then((films) => {
+  filmsModel.setFilms(UpdateType.INIT, films);
+})
+.catch(() => {
+  filmsModel.setFilms(UpdateType.INIT, []);
+});

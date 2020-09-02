@@ -78,4 +78,9 @@ const Emoji = {
   [`EMOJI-SMILE`]: `smile`,
 };
 
-export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType};
+const Socket = {
+  AUTHORIZATION: `Basic aS2dfgSfer3fbrb3fw`,
+  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict/`
+}
+
+export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket};
