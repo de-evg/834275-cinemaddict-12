@@ -15,14 +15,14 @@ const userRanks = [
 ];
 
 class Staitstics {
-  constructor(statisticContainer, films) {
+  constructor(statisticContainer, filmsModel) {
     this._statisics = null;
-    this._films = films.slice();
+    this._filmsModel = filmsModel;
+
     this._statisticContainer = statisticContainer;
     this._isStatisticInit = false;
 
     this._handelerChangePeriod = this._handelerChangePeriod.bind(this);
-    this._setStatistic(StatisticFilterType.ALL);
   }
 
   getStatisticInitStatus() {
@@ -30,6 +30,8 @@ class Staitstics {
   }
 
   init() {
+    this._films = this._filmsModel.getFilms();
+    this._setStatistic(StatisticFilterType.ALL);
     this._statisticComponent = new StaitsticView();
     this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);

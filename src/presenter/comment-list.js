@@ -1,6 +1,5 @@
 import Api from "../api";
 import CommentPresenter from "./comment-item.js";
-import {UpdateType, UserAction} from "../const.js";
 import {Socket} from "../const.js";
 
 class CommentList {
@@ -14,11 +13,10 @@ class CommentList {
     this._commentPresenter = {};
     this._comments = [];
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
-    this._handleCommentModelChange = this._handleCommentModelChange.bind(this);    
+    this._handleCommentModelChange = this._handleCommentModelChange.bind(this);
   }
 
   init() {
-    
     this._getComments();
     this._renderCommentList();
   }

@@ -1,5 +1,11 @@
 import moment from "moment";
 
+const Interval = {
+  WEEK: moment().startOf(`week`),
+  MONTH: moment().startOf(`month`),
+  YEAR: moment().startOf(`year`),
+};
+
 const countWatchedFilms = (films) => {
   const initialValue = 0;
   return films.reduce((count, film) => film.isWatched ? count + 1 : count, initialValue);
@@ -39,26 +45,34 @@ const findTopGenre = (films) => {
 };
 
 const statisticFilter = {
-  [`all-time`]: (films) => films,
+  [`all-time`]: (films) => films.filter((film) => {
+    let today = new Date();
+    today = moment(today).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const before = moment(watched).isSameOrBefore(today);
+    return film.isWatched && (before);
+  }),
   [`today`]: (films) => films.filter((film) => {
-    return film.isWatched && (
-      moment(film.watchedDate).isSameOrBefore(new Date(), `day`) ||
-      moment(film.watchedDate).isSameOrAfter(new Date(), `day`));
+    let today = new Date();
+    today = moment(today).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const before = moment(today).isSame(watched);
+    return film.isWatched && (before);
   }),
-  [`week`]: (films) => films.filter((film) => {
-    return film.isWatched && (
-      moment(film.watchedDate).isSameOrBefore(new Date(), `week`) ||
-      moment(film.watchedDate).isSameOrAfter(new Date(), `week`));
+  [`week`]: (films) => films.filter((film) => {        
+    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const before = moment(watched).isSameOrAfter(Interval.WEEK);
+    return film.isWatched && (before);
   }),
-  [`month`]: (films) => films.filter((film) => {
-    return film.isWatched && (
-      moment(film.watchedDate).isSameOrBefore(new Date(), `month`) ||
-      moment(film.watchedDate).isSameOrAfter(new Date(), `month`));
+  [`month`]: (films) => films.filter((film) => {        
+    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const before = moment(watched).isSameOrAfter(Interval.MONTH);
+    return film.isWatched && (before);
   }),
   [`year`]: (films) => films.filter((film) => {
-    return film.isWatched && (
-      moment(film.watchedDate).isSameOrBefore(new Date(), `year`) ||
-      moment(film.watchedDate).isSameOrAfter(new Date(), `year`));
+    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const before = moment(watched).isSameOrAfter(Interval.YEAR);
+    return film.isWatched && (before);
   }),
 };
 

@@ -7,7 +7,7 @@ import SiteMenuView from "./view/site-menu.js";
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
-import FooterStatisticPresenter from "./presenter/footer-statistic.js";
+import FilmsCountPresenter from "./presenter/films-count.js";
 import ProfileRangPresenter from "./presenter/profile-rang.js";
 
 import {render, RenderPosition} from "./utils/render.js";
@@ -16,13 +16,11 @@ import {MenuItem, UpdateType, Socket} from "./const.js";
 
 import Api from "./api.js";
 
-import moment from "moment";
-
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
-const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
+const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
 
 const filmsModel = new FilmsModel();
 
@@ -56,11 +54,11 @@ const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, film
 filterPresenter.init();
 
 const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
-const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel.getFilms());
+const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
 movieListPresenter.init();
 
-const footerStatisticPresenter = new FooterStatisticPresenter(footerStatisticElement, filmsModel);
-footerStatisticPresenter.init();
+const filmsCountPresenter = new FilmsCountPresenter(footerStatisticsElement, filmsModel);
+filmsCountPresenter.init();
 
 const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
 api.getFilms()

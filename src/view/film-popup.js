@@ -35,7 +35,6 @@ class FilmPopup extends SmartView {
       inWatchlist,
       isWatched,
       isFavorite} = this._data;
-      console.log(comments);
     const releaseDate = formatReleaseDate(release, this._isFullDate);
     const filmDuration = formatDuration(duration);
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
