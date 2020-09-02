@@ -4,20 +4,19 @@ import CommentModel from "./model/comments.js";
 
 import SiteMenuView from "./view/site-menu.js";
 
-
-
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
 import FooterStatisticPresenter from "./presenter/footer-statistic.js";
 import ProfileRangPresenter from "./presenter/profile-rang.js";
 
-import {generateProfileRang} from "./mock/user-profile.js";
 import {render, RenderPosition} from "./utils/render.js";
 
 import {MenuItem, UpdateType, Socket} from "./const.js";
 
 import Api from "./api.js";
+
+import moment from "moment";
 
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
@@ -66,6 +65,9 @@ footerStatisticPresenter.init();
 const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
 api.getFilms()
 .then((films) => {
+  console.log(films[0]);
+  const release = films[0].release;
+  console.log(moment(release, `YYYY-MM-DDTHH:mm:ss.SSSSZ`).format());
   filmsModel.setFilms(UpdateType.INIT, films);
 })
 .catch(() => {

@@ -2,8 +2,6 @@ import Api from "../api";
 import CommentPresenter from "./comment-item.js";
 import {Socket} from "../const.js";
 
-
-
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData) {
     this._api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);

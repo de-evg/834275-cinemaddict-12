@@ -99,7 +99,9 @@ class FilmList {
     const filtredFilms = filter[filterType](films);
     switch (this._currentSortType) {
       case SortType.RELEASE:
-        return filtredFilms.slice().sort(sortByRelease);
+        const stepOne = filtredFilms.slice();
+        const stepTwo = stepOne.sort(sortByRelease);
+        return stepTwo;
       case SortType.RATING:
         return filtredFilms.slice().sort(sortByRating);
       default:
