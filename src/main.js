@@ -16,6 +16,8 @@ import {MenuItem, UpdateType, Socket} from "./const.js";
 
 import Api from "./api.js";
 
+const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
+
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteHeaderElement = document.querySelector(`.header`);
@@ -53,14 +55,13 @@ const commentModel = new CommentModel();
 const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, filmsModel, handleSiteMenuClick);
 filterPresenter.init();
 
-const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
+const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel, api);
 const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
 movieListPresenter.init();
 
 const filmsCountPresenter = new FilmsCountPresenter(footerStatisticsElement, filmsModel);
 filmsCountPresenter.init();
 
-const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
 api.getFilms()
 .then((films) => {
   filmsModel.setFilms(UpdateType.INIT, films);

@@ -1,3 +1,4 @@
+import moment from "moment";
 import SmartView from "./smart.js";
 import {Emoji} from "../const.js";
 
@@ -56,10 +57,10 @@ class NewComment extends SmartView {
     let newComment = null;
     if (this._checkCommentReady()) {
       newComment = NewComment.parseDataToComment({
-        id: generateId(),
+        id: generateId().toString(),
         author: `User`,
         comment: this._data.currentComment,
-        date: (new Date().getTime()),
+        date: moment(new Date()).toISOString(),
         emoji: this._data.currentEmoji
       });
       this._commentModel.resetNewComment();

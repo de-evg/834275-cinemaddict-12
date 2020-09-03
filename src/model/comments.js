@@ -1,3 +1,4 @@
+import moment from "moment";
 import Observer from "../utils/observer.js";
 
 class Comment extends Observer {
@@ -38,24 +39,24 @@ class Comment extends Observer {
     this._notify();
   }
 
-  addComment(actionType, update) {
-    this._comments.push(update);
-    this._notify(actionType, update);
+  addComment(actionType, filmID, update) {
+    this._comments.set(filmID, update);
   }
 
-  deleteComment(actionType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+  deleteComment(actionType, filmID, update) {
+    let comments = this._comments.get(filmID);
+    const index = comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
       throw new Error(`Can't update unexisting comment`);
     }
 
-    this._comments = [
-      ...this._comments.slice(0, index),
-      ...this._comments.slice(index + 1)
+    comments = [
+      ...comments.slice(0, index),
+      ...comments.slice(index + 1)
     ];
 
-    this._notify(actionType, update);
+    this.setComments(filmID, comments);
   }
 
   static adaptToClient(comment) {
@@ -82,8 +83,9 @@ class Comment extends Observer {
     );
 
     delete adaptedComment.emoji;
-
+    delete adaptedComment.filmID;
     return adaptedComment;
+
   }
 }
 

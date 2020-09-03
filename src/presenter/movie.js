@@ -14,11 +14,13 @@ const Mode = {
 };
 
 class Film {
-  constructor(popupContainer, commentModel, changeData, resetView) {
+  constructor(popupContainer, commentModel, changeData, resetView, api) {
     this._popupContainer = popupContainer;
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._resetView = resetView;
+    this._api = api;
+
     this._mode = Mode.DEFAULT;
     this._commentListPresenter = {};
 
@@ -48,6 +50,9 @@ class Film {
       return;
     }
 
+    this._filmPopupComponent.removeListeners();
+    this._filmPopupComponent.setClosePopupHandler(this._handleCloseBtnClick);
+
     replace(this._filmComponent, this._prevFilmComponent);
     replace(this._filmPopupComponent, this._prevFilmPopupComponent);
 
@@ -58,6 +63,7 @@ class Film {
   destroy() {
     remove(this._filmComponent);
     remove(this._filmPopupComponent);
+    this._filmPopupComponent.removeListener();
   }
 
   resetPopupView() {
@@ -94,13 +100,12 @@ class Film {
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
 
-    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData);
+    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
   }
 
   _initPopup() {
     this._createPopupComponents();
     this._renderPopupComponents();
-    this._setFilmPopupHandlers();
   }
 
   _setFilmHandlers() {
@@ -111,17 +116,17 @@ class Film {
   }
 
   _setFilmPopupHandlers() {
-    this._filmPopupComponent.setBtnCloseClickHandler(this._handleCloseBtnClick);
-    this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlChange);
+    this._filmPopupComponent.setClosePopupHandler(this._handleCloseBtnClick);
     this._filmPopupComponent.setSubmitHandler(this._handleFormSubmit);
   }
 
   _showPopup() {
     this._resetView();
     this._initPopup();
+    this._setFilmPopupHandlers();
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._commentListPresenter.init();
     this._renderPopup();
-    document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DETAILS;
   }
 
@@ -129,6 +134,7 @@ class Film {
     if (this._mode === Mode.DETAILS) {
       remove(this._filmPopupComponent);
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
+      this._filmPopupComponent.removeListeners();
       this._mode = Mode.DEFAULT;
     }
   }
@@ -212,21 +218,14 @@ class Film {
 
   _handleFormSubmit() {
     if (this._newCommetFormComponent.getComment()) {
-      this._commentModel.addComment(UserAction.ADD_COMMENT, this._newCommetFormComponent.getComment());
+      const newComment = this._newCommetFormComponent.getComment();
+      newComment.filmID = this._film.id;
+      this._changeData(
+          UserAction.ADD_COMMENT,
+          UpdateType.PATCH,
+          newComment
+      );
     }
-    const update = this._commentModel.getComments();
-    this._changeData(
-        UserAction.ADD_COMMENT,
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._film,
-            {
-              comments: update
-            }
-        )
-    );
-
   }
 }
 

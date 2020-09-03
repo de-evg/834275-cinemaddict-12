@@ -18,11 +18,12 @@ const FILMS_STEP = 5;
 const siteBodyElement = document.querySelector(`body`);
 
 class FilmList {
-  constructor(siteMainElement, filmsModel, filterModel, commentModel) {
+  constructor(siteMainElement, filmsModel, filterModel, commentModel, api) {
     this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentModel = commentModel;
+    this._api = api;
 
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
@@ -129,7 +130,7 @@ class FilmList {
   }
 
   _renderFilm(film) {
-    const moviePresenter = new MoviePresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange);
+    const moviePresenter = new MoviePresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._handleModeChange, this._api);
     moviePresenter.init(film, this._filmsContainer);
     this._filmPresenter[film.id] = moviePresenter;
   }
@@ -177,7 +178,11 @@ class FilmList {
         this._filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.addComment(update).then((response) => {
+          const {updatedFilm, updatedComments} = response;
+          this._filmsModel.updateFilm(updateType, updatedFilm);
+          this._commentModel.addComment(updateType, updatedFilm.id, updatedComments);
+        });
         break;
     }
   }

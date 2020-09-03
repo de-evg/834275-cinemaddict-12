@@ -32,7 +32,7 @@ class Comment {
   }
 
   _handelDeleteClick() {
-    this._removeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment);
+    this._removeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment.id);
   }
 }
 

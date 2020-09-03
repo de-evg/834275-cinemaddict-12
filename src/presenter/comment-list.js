@@ -1,23 +1,22 @@
-import Api from "../api";
 import CommentPresenter from "./comment-item.js";
-import {Socket} from "../const.js";
 
 class CommentList {
-  constructor(popupComponent, film, commentModel, changeData) {
-    this._api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
+  constructor(popupComponent, film, commentModel, changeData, api) {
     this._popupComponent = popupComponent;
     this._film = film;
     this._commentListContainer = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
     this._commentModel = commentModel;
     this._changeData = changeData;
+    this._api = api;
+
     this._commentPresenter = {};
     this._comments = [];
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
     this._handleCommentModelChange = this._handleCommentModelChange.bind(this);
+    this._setComments();
   }
 
   init() {
-    this._getComments();
     this._renderCommentList();
   }
 
@@ -27,7 +26,7 @@ class CommentList {
       .forEach((presenter) => presenter.destroy());
   }
 
-  _getComments() {
+  _setComments() {
     this._commentModel.setComments(this._film.id, this._comments);
     this._api.getComments(this._film.id)
       .then((comments) => {
@@ -52,20 +51,34 @@ class CommentList {
     this._renderComments(this._comments);
   }
 
-  _handleDeleteBtnClick(actionType, updateType, update) {
-    this._commentModel.deleteComment(actionType, update);
-    this._commentPresenter[this._comment.id].destroy();
-    this._changeData(
-        actionType,
-        updateType,
-        Object.assign(
-            {},
-            this._film,
-            {
-              comments: this._commentModel.getComments()
-            }
-        )
-    );
+  _updateCommentsCount(update) {
+    const index = this._film.comments.findIndex((commentID) => commentID === update);
+
+    if (index === -1) {
+      throw new Error(`Can't update unexisting film`);
+    }
+
+    this._film.comments = [
+      ...this._film.comments.slice(0, index),
+      ...this._film.comments.slice(index + 1)
+    ];
+  }
+
+  _handleDeleteBtnClick(actionType, updateType, commentID) {
+    this._api.deleteComment(commentID)
+      .then(() => {
+        this._commentModel.deleteComment(actionType, this._film.id, commentID);
+        this._commentPresenter[+commentID].destroy();
+        this._updateCommentsCount(commentID);
+        this._changeData(
+            actionType,
+            updateType,
+            Object.assign(
+                {},
+                this._film
+            )
+        );
+      });
   }
 
   _handleCommentSubmit(actionType, updateType, update) {
