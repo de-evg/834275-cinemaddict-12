@@ -11,6 +11,9 @@ const sortByRelease = (filmA, filmB) => {
 
   return 0;
 };
+
 const sortByRating = (filmA, filmB) => filmB.rating - filmA.rating;
 
-export {sortByRelease, sortByRating};
+const sortByComments = (filmA, filmB) => filmB.comments.length - filmA.comments.length;
+
+export {sortByRelease, sortByRating, sortByComments};

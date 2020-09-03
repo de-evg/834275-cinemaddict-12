@@ -81,6 +81,11 @@ const Emoji = {
 const Socket = {
   AUTHORIZATION: `Basic aS2dfgSfer3fbrb3fw`,
   END_POINT: `https://12.ecmascript.pages.academy/cinemaddict/`
-}
+};
 
-export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket};
+const ExtraFilmsType = {
+  TOP_RATED: `TOP_RATED`,
+  MOST_COMMENTED: `MOST_COMMENTED`
+};
+
+export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket, ExtraFilmsType};
