@@ -1,4 +1,3 @@
-import moment from "moment";
 import Observer from "../utils/observer.js";
 
 class Comment extends Observer {

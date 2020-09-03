@@ -48,29 +48,29 @@ const statisticFilter = {
   [`all-time`]: (films) => films.filter((film) => {
     let today = new Date();
     today = moment(today).format(`YYYY-MM-DD`);
-    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrBefore(today);
     return film.isWatched && (before);
   }),
   [`today`]: (films) => films.filter((film) => {
     let today = new Date();
     today = moment(today).format(`YYYY-MM-DD`);
-    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(today).isSame(watched);
     return film.isWatched && (before);
   }),
   [`week`]: (films) => films.filter((film) => {        
-    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrAfter(Interval.WEEK);
     return film.isWatched && (before);
   }),
   [`month`]: (films) => films.filter((film) => {        
-    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrAfter(Interval.MONTH);
     return film.isWatched && (before);
   }),
   [`year`]: (films) => films.filter((film) => {
-    const watched = moment(film.watchedDate).format(`YYYY-MM-DD`);
+    const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrAfter(Interval.YEAR);
     return film.isWatched && (before);
   }),

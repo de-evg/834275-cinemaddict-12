@@ -30,7 +30,7 @@ class Staitstics {
   }
 
   init() {
-    this._films = this._filmsModel.getFilms();
+    this._films = this._filmsModel.getFilms().filter((film) => film.isWatched);
     this._setStatistic(StatisticFilterType.ALL);
     this._statisticComponent = new StaitsticView();
     this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);

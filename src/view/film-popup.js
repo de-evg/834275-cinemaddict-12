@@ -1,3 +1,4 @@
+import moment from "moment";
 import SmartView from "./smart.js";
 import {Controls, UserAction} from "../const.js";
 import {formatReleaseDate, formatDuration} from "../utils/film.js";
@@ -176,6 +177,7 @@ class FilmPopup extends SmartView {
           break;
         case Controls.WATCHED:
           update = {isWatched: !this._data.isWatched};
+          update.watchingDate = update.isWatched ? moment(new Date()).toISOString() : null;
           break;
         case Controls.FAVORITE:
           update = {isFavorite: !this._data.isFavorite};

@@ -1,3 +1,4 @@
+import moment from "moment";
 import CommentListPresenter from "./comment-list.js";
 
 import FilmView from "../view/film";
@@ -52,6 +53,7 @@ class Film {
 
     this._filmPopupComponent.removeListeners();
     this._filmPopupComponent.setClosePopupHandler(this._handleCloseBtnClick);
+    this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlsChange);
 
     replace(this._filmComponent, this._prevFilmComponent);
     replace(this._filmPopupComponent, this._prevFilmPopupComponent);
@@ -63,7 +65,6 @@ class Film {
   destroy() {
     remove(this._filmComponent);
     remove(this._filmPopupComponent);
-    this._filmPopupComponent.removeListener();
   }
 
   resetPopupView() {
@@ -117,6 +118,7 @@ class Film {
 
   _setFilmPopupHandlers() {
     this._filmPopupComponent.setClosePopupHandler(this._handleCloseBtnClick);
+    this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlsChange);
     this._filmPopupComponent.setSubmitHandler(this._handleFormSubmit);
   }
 
@@ -196,7 +198,8 @@ class Film {
             {},
             this._film,
             {
-              isWatched: !this._film.isWatched
+              isWatched: !this._film.isWatched,
+              watchingDate: moment(new Date()).toISOString()
             }
         )
     );

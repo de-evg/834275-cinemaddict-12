@@ -172,7 +172,9 @@ class FilmList {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.CHANGE_CONTROL:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((updatedFilm) => {
+          this._filmsModel.updateFilm(updateType, updatedFilm);
+        });
         break;
       case UserAction.DELETE_COMMENT:
         this._filmsModel.updateFilm(updateType, update);

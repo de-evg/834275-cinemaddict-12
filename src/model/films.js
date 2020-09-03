@@ -55,7 +55,7 @@ class Film extends Observer {
           inWatchlist: film.user_details.watchlist,
           isWatched: film.user_details.already_watched,
           isFavorite: film.user_details.favorite,
-          watchedDate: film.user_details.watching_date
+          watchingDate: film.user_details.watching_date
         }
     );
 
@@ -91,7 +91,13 @@ class Film extends Observer {
             [`isFavorite`]: film.isFavorite,
             [`watchedDate`]: film.watchedDate
           },
-          [`comments`]: film.comments
+          [`comments`]: film.comments,
+          [`user_details`]: {
+            [`watchlist`]: film.inWatchlist,
+            [`already_watched`]: film.isWatched,
+            [`watching_date`]: film.watchingDate,
+            [`favorite`]: film.isFavorite
+          }
         }
     );
 
@@ -99,7 +105,6 @@ class Film extends Observer {
     delete adaptedFilm.originalTitle;
     delete adaptedFilm.poster;
     delete adaptedFilm.description;
-    delete adaptedFilm.comments;
     delete adaptedFilm.rating;
     delete adaptedFilm.release;
     delete adaptedFilm.genres;

@@ -22,13 +22,19 @@ class Api {
   getFilms() {
     return this._load({url: `movies`})
       .then(Api.toJSON)
-      .then((films) => films.map(FilmsModel.adaptToClient));
+      .then((films) => films.map(FilmsModel.adaptToClient))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   getComments(filmID) {
     return this._load({url: `comments/${filmID}`})
       .then(Api.toJSON)
-      .then((comments) => comments.map(CommentsModel.adaptToClient));
+      .then((comments) => comments.map(CommentsModel.adaptToClient))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   updateFilm(film) {
@@ -39,7 +45,10 @@ class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClient);
+      .then(FilmsModel.adaptToClient)
+      .catch((err) => {
+        throw new Error(err);
+      });
   }
 
   addComment(comment) {
@@ -56,6 +65,9 @@ class Api {
         const updatedFilm = FilmsModel.adaptToClient(movie);
         const updatedComments = comments.map(CommentsModel.adaptToClient);
         return {updatedFilm, updatedComments};
+      })
+      .catch((err) => {
+        throw new Error(err);
       });
   }
 
