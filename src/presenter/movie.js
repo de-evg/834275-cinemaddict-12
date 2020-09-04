@@ -46,7 +46,7 @@ class Film {
     this._initFilm();
     this._initPopup();
 
-    if (!this._prevFilmComponent || !this._prevFilmPopupComponent) {
+    if (!this._prevFilmComponent) {
       this._renderFilm();
       return;
     }
@@ -56,7 +56,10 @@ class Film {
     this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlsChange);
 
     replace(this._filmComponent, this._prevFilmComponent);
-    replace(this._filmPopupComponent, this._prevFilmPopupComponent);
+
+    if (Mode.DETAILS) {
+      replace(this._filmPopupComponent, this._prevFilmPopupComponent);
+    }
 
     remove(this._prevFilmComponent);
     remove(this._prevFilmPopupComponent);
@@ -64,7 +67,8 @@ class Film {
 
   destroy() {
     remove(this._filmComponent);
-    remove(this._filmPopupComponent);
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    this._filmPopupComponent.removeListeners();
   }
 
   resetPopupView() {
@@ -225,7 +229,7 @@ class Film {
       this._commentModel.resetNewComment();
       this._changeData(
           UserAction.ADD_COMMENT,
-          UpdateType.MINOR,
+          UpdateType.PATCH,
           newComment
       );
     }

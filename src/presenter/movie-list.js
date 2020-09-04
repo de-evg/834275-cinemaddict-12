@@ -29,10 +29,12 @@ class FilmList {
     this._commentModel = commentModel;
     this._api = api;
 
+    this._boardComponent = new BoardView();
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
     this._loadingFilmsComponent = new LoadingFilmsView();
+    this._mainMovieListComponent = new FilmListView();
 
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -50,16 +52,14 @@ class FilmList {
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._commentModel.addObserver(this._handleModelEvent);
+
+    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
   }
 
   init() {
-    this._boardComponent = new BoardView();
     this._sortComponent = new SortView(this._currentSortType);
 
-
     this._renderSort();
-    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
-
     this._renderFilmList();
   }
 
@@ -78,7 +78,6 @@ class FilmList {
     remove(this._mainMovieListComponent);
     remove(this._topRatedFilmsListComponent);
     remove(this._mostCommentedFilmsListComponent);
-    remove(this._boardComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FILMS_STEP;
@@ -89,19 +88,6 @@ class FilmList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-  }
-
-  _clearFilmList() {
-    Object
-      .values(this._filmPresenter)
-      .forEach((presenter) => presenter.destroy());
-
-    this._filmPresenter = {};
-    this._renderedFilmCount = FILMS_STEP;
-
-    remove(this._mainMovieListComponent);
-    remove(this._topRatedFilmsListComponent);
-    remove(this._mostCommentedFilmsListComponent);
   }
 
   _getFilms() {
@@ -220,7 +206,6 @@ class FilmList {
   }
 
   _renderFilmList() {
-    this._mainMovieListComponent = new FilmListView();
     this._topRatedFilmsListComponent = new ExtraFilmsListView();
     this._mostCommentedFilmsListComponent = new ExtraFilmsListView();
 

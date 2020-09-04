@@ -70,10 +70,20 @@ class CommentList {
       .then(() => {
         this._updateCommentsCount(commentID);
         this._commentModel.deleteComment(this._film.id, commentID);
-        this._commentPresenter[+commentID].destroy();
+        this._commentPresenter[+commentID].destroy();        
         this._changeData(
             UserAction.DELETE_COMMENT,
-            UpdateType.MINOR,
+            UpdateType.PATCH,
+            Object.assign(
+                {},
+                this._film
+            )
+        );
+      })
+      .catch(() => {
+        this._changeData(
+            UserAction.DELETE_COMMENT,
+            UpdateType.PATCH,
             Object.assign(
                 {},
                 this._film

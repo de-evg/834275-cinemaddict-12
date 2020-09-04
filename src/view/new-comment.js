@@ -66,10 +66,6 @@ class NewComment extends SmartView {
         filmID: this._film.id,
         date: moment(new Date()).toISOString()
       });
-      this.updateData({
-        currentEmoji: ``,
-        currentComment: ``
-      }, true);
     }
   }
 
