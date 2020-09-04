@@ -33,7 +33,7 @@ class ProfileRang {
     remove(this._prevProfileRangComponent);
   }
 
-  _setProfileRang() {    
+  _setProfileRang() {
     for (const entry of profileRang) {
       const range = entry[0];
       const rang = entry[1];

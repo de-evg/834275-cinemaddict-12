@@ -59,12 +59,12 @@ const statisticFilter = {
     const before = moment(today).isSame(watched);
     return film.isWatched && (before);
   }),
-  [`week`]: (films) => films.filter((film) => {        
+  [`week`]: (films) => films.filter((film) => {
     const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrAfter(Interval.WEEK);
     return film.isWatched && (before);
   }),
-  [`month`]: (films) => films.filter((film) => {        
+  [`month`]: (films) => films.filter((film) => {
     const watched = moment(film.watchingDate).format(`YYYY-MM-DD`);
     const before = moment(watched).isSameOrAfter(Interval.MONTH);
     return film.isWatched && (before);
