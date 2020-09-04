@@ -1,4 +1,5 @@
 import CommentPresenter from "./comment-item.js";
+import {UpdateType, UserAction} from "../const.js";
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData, api) {
@@ -64,36 +65,21 @@ class CommentList {
     ];
   }
 
-  _handleDeleteBtnClick(actionType, updateType, commentID) {
+  _handleDeleteBtnClick(commentID) {
     this._api.deleteComment(commentID)
       .then(() => {
-        this._commentModel.deleteComment(actionType, this._film.id, commentID);
-        this._commentPresenter[+commentID].destroy();
         this._updateCommentsCount(commentID);
+        this._commentModel.deleteComment(this._film.id, commentID);
+        this._commentPresenter[+commentID].destroy();
         this._changeData(
-            actionType,
-            updateType,
+            UserAction.DELETE_COMMENT,
+            UpdateType.MINOR,
             Object.assign(
                 {},
                 this._film
             )
         );
       });
-  }
-
-  _handleCommentSubmit(actionType, updateType, update) {
-    this._commentModel.addComment(actionType, update);
-    this._changeData(
-        actionType,
-        updateType,
-        Object.assign(
-            {},
-            this._film,
-            {
-              comments: this._commentModel.getComments()
-            }
-        )
-    );
   }
 
   _handleCommentModelChange() {

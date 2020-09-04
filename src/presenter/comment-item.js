@@ -1,12 +1,10 @@
 import CommentView from "../view/comment.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {UpdateType, UserAction} from "../const.js";
 
 class Comment {
-  constructor(commentContainer, removeData, addData) {
+  constructor(commentContainer, removeData) {
     this._commentContainer = commentContainer;
     this._removeData = removeData;
-    this._addData = addData;
     this._comment = null;
 
     this._handelDeleteClick = this._handelDeleteClick.bind(this);
@@ -32,7 +30,7 @@ class Comment {
   }
 
   _handelDeleteClick() {
-    this._removeData(UserAction.DELETE_COMMENT, UpdateType.PATCH, this._comment.id);
+    this._removeData(this._comment.id);
   }
 }
 

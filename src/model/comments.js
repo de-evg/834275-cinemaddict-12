@@ -38,11 +38,11 @@ class Comment extends Observer {
     this._notify();
   }
 
-  addComment(actionType, filmID, update) {
+  addComment(filmID, update) {
     this._comments.set(filmID, update);
   }
 
-  deleteComment(actionType, filmID, update) {
+  deleteComment(filmID, update) {
     let comments = this._comments.get(filmID);
     const index = comments.findIndex((comment) => comment.id === update);
 
@@ -77,12 +77,17 @@ class Comment extends Observer {
         {},
         comment,
         {
-          emotion: comment.emoji
+
+          emotion: comment.currentEmoji,
+          comment: comment.currentComment,
+
         }
     );
 
     delete adaptedComment.emoji;
     delete adaptedComment.filmID;
+    delete adaptedComment.currentEmoji;
+    delete adaptedComment.currentComment;
     return adaptedComment;
 
   }

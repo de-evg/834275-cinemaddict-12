@@ -32,9 +32,10 @@ class Filter extends AbstractView {
   }
 
   _filterTypeChangeHandler(evt) {
-    if (evt.target.tagName === `A`) {
+    if (evt.target.tagName === `A` || evt.target.tagName === `SPAN`) {
+      const targetID = evt.target.tagName === `A` ? evt.target.id : evt.target.parentElement.id;
       evt.preventDefault();
-      this._callback.filterTypeChange(evt.target.id);
+      this._callback.filterTypeChange(targetID);
     }
   }
 }

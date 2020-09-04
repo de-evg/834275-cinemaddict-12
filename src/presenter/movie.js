@@ -76,6 +76,11 @@ class Film {
     this._setFilmHandlers();
   }
 
+  _initPopup() {
+    this._createPopupComponents();
+    this._renderPopupComponents();
+  }
+
   _renderNewCommentFormComponent() {
     render(this._commentsContainer, this._newCommetFormComponent, RenderPosition.BEFOREEND);
   }
@@ -96,17 +101,12 @@ class Film {
 
   _createPopupComponents() {
     this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
-    this._newCommetFormComponent = new NewCommentFormView(this._commentModel);
+    this._newCommetFormComponent = new NewCommentFormView(this._commentModel, this._film);
 
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
 
     this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
-  }
-
-  _initPopup() {
-    this._createPopupComponents();
-    this._renderPopupComponents();
   }
 
   _setFilmHandlers() {
@@ -220,12 +220,12 @@ class Film {
   }
 
   _handleFormSubmit() {
-    if (this._newCommetFormComponent.getComment()) {
-      const newComment = this._newCommetFormComponent.getComment();
-      newComment.filmID = this._film.id;
+    const newComment = this._commentModel.getNewComment();
+    if (newComment) {
+      this._commentModel.resetNewComment();
       this._changeData(
           UserAction.ADD_COMMENT,
-          UpdateType.PATCH,
+          UpdateType.MINOR,
           newComment
       );
     }

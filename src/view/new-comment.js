@@ -5,14 +5,15 @@ import {Emoji} from "../const.js";
 const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
 
 class NewComment extends SmartView {
-  constructor(commentModel) {
+  constructor(commentModel, film) {
     super();
     this._commentModel = commentModel;
+    this._film = film;
     this._data = this._commentModel.getNewComment();
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentMessageChangeHandler = this._commentMessageChangeHandler.bind(this);
-    this._checkCommentReady = this._checkCommentReady.bind(this);
+    this._setNewCommentID = this._setNewCommentID.bind(this);
 
     this._setInnerHandlers();
   }
@@ -53,29 +54,23 @@ class NewComment extends SmartView {
     this._setInnerHandlers();
   }
 
-  getComment() {
-    let newComment = null;
-    if (this._checkCommentReady()) {
-      newComment = NewComment.parseDataToComment({
-        id: generateId().toString(),
-        author: `User`,
-        comment: this._data.currentComment,
-        date: moment(new Date()).toISOString(),
-        emoji: this._data.currentEmoji
-      });
-      this._commentModel.resetNewComment();
-    }
-    return newComment;
-  }
-
-
   _setInnerHandlers() {
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, this._emojiClickHandler);
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._commentMessageChangeHandler);
   }
 
-  _checkCommentReady() {
-    return this._data.currentEmoji && this._data.currentComment;
+  _setNewCommentID() {
+    if (this._data.currentEmoji && this._data.currentComment) {
+      this._commentModel.setNewComment({
+        id: generateId().toString(),
+        filmID: this._film.id,
+        date: moment(new Date()).toISOString()
+      });
+      this.updateData({
+        currentEmoji: ``,
+        currentComment: ``
+      }, true);
+    }
   }
 
   _commentMessageChangeHandler(evt) {
@@ -87,6 +82,7 @@ class NewComment extends SmartView {
     this._commentModel.setNewComment({
       currentComment: newCommentText
     });
+    this._setNewCommentID();
   }
 
   _emojiClickHandler(evt) {
@@ -100,6 +96,7 @@ class NewComment extends SmartView {
       this._commentModel.setNewComment({
         currentEmoji: Emoji[emojyName]
       });
+      this._setNewCommentID();
     }
   }
 
