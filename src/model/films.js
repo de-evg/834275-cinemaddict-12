@@ -1,4 +1,5 @@
 import Observer from "../utils/observer.js";
+import {Mode} from "../const.js";
 
 class Film extends Observer {
   constructor() {
@@ -55,7 +56,8 @@ class Film extends Observer {
           inWatchlist: film.user_details.watchlist,
           isWatched: film.user_details.already_watched,
           isFavorite: film.user_details.favorite,
-          watchingDate: film.user_details.watching_date
+          watchingDate: film.user_details.watching_date,
+          mode: Mode.DEFAULT
         }
     );
 
@@ -118,6 +120,7 @@ class Film extends Observer {
     delete adaptedFilm.isWatched;
     delete adaptedFilm.isFavorite;
     delete adaptedFilm.watchedDate;
+    delete adaptedFilm.mode;
 
     return adaptedFilm;
   }

@@ -36,6 +36,7 @@ const DescritptionRange = {
 };
 
 const UserAction = {
+  CHANGE_VIEW_POPUP: `CHANGE_VIEW_POPUP`,
   CHANGE_CONTROL: `CHANGE_CONTROL`,
   DELETE_COMMENT: `DELETE_COMMENT`,
   ADD_COMMENT: `ADD_COMMENT`
@@ -88,4 +89,9 @@ const ExtraFilmsType = {
   MOST_COMMENTED: `MOST_COMMENTED`
 };
 
-export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket, ExtraFilmsType};
+const Mode = {
+  DEFAULT: `default`,
+  DETAILS: `details`
+};
+
+export {Mode, MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket, ExtraFilmsType};

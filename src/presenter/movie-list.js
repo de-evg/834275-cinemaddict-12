@@ -15,10 +15,11 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortByRelease, sortByRating, sortByComments} from "../utils/sort.js";
 import {filter} from "../utils/filter.js";
 
-import {SortType, UpdateType, UserAction, ExtraFilmsType} from "../const.js";
+import {SortType, UpdateType, UserAction, ExtraFilmsType, Mode} from "../const.js";
 
 const FILMS_STEP = 5;
 const EXTRA_FILMS_COUNT = 2;
+
 const siteBodyElement = document.querySelector(`body`);
 
 class FilmList {
@@ -28,8 +29,9 @@ class FilmList {
     this._filterModel = filterModel;
     this._commentModel = commentModel;
     this._api = api;
+    this._mode = Mode.DEFAULT;
 
-    this._boardComponent = new BoardView();
+    
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
     this._noFilmsComponent = new NoFilmsView();
@@ -52,14 +54,14 @@ class FilmList {
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._commentModel.addObserver(this._handleModelEvent);
-
-    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
   }
 
   init() {
+    this._boardComponent = new BoardView();
     this._sortComponent = new SortView(this._currentSortType);
 
     this._renderSort();
+    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
     this._renderFilmList();
   }
 
@@ -78,6 +80,7 @@ class FilmList {
     remove(this._mainMovieListComponent);
     remove(this._topRatedFilmsListComponent);
     remove(this._mostCommentedFilmsListComponent);
+    remove(this._boardComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FILMS_STEP;
@@ -216,18 +219,26 @@ class FilmList {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
+      case UserAction.CHANGE_VIEW_POPUP:
+        this._filmsModel.updateFilm(updateType, update);
+        break;
       case UserAction.CHANGE_CONTROL:
         this._api.updateFilm(update).then((updatedFilm) => {
           this._filmsModel.updateFilm(updateType, updatedFilm);
         });
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.deleteComment(update.commentID)
+        .then(() => {
+          this._commentModel.deleteComment(update.film.id, update.commentID);          
+          this._filmsModel.updateFilm(updateType, update.film);
+        });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
           const {updatedFilm, updatedComments} = response;
           this._commentModel.addComment(updatedFilm.id, updatedComments);
+          updatedFilm.mode = Mode.DETAILS;
           this._filmsModel.updateFilm(updateType, updatedFilm);
         });
         break;
@@ -271,8 +282,8 @@ class FilmList {
   }
 
   _renderSort() {
-    render(this._siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _handleFilmChange(updateType, updatedFilm) {
