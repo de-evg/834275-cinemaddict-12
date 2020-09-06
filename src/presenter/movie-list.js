@@ -30,7 +30,6 @@ class FilmList {
     this._commentModel = commentModel;
     this._api = api;
     this._mode = Mode.DEFAULT;
-
     
     this._titleMainListComponent = new AllFilmsListTitleView();
     this._loadingMoreBtnComponent = new LoadMoreBtnView();
@@ -53,7 +52,6 @@ class FilmList {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._commentModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -67,6 +65,12 @@ class FilmList {
 
   destroy() {
     this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+  }
+
+  _removePopups() {
+    Object
+    .values(this._filmPresenter)
+    .forEach((presenter) => presenter.removePopup());
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
@@ -219,7 +223,12 @@ class FilmList {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case UserAction.CHANGE_VIEW_POPUP:
+      case UserAction.SHOW_POPUP:
+        update.mode = Mode.DETAILS;
+        this._filmsModel.updateFilm(updateType, update);
+        break;
+      case UserAction.CLOSE_POPUP:
+        update.mode = Mode.DEFAULT;
         this._filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.CHANGE_CONTROL:
@@ -230,29 +239,33 @@ class FilmList {
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update.commentID)
         .then(() => {
-          this._commentModel.deleteComment(update.film.id, update.commentID);          
+          this._commentModel.deleteComment(update.film.id, update.commentID);
           this._filmsModel.updateFilm(updateType, update.film);
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update).then((response) => {
-          const {updatedFilm, updatedComments} = response;
-          this._commentModel.addComment(updatedFilm.id, updatedComments);
-          updatedFilm.mode = Mode.DETAILS;
-          this._filmsModel.updateFilm(updateType, updatedFilm);
-        });
+        this._api.addComment(update)
+          .then((response) => {
+            const {updatedFilm, updatedComments} = response;
+            this._commentModel.addComment(updatedFilm.id, updatedComments);
+            return updatedFilm;
+          })
+          .then((updatedFilm) => {
+            updatedFilm.mode = Mode.DETAILS;
+            this._filmsModel.updateFilm(UpdateType.MINOR, updatedFilm);
+          });
         break;
     }
   }
 
-  _handleModelEvent(updateType, data, resetSettings) {
+  _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
         this._filmPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        this._clearBoard(resetSettings);
-        this.init();
+        this._removePopups();
+        this._filmPresenter[data.id].init(data);
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});

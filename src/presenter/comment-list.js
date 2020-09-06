@@ -79,7 +79,7 @@ class CommentList {
     delete this._commentPresenter[update.commentID];
     this._changeData(
         UserAction.DELETE_COMMENT,
-        UpdateType.MINOR,
+        UpdateType.MAJOR,
         update
     );
   }
