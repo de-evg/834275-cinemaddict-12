@@ -57,7 +57,7 @@ class Film {
 
   destroy() {
     remove(this._filmComponent);
-    this.removePopup();
+    this.resetView();
   }
 
   resetView() {

@@ -1,6 +1,6 @@
 import MoviePresenter from "./movie.js";
 
-import BoardView from "../view/board.js";
+import MainFilmsView from "../view/main-films.js";
 import FilmListView from "../view/films-list.js";
 import AllFilmsListTitleView from "../view/all-film-list-title.js";
 import NoFilmsView from "../view/no-films.js";
@@ -44,9 +44,8 @@ class FilmList {
     this._handleLoadMoreBtnClick = this._handleLoadMoreBtnClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);    
+    this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -54,16 +53,25 @@ class FilmList {
   }
 
   init() {
-    this._boardComponent = new BoardView();
-    this._sortComponent = new SortView(this._currentSortType);
-
     this._renderSort();
-    render(this._siteMainElement, this._boardComponent, RenderPosition.BEFOREEND);
+    this._renderMainFilmsContainer();
     this._renderFilmList();
   }
 
   destroy() {
     this._clearBoard();
+  }
+
+  _renderMainFilmsContainer() {
+    const prevMainFilmsContainerComponent = this._mainFilmsContainerComponent;
+    this._mainFilmsContainerComponent = new MainFilmsView();
+
+    if (prevMainFilmsContainerComponent) {
+      replace(this._mainFilmsContainerComponent, prevMainFilmsContainerComponent);
+      remove(prevMainFilmsContainerComponent);
+      return;
+    }
+    render(this._siteMainElement, this._mainFilmsContainerComponent, RenderPosition.BEFOREEND);
   }
 
   _hanldeModeChange() {
@@ -79,18 +87,12 @@ class FilmList {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenter = {};
 
-    remove(this._sortComponent);
-    if (this._mainMovieListComponent) {
-      remove(this._mainMovieListComponent);
-    }
-    
     if (this._topRatedFilmsListComponent) {
       remove(this._topRatedFilmsListComponent);
     }
     if (this._mostCommentedFilmsListComponent) {
       remove(this._mostCommentedFilmsListComponent);
     }
-    remove(this._boardComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FILMS_STEP;
@@ -187,7 +189,7 @@ class FilmList {
       remove(prevMainMovieListComponent);
       return;
     }
-    render(this._boardComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
+    render(this._mainFilmsContainerComponent, this._mainMovieListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderTopRatedFilms() {
@@ -205,12 +207,12 @@ class FilmList {
     this._renderFilms(topRatedFilmsContainer, films);
 
 
-    if (prevTopRatedFilmsComponent) {      
+    if (prevTopRatedFilmsComponent) {
       replace(this._topRatedFilmsListComponent, prevTopRatedFilmsComponent);
       remove(prevTopRatedFilmsComponent);
       return;
     }
-    render(this._boardComponent, this._topRatedFilmsListComponent, RenderPosition.BEFOREEND);
+    render(this._mainFilmsContainerComponent, this._topRatedFilmsListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderMostCommentedFilms() {
@@ -232,20 +234,20 @@ class FilmList {
       replace(this._mostCommentedFilmsListComponent, prevMostCommenterdFilmsComponent);
       remove(prevMostCommenterdFilmsComponent);
       return;
-    }    
-    render(this._boardComponent, this._mostCommentedFilmsListComponent, RenderPosition.BEFOREEND);
+    }
+    render(this._mainFilmsContainerComponent, this._mostCommentedFilmsListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoading() {
     const mainMovieListComponent = new FilmListView();
     render(mainMovieListComponent, this._loadingFilmsComponent, RenderPosition.BEFOREEND);
-    render(this._boardComponent, mainMovieListComponent, RenderPosition.BEFOREEND);
+    render(this._mainFilmsContainerComponent, mainMovieListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderNoFilms() {
     const mainMovieListComponent = new FilmListView();
     render(mainMovieListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
-    render(this._boardComponent, mainMovieListComponent, RenderPosition.BEFOREEND);
+    render(this._mainFilmsContainerComponent, mainMovieListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoadMoreBtn() {
@@ -265,6 +267,7 @@ class FilmList {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
+
       case UserAction.CHANGE_CONTROL:
         this._api.updateFilm(update).then((updatedFilm) => {
           this._filmsModel.updateFilm(UpdateType.PATCH, updatedFilm);
@@ -305,8 +308,8 @@ class FilmList {
         this._reInitFilmLists();
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
-        this.init();
+        this._resetSort({resetRenderedFilmCount: true, resetSortType: true});
+        this._reInitFilmLists();
         break;
       case UpdateType.INIT:
         this._isLoading = false;
@@ -315,12 +318,6 @@ class FilmList {
         this.init();
         break;
     }
-  }
-
-  _handleModeChange() {
-    Object
-      .values(this._filmPresenter)
-      .forEach((presenter) => presenter.resetPopupView());
   }
 
   _handleSortTypeChange(sortType) {
@@ -332,8 +329,23 @@ class FilmList {
   }
 
   _renderSort() {
+    const prevSortCompnent = this._sortComponent;
+    this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    if (prevSortCompnent) {
+      replace(this._sortComponent, prevSortCompnent);
+      remove(prevSortCompnent);
+      return;
+    }
     render(this._siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
+  }
+
+  _resetSort() {
+    this._renderedFilmCount = FILMS_STEP;
+    this._currentSortType = SortType.DEFAULT;
+    this._renderSort();
+
   }
 
   _handleFilmChange(updateType, updatedFilm) {
