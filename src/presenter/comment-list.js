@@ -15,6 +15,7 @@ class CommentList {
     this._comments = [];
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
     this._handleCommentModelChange = this._handleCommentModelChange.bind(this);
+    this._deleteComment = this._deleteComment.bind(this);
     this._setComments();
   }
 
@@ -69,17 +70,22 @@ class CommentList {
     ];
   }
 
+  _deleteComment(commentID) {
+    this._commentPresenter[commentID].destroy();
+    delete this._commentPresenter[commentID];
+  }
+
   _handleDeleteBtnClick(commentID) {
     this._updateCommentsCount(commentID);
     const update = {
       commentID,
-      film: this._film
+      film: this._film,
+      delete: this._deleteComment
     };
-    this._commentPresenter[update.commentID].destroy();
-    delete this._commentPresenter[update.commentID];
+
     this._changeData(
         UserAction.DELETE_COMMENT,
-        UpdateType.MAJOR,
+        UpdateType.MINOR,
         update
     );
   }

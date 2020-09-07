@@ -42,8 +42,8 @@ class Comment extends Observer {
     this._comments.set(filmID, update);
   }
 
-  deleteComment(filmID, update) {
-    let comments = this._comments.get(filmID);
+  deleteComment(film, update) {
+    let comments = this._comments.get(film.id);
     const index = comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
@@ -54,8 +54,6 @@ class Comment extends Observer {
       ...comments.slice(0, index),
       ...comments.slice(index + 1)
     ];
-
-    this.setComments(filmID, comments);
   }
 
   static adaptToClient(comment) {

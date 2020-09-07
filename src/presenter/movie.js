@@ -10,12 +10,16 @@ import {UpdateType, UserAction, Mode} from "../const.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 class Film {
-  constructor(popupContainer, commentModel, changeData, resetView, api) {
+  constructor(popupContainer, commentModel, changeData, resetPopups, api) {
     this._popupContainer = popupContainer;
     this._commentModel = commentModel;
     this._changeData = changeData;
-    this._resetView = resetView;
+    this._resetPopups = resetPopups;
     this._api = api;
+
+    this._filmComponent = null;
+    this._filmPopupComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._handleFilmClick = this._handleFilmClick.bind(this);
     this._handleCloseBtnClick = this._handleCloseBtnClick.bind(this);
@@ -31,62 +35,43 @@ class Film {
     this._film = film;
     this._filmsContainer = filmsContainer;
 
-    this._prevFilmComponent = this._filmComponent;    
+    this._prevFilmComponent = this._filmComponent;
+    this._prevFilmPopupComponent = this._filmPopupComponent;
 
     this._initFilm();
-    
+    this._initPopup();
 
-    if (!this._prevFilmComponent) {
+    if (this._prevFilmComponent === null) {
       this._renderFilm();
     } else {
       replace(this._filmComponent, this._prevFilmComponent);
       remove(this._prevFilmComponent);
     }
 
-    if (this._film.mode === Mode.DETAILS) {
-      this._initPopup();
-      this._filmPopupComponent.setClosePopupHandler(this._handleCloseBtnClick);
-      this._filmPopupComponent.setChangeControlHandler(this._handlePopupControlsChange);      
-    }
-
-    if (this._filmPopupComponent) {
-      switch (this._film.mode) {
-        case Mode.DEFAULT:
-          this.removePopup();
-          break;
-        case Mode.DETAILS:
-          this._renderPopup();
-          break;
-        default:
-          break;
-      }
+    if (this._mode === Mode.DETAILS) {
+      this._showPopup();
+      remove(this._prevFilmPopupComponent);
+      return;
     }
   }
 
   destroy() {
     remove(this._filmComponent);
-    if (this._filmPopupComponent) {
-      remove(this._filmPopupComponent);
-      document.removeEventListener(`keydown`, this._escKeyDownHandler);
-      document.removeEventListener(`keydown`, this._formSubmitHandle);
+    this.removePopup();
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closePopup();
     }
   }
 
-  removePopup() {
-    if (this._film.mode === Mode.DETAILS) {
-      remove(this._filmPopupComponent);
-      document.removeEventListener(`keydown`, this._escKeyDownHandler);
-      document.removeEventListener(`keydown`, this._formSubmitHandle);
-      this._film.mode = Mode.DEFAULT;
-      this._changeData(
-          UserAction.CLOSE_POPUP,
-          UpdateType.PATCH,
-          Object.assign(
-              {},
-              this._film
-          )
-      );
-    }
+  _closePopup() {
+    remove(this._filmPopupComponent);
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.removeEventListener(`keydown`, this._formSubmitHandle);
+    this._mode = Mode.DEFAULT;
+
   }
 
   _initFilm() {
@@ -95,39 +80,15 @@ class Film {
   }
 
   _initPopup() {
-    this._createPopupComponents();
-    this._renderPopupComponents();
-    this._commentListPresenter.init();
+    this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
+    this._newCommetFormComponent = new NewCommentFormView(this._commentModel, this._film);
   }
 
   _renderNewCommentFormComponent() {
+    this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     render(this._commentsContainer, this._newCommetFormComponent, RenderPosition.BEFOREEND);
   }
-
-  _renderPopupControls() {
-    render(this._popupControlsContainer, this._popupControlsComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderComments(comments) {
-    comments.forEach((comment) => {
-      render(this._commentListContainer, new Comment(comment), RenderPosition.BEFOREEND);
-    });
-  }
-
-  _renderPopupComponents() {
-    this._renderNewCommentFormComponent();
-  }
-
-  _createPopupComponents() {
-    this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
-    this._newCommetFormComponent = new NewCommentFormView(this._commentModel, this._film);
-
-    this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
-    this._popupControlsContainer = this._filmPopupComponent.getElement().querySelector(`.form-details__top-container`);
-
-    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
-  }
-
+  
   _setFilmHandlers() {
     this._filmComponent.setClickHandler(this._handleFilmClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -141,16 +102,11 @@ class Film {
   }
 
   _showPopup() {
+    this._setPopupHandlers();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     document.addEventListener(`keydown`, this._formSubmitHandle);
-    this._changeData(
-        UserAction.SHOW_POPUP,
-        UpdateType.MINOR,
-        Object.assign(
-            {},
-            this._film
-        )
-    );
+    this._renderPopup();
+    this._mode = Mode.DETAILS;
   }
 
   _renderPopup() {
@@ -162,11 +118,14 @@ class Film {
   }
 
   _handleFilmClick() {
+    this._renderNewCommentFormComponent();
+    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
+    this._commentListPresenter.init();
     this._showPopup();
   }
 
   _handleCloseBtnClick() {
-    this.removePopup();
+    this._closePopup();
   }
 
   _escKeyDownHandler(evt) {
@@ -235,10 +194,9 @@ class Film {
     if (evt.ctrlKey && evt.key === `Enter`) {
       const newComment = this._commentModel.getNewComment();
       if (newComment.currentComment && newComment.currentEmoji) {
-        this._commentModel.resetNewComment();
         this._changeData(
             UserAction.ADD_COMMENT,
-            UpdateType.MAJOR,
+            UpdateType.MINOR,
             newComment
         );
       }
