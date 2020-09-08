@@ -16,10 +16,7 @@ class SiteFilter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleFilterChange);
-  }
-
-  setCurrentFilterDisabled() {
-    this._currentFilter = null;
+    this._filterModel.addObserver(this._menuChangeHandler);
   }
 
   init() {
@@ -29,6 +26,7 @@ class SiteFilter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -76,7 +74,12 @@ class SiteFilter {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    if (filterType !== FilterType.STATS) {
+      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+      this._handleFilterChange();
+      return;
+    }
+    this._filterModel.setFilter(null, filterType);
     this._handleFilterChange();
   }
 

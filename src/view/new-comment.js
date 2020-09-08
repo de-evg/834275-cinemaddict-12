@@ -24,7 +24,7 @@ class NewComment extends SmartView {
               <div for="add-emoji" class="film-details__add-emoji-label">${emojiTemplate}</div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${this._data.currentComment}</textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${this._data.isFormDisabled ? `disabled` : ``}>${this._data.currentComment}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
@@ -33,7 +33,14 @@ class NewComment extends SmartView {
                   <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${this._data.currentEmoji === Emoji[`EMOJI-SLEEPING`] ? `checked` : ``}>
+                <input 
+                  class="film-details__emoji-item visually-hidden" 
+                  name="comment-emoji" 
+                  type="radio" 
+                  id="emoji-sleeping" 
+                  value="sleeping" 
+                  ${this._data.currentEmoji === Emoji[`EMOJI-SLEEPING`] ? `checked` : ``}
+                  ${this._data.isFormDisabled ? `disabled` : ``}>
                 <label class="film-details__emoji-label" for="emoji-sleeping">
                   <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
                 </label>
@@ -61,6 +68,9 @@ class NewComment extends SmartView {
 
   _setNewCommentID() {
     if (this._data.currentEmoji && this._data.currentComment) {
+      this.updateData({
+        isFormDisabled: true
+      });
       this._commentModel.setNewComment({
         id: generateId().toString(),
         filmID: this._film.id,
@@ -82,7 +92,7 @@ class NewComment extends SmartView {
   }
 
   _emojiClickHandler(evt) {
-    if (evt.target.tagName === `IMG`) {
+    if (evt.target.tagName === `IMG` && !this._data.isFormDisabled) {
       evt.preventDefault();
       const parent = evt.target.parentElement;
       const emojyName = parent.htmlFor.toUpperCase();

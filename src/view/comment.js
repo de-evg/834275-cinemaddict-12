@@ -21,7 +21,7 @@ class Comment extends SmartView {
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${this._data.author}</span>
         <span class="film-details__comment-day">${date}</span>
-        <button class="film-details__comment-delete">Delete</button>
+        <button class="film-details__comment-delete" ${this._data.isFormDisaled ? `disabled` : ``}>Delete</button>
       </p>
     </div>
   </li>`;
@@ -34,7 +34,10 @@ class Comment extends SmartView {
 
   _deleteBtnClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick();
+    if (!this._data.isFormDisaled) {
+      this.updateData({isFormDisaled: true});
+      this._callback.deleteClick();
+    }
   }
 
   static parseCommentToData(comment) {

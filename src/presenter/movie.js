@@ -33,6 +33,7 @@ class Film {
 
   init(film, filmsContainer) {
     this._film = film;
+    this._mode = this._film.mode;
     this._filmsContainer = filmsContainer;
 
     this._prevFilmComponent = this._filmComponent;
@@ -70,8 +71,6 @@ class Film {
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keydown`, this._formSubmitHandle);
-    this._mode = Mode.DEFAULT;
-
   }
 
   _initFilm() {
@@ -88,7 +87,7 @@ class Film {
     this._commentsContainer = this._filmPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
     render(this._commentsContainer, this._newCommetFormComponent, RenderPosition.BEFOREEND);
   }
-  
+
   _setFilmHandlers() {
     this._filmComponent.setClickHandler(this._handleFilmClick);
     this._filmComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -102,6 +101,9 @@ class Film {
   }
 
   _showPopup() {
+    this._renderNewCommentFormComponent();
+    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
+    this._commentListPresenter.init();
     this._setPopupHandlers();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     document.addEventListener(`keydown`, this._formSubmitHandle);
@@ -118,14 +120,23 @@ class Film {
   }
 
   _handleFilmClick() {
-    this._renderNewCommentFormComponent();
-    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
-    this._commentListPresenter.init();
     this._showPopup();
   }
 
   _handleCloseBtnClick() {
     this._closePopup();
+    this._mode = Mode.DEFAULT;
+    this._changeData(
+        UserAction.CLOSE_POPUP,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._film,
+            {
+              mode: this._mode
+            }
+        )
+    );
   }
 
   _escKeyDownHandler(evt) {
@@ -137,7 +148,7 @@ class Film {
 
   _handlePopupControlsChange(update) {
     this._changeData(
-        UserAction.CHANGE_CONTROL,
+        UserAction.CHANGE_POPUP_CONTROL,
         UpdateType.MINOR,
         Object.assign(
             {},
@@ -170,7 +181,7 @@ class Film {
             this._film,
             {
               isWatched: !this._film.isWatched,
-              watchingDate: moment(new Date()).toISOString()
+              watchingDate: new Date().toISOString()
             }
         )
     );
@@ -196,7 +207,7 @@ class Film {
       if (newComment.currentComment && newComment.currentEmoji) {
         this._changeData(
             UserAction.ADD_COMMENT,
-            UpdateType.MINOR,
+            UpdateType.PATCH,
             newComment
         );
       }

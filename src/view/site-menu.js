@@ -25,11 +25,7 @@ class SiteMenu extends AbstractView {
   }
 
   _createStatisticMenuItemTemplate() {
-    return `<a href="#stats" 
-              class="main-navigation__additional ${this.activeMenuType === MenuItem.STATISTIC ? `main-navigation__item--active` : ``}" 
-              id=${MenuItem.STATISTIC}>
-              Stats
-            </a>`;
+    return ``;
   }
 
   _menuTypeChangeHandler(evt) {

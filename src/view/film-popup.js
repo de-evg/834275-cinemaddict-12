@@ -1,6 +1,6 @@
 import moment from "moment";
 import SmartView from "./smart.js";
-import {Controls, UserAction} from "../const.js";
+import {Controls, Mode} from "../const.js";
 import {formatReleaseDate, formatDuration} from "../utils/film.js";
 
 class FilmPopup extends SmartView {
@@ -12,7 +12,7 @@ class FilmPopup extends SmartView {
     this._callback = {};
 
     this._btnCloseClickHandler = this._btnCloseClickHandler.bind(this);
-    this._changeHandler = this._changeHandler.bind(this);
+    this._changeHandler = this._changeHandler.bind(this);    
   }
 
   getTemplate() {
@@ -32,7 +32,8 @@ class FilmPopup extends SmartView {
       ageRating,
       inWatchlist,
       isWatched,
-      isFavorite} = this._data;
+      isFavorite,
+      isControlsDisabled} = this._data;
     const releaseDate = formatReleaseDate(release, this._isFullDate);
     const filmDuration = formatDuration(duration);
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
@@ -105,8 +106,9 @@ class FilmPopup extends SmartView {
                       class="film-details__control-input visually-hidden" 
                       id="list" 
                       name="watchlist" 
-                      value="${UserAction.ADD_TO_WATCHED}" 
-                      ${inWatchlist ? `checked` : ``}>
+                      value="${Controls.LIST}" 
+                      ${inWatchlist ? `checked` : ``}
+                      ${isControlsDisabled ? `disabled` : ``}>
                     <label for="list" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
                     <input 
@@ -114,16 +116,18 @@ class FilmPopup extends SmartView {
                       class="film-details__control-input visually-hidden" 
                       id="watched" 
                       name="watched" 
-                      value="${UserAction.ADD_TO_WATCHED}" 
-                      ${isWatched ? `checked` : ``}>
+                      value="${Controls.WATCHED}" 
+                      ${isWatched ? `checked` : ``}
+                      ${isControlsDisabled ? `disabled` : ``}>
                     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
       
                     <input type="checkbox" 
                       class="film-details__control-input visually-hidden" 
                       id="favorite" 
                       name="favorite" 
-                      value="${UserAction.ADD_TO_FAVORITES}" 
-                      ${isFavorite ? `checked` : ``}>
+                      value="${Controls.FAVORITE}" 
+                      ${isFavorite ? `checked` : ``}
+                      ${isControlsDisabled ? `disabled` : ``}>
                     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                   </section>
                 </div>
@@ -173,7 +177,10 @@ class FilmPopup extends SmartView {
           update = {isFavorite: !this._data.isFavorite};
           break;
       }
-      this.updateData(update, true);
+      this.updateData({isControlsDisabled: true,
+        update
+      });
+      update.mode = Mode.DETAILS;
       this._changeData(update);
     }
   }
