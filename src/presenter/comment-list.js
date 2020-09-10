@@ -22,12 +22,6 @@ class CommentList {
     this._renderCommentList();
   }
 
-  _clearCommentsBoard() {
-    Object
-      .values(this._commentPresenter)
-      .forEach((presenter) => presenter.destroy());
-  }
-
   _setComments() {
     this._commentModel.setComments(this._film.id, this._comments);
     this._api.getComments(this._film.id)
@@ -38,6 +32,12 @@ class CommentList {
       .catch(() =>{
         this._commentModel.setComments(this._film.id, this._comments);
       });
+  }
+
+  _clearCommentsBoard() {
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.destroy());
   }
 
   _renderComment(comment) {

@@ -20,7 +20,6 @@ const setProfileRang = (watchedFilmCount) => {
     }
   }
   return result;
-}
-
+};
 
 export {setProfileRang};

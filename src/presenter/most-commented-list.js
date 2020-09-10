@@ -51,10 +51,6 @@ class MostCommentedFilmList {
     this._mostCommentedFilmsPresenter = {};
   }
 
-  hide() {
-    this._mostCommentedFilmsListComponent.hide();
-  }
-
   _renderFilm(container, film) {
     if (!this._mostCommentedFilmsPresenter[film.id]) {
       const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);

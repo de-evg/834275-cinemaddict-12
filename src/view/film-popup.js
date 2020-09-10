@@ -12,7 +12,7 @@ class FilmPopup extends SmartView {
     this._callback = {};
 
     this._btnCloseClickHandler = this._btnCloseClickHandler.bind(this);
-    this._changeHandler = this._changeHandler.bind(this);    
+    this._changeHandler = this._changeHandler.bind(this);
   }
 
   getTemplate() {

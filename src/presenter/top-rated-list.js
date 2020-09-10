@@ -51,10 +51,6 @@ class TopRatedFilmList {
     this._topRatedFilmsPresenter = {};
   }
 
-  hide() {
-    this._topRatedFilmsListComponent.hide();
-  }
-
   _renderFilm(container, film) {
     if (!this._topRatedFilmsPresenter[film.id]) {
       const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);

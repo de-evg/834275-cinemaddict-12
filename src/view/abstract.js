@@ -10,14 +10,6 @@ class Abstract {
     this._callback = {};
   }
 
-  hide() {
-    this.getElement().hidden = true;
-  }
-
-  show() {
-    this.getElement().hidden = false;
-  }
-
   getTemplate() {
     throw new Error(`Abstract method not implemented: getTemplate`);
   }

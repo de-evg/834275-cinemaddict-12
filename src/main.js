@@ -2,16 +2,13 @@ import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
 import CommentModel from "./model/comments.js";
 
-
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
 import FilmsCountPresenter from "./presenter/films-count.js";
 import ProfileRangPresenter from "./presenter/profile-rang.js";
 
-import {render, RenderPosition} from "./utils/render.js";
-
-import {MenuItem, UpdateType, Socket, FilterType} from "./const.js";
+import {UpdateType, Socket, FilterType} from "./const.js";
 
 import Api from "./api.js";
 
@@ -56,7 +53,7 @@ const handleSiteMenuClick = () => {
       break;
     default:
       switchToFilms();
-  }  
+  }
 };
 
 const profileRangPresenter = new ProfileRangPresenter(siteHeaderElement, filmsModel);
