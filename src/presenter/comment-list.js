@@ -14,7 +14,7 @@ class CommentList {
 
     this._commentPresenter = {};
     this._comments = [];
-    this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);    
+    this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
     this._setComments();
   }
 

@@ -209,7 +209,7 @@ class Film {
         const update = {
           newComment,
           film: this._film,
-        }
+        };
         this._changeData(
             UserAction.ADD_COMMENT,
             UpdateType.MINOR,
