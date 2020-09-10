@@ -6,16 +6,19 @@ import TopRatedListTitleView from "../view/top-rated-list-title.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {sortByRating} from "../utils/sort.js";
 
+import {UpdateType} from "../const.js";
+
 const EXTRA_FILMS_COUNT = 2;
 
 class TopRatedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, changeData, modelChange, api) {
+  constructor(siteMainElement, filmsModel, commentModel, changeData, api) {
     this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
     this._changeData = changeData;
-    this._modelChange = modelChange;
     this._api = api;
+
+    this._callback = {};
 
     this._topRatedFilmsPresenter = {};
   }
@@ -31,9 +34,9 @@ class TopRatedFilmList {
     }
 
     this._topRatedFilmsListComponent = new ExtraFilmsListView();
-    const topRatedFilmsContainer = this._topRatedFilmsListComponent.getElement().querySelector(`.films-list__container`);
+    this._topRatedFilmsContainer = this._topRatedFilmsListComponent.getElement().querySelector(`.films-list__container`);
     this._renderTitle(this._topRatedFilmsListComponent, new TopRatedListTitleView());
-    this._renderFilms(topRatedFilmsContainer, films);
+    this._renderFilms(this._topRatedFilmsContainer, films);
 
 
     if (prevTopRatedFilmsComponent) {
@@ -73,6 +76,14 @@ class TopRatedFilmList {
       .slice()
       .sort(sortByRating)
       .slice(0, EXTRA_FILMS_COUNT);
+  }
+
+  _handleModelEvent(updateType, data) {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._topRatedFilmListPresenter.patchFilm(data.id);
+        break;
+    }
   }
 }
 

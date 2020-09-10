@@ -4,6 +4,7 @@ class Comment extends Observer {
   constructor() {
     super();
     this._comments = {};
+    this._notDeletedComment = null;
     this._newComment = {
       currentEmoji: ``,
       currentComment: ``
@@ -15,7 +16,23 @@ class Comment extends Observer {
   }
 
   getNewComment() {
+    this._newComment = Object.assign(
+        {},
+        this._newComment,
+        {
+          date: new Date().toISOString()
+        }
+    );
     return this._newComment;
+  }
+
+  getNotDeletedComment() {
+    return this._notDeletedComment;
+  }
+
+  setComments(filmID, comments) {
+    this._comments[filmID] = comments;
+    this._notify();
   }
 
   setNewComment(update) {
@@ -26,6 +43,10 @@ class Comment extends Observer {
     );
   }
 
+  setNotDeletedComment(id) {
+    this._notDeletedComment = id;
+  }
+
   resetNewComment() {
     this._newComment = {
       currentEmoji: ``,
@@ -33,9 +54,8 @@ class Comment extends Observer {
     };
   }
 
-  setComments(filmID, comments) {
-    this._comments[filmID] = comments;
-    this._notify();
+  resetNotDeletedComment() {
+    this._notDeletedComment = null;
   }
 
   addComment(filmID, update) {
@@ -54,6 +74,7 @@ class Comment extends Observer {
       ...comments.slice(0, index),
       ...comments.slice(index + 1)
     ];
+    this._notify();
   }
 
   static adaptToClient(comment) {
@@ -62,6 +83,7 @@ class Comment extends Observer {
         comment,
         {
           emoji: comment.emotion,
+          onCommentDeleteError: false,
         }
     );
 
@@ -75,10 +97,8 @@ class Comment extends Observer {
         {},
         comment,
         {
-
           emotion: comment.currentEmoji,
           comment: comment.currentComment,
-
         }
     );
 

@@ -1,4 +1,3 @@
-import moment from "moment";
 import SmartView from "./smart.js";
 import {Emoji} from "../const.js";
 
@@ -14,7 +13,6 @@ class NewComment extends SmartView {
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentMessageChangeHandler = this._commentMessageChangeHandler.bind(this);
-    this._setNewCommentID = this._setNewCommentID.bind(this);
 
     this._setInnerHandlers();
   }
@@ -25,11 +23,22 @@ class NewComment extends SmartView {
               <div for="add-emoji" class="film-details__add-emoji-label">${emojiTemplate}</div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${this._data.isFormDisabled ? `disabled` : ``}>${this._data.currentComment}</textarea>
+                <textarea 
+                  class="film-details__comment-input" 
+                  placeholder="Select reaction below and write comment here" 
+                  name="comment" 
+                  ${this._data.isFormDisabled ? `disabled` : ``}>${this._data.currentComment}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${this._data.currentEmoji === Emoji[`EMOJI-SMILE`] ? `checked` : ``}>
+                <input 
+                  class="film-details__emoji-item visually-hidden" 
+                  name="comment-emoji" 
+                  type="radio" 
+                  id="emoji-smile" 
+                  value="smile" 
+                  ${this._data.currentEmoji === Emoji[`EMOJI-SMILE`] ? `checked` : ``}
+                  ${this._data.isFormDisabled ? `disabled` : ``}>
                 <label class="film-details__emoji-label" for="emoji-smile">
                   <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
                 </label>
@@ -46,12 +55,26 @@ class NewComment extends SmartView {
                   <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${this._data.currentEmoji === Emoji[`EMOJI-PUKE`] ? `checked` : ``}>
+                <input 
+                  class="film-details__emoji-item visually-hidden" 
+                  name="comment-emoji" 
+                  type="radio" 
+                  id="emoji-puke" 
+                  value="puke" 
+                  ${this._data.currentEmoji === Emoji[`EMOJI-PUKE`] ? `checked` : ``}
+                  ${this._data.isFormDisabled ? `disabled` : ``}>
                 <label class="film-details__emoji-label" for="emoji-puke">
                   <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${this._data.currentEmoji === Emoji[`EMOJI-ANGRY`] ? `checked` : ``}>
+                <input 
+                  class="film-details__emoji-item visually-hidden" 
+                  name="comment-emoji" 
+                  type="radio" 
+                  id="emoji-angry" 
+                  value="angry" 
+                  ${this._data.currentEmoji === Emoji[`EMOJI-ANGRY`] ? `checked` : ``}
+                  ${this._data.isFormDisabled ? `disabled` : ``}>
                 <label class="film-details__emoji-label" for="emoji-angry">
                   <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
                 </label>
@@ -67,19 +90,6 @@ class NewComment extends SmartView {
     this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._commentMessageChangeHandler);
   }
 
-  _setNewCommentID() {
-    if (this._data.currentEmoji && this._data.currentComment) {
-      this.updateData({
-        isFormDisabled: true
-      });
-      this._commentModel.setNewComment({
-        id: generateId().toString(),
-        filmID: this._film.id,
-        date: moment(new Date()).toISOString()
-      });
-    }
-  }
-
   _commentMessageChangeHandler(evt) {
     evt.preventDefault();
     const newCommentText = evt.target.value;
@@ -87,9 +97,10 @@ class NewComment extends SmartView {
       currentComment: newCommentText
     }, true);
     this._commentModel.setNewComment({
-      currentComment: newCommentText
+      currentComment: newCommentText,
+      filmID: this._film.id,
+      id: generateId().toString()
     });
-    this._setNewCommentID();
   }
 
   _emojiClickHandler(evt) {
@@ -103,7 +114,6 @@ class NewComment extends SmartView {
       this._commentModel.setNewComment({
         currentEmoji: Emoji[emojyName]
       });
-      this._setNewCommentID();
     }
   }
 

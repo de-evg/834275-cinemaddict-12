@@ -137,7 +137,12 @@ class Film {
             {},
             this._film,
             {
-              mode: this._mode
+              mode: this._mode,
+              error: {
+                onCommentDelete: false,
+                onCommentAdd: false,
+                onControlsChange: false
+              }
             }
         )
     );

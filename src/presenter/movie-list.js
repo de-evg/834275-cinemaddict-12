@@ -259,13 +259,15 @@ class FilmList {
           .then(() => {
             update.updateCommentsCount(update);
             update.film.mode = Mode.DETAILS;
-            update.film.error.onCommentDelete = false;
+            update.film.error.atCommentDeleting = false;
             this._filmsModel.updateFilm(updateType, update.film);
           })
           .catch(() => {
             update.film.mode = Mode.DETAILS;
-            update.film.error.onCommentDelete = true;
-            this._filmsModel.updateFilm(UpdateType.PATCH, update.film);
+            update.film.error.atCommentDeleting = true;
+            this._commentModel.setNotDeletedComment(update.commentID);
+            this._filmsModel.updateFilm(UpdateType.MINOR, update.film);
+            this._commentModel.resetNotDeletedComment(update.commentID);
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -278,12 +280,12 @@ class FilmList {
           })
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
-            update.film.error.onCommentAdd = false;
+            update.film.error.atCommentAdding = false;
             this._filmsModel.updateFilm(updateType, updatedFilm);
           })
           .catch(() => {
             update.film.mode = Mode.DETAILS;
-            update.film.error.onCommentAdd = true;
+            update.film.error.atCommentAdding = true;
             this._filmsModel.updateFilm(UpdateType.MINOR, update.film);
           });
         break;
