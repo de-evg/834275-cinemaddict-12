@@ -19,8 +19,6 @@ import {SortType, UpdateType, UserAction, Mode} from "../const.js";
 
 const FILMS_STEP = 5;
 
-const siteBodyElement = document.querySelector(`body`);
-
 class FilmList {
   constructor(siteMainElement, filmsModel, filterModel, commentModel, api) {
     this._siteMainElement = siteMainElement;
@@ -150,7 +148,7 @@ class FilmList {
 
   _renderFilm(container, film) {
     if (!this._filmPresenter[film.id]) {
-      const moviePresenter = new MoviePresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._removePopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentModel, this._handleViewAction, this._removePopups, this._api);
       this._filmPresenter[film.id] = moviePresenter;
     }
     this._filmPresenter[film.id].init(film, container);
@@ -231,13 +229,14 @@ class FilmList {
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update.commentID)
-        .then(() => {
-          update.delete(update.commentID);
-          this._commentModel.deleteComment(update.film, update.commentID);
-        })
-        .then(() => {
-          this._filmsModel.updateFilm(updateType, update.film);
-        });
+          .then(() => {
+            this._commentModel.deleteComment(update.film, update.commentID);
+          })
+          .then(() => {
+            update.updateCommentsCount(update);
+            update.film.mode = Mode.DETAILS;
+            this._filmsModel.updateFilm(updateType, update.film);
+          });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update)
@@ -248,6 +247,7 @@ class FilmList {
             return updatedFilm;
           })
           .then((updatedFilm) => {
+            updatedFilm.mode = Mode.DETAILS;
             this._filmsModel.updateFilm(updateType, updatedFilm);
           });
         break;
@@ -257,7 +257,7 @@ class FilmList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._reInitFilmLists();
+        this._filmPresenter[film.id].init(film, container);
         break;
       case UpdateType.MINOR:
         this._hanldeModeChange();
@@ -311,7 +311,6 @@ class FilmList {
     this._renderedFilmCount = FILMS_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._renderSort();
-
   }
 
   _handleLoadMoreBtnClick() {

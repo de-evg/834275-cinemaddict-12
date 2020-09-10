@@ -8,14 +8,12 @@ import {sortByRating} from "../utils/sort.js";
 
 const EXTRA_FILMS_COUNT = 2;
 
-const siteBodyElement = document.querySelector(`body`);
-
 class TopRatedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, viewChange, modelChange, api) {
+  constructor(siteMainElement, filmsModel, commentModel, changeData, modelChange, api) {
     this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
-    this._viewChange = viewChange;
+    this._changeData = changeData;
     this._modelChange = modelChange;
     this._api = api;
 
@@ -59,7 +57,7 @@ class TopRatedFilmList {
 
   _renderFilm(container, film) {
     if (!this._topRatedFilmsPresenter[film.id]) {
-      const moviePresenter = new MoviePresenter(siteBodyElement, this._commentModel, this._handleViewAction, this._removePopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);
       this._topRatedFilmsPresenter[film.id] = moviePresenter;
     }
     this._topRatedFilmsPresenter[film.id].init(film, container);

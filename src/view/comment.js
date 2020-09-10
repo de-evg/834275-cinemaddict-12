@@ -6,7 +6,7 @@ class Comment extends SmartView {
   constructor(comment) {
     super();
     this._data = Comment.parseCommentToData(comment);
-
+    this._data.isFormDisaled = false;
     this._deleteBtnClickHandler = this._deleteBtnClickHandler.bind(this);
   }
 
@@ -25,6 +25,10 @@ class Comment extends SmartView {
       </p>
     </div>
   </li>`;
+  }
+
+  restoreHandlers() {
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
   }
 
   setDeleteClickHandler(callback) {

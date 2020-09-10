@@ -1,4 +1,3 @@
-import moment from "moment";
 import CommentListPresenter from "./comment-list.js";
 
 import FilmView from "../view/film";
@@ -9,9 +8,11 @@ import {UpdateType, UserAction, Mode} from "../const.js";
 
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
+const siteBodyElement = document.querySelector(`body`);
+
 class Film {
-  constructor(popupContainer, commentModel, changeData, resetPopups, api) {
-    this._popupContainer = popupContainer;
+  constructor(commentModel, changeData, resetPopups, api) {
+    this._popupContainer = siteBodyElement;
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._resetPopups = resetPopups;
@@ -207,7 +208,7 @@ class Film {
       if (newComment.currentComment && newComment.currentEmoji) {
         this._changeData(
             UserAction.ADD_COMMENT,
-            UpdateType.PATCH,
+            UpdateType.MINOR,
             newComment
         );
       }

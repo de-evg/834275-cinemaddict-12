@@ -6,13 +6,10 @@ import StatisticChartView from "../view/statistic-chart";
 
 import {statisticFilter, countDurationWatchedFilms, findTopGenre} from "../utils/statistic.js";
 
-import {StatisticFilterType} from "../const.js";
+import {filter} from "../utils/filter.js";
+import {StatisticFilterType, FilterType} from "../const.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
-import {getRandomInteger} from "../utils/common.js";
-
-const userRanks = [
-  `Sci-Fighter`, `Sci-Defender`, `Sci-Finder`, `Sci-Minder`
-];
+import {setProfileRang} from "../utils/profile-rang.js";
 
 class Staitstics {
   constructor(statisticContainer, filmsModel) {
@@ -31,9 +28,11 @@ class Staitstics {
 
   init() {
     this._films = this._filmsModel.getFilms().filter((film) => film.isWatched);
+    this._watchedFilmCount = filter[FilterType.HISTORY](this._films).length;
+    this._rank = setProfileRang(this._watchedFilmCount);
     this._setStatistic(StatisticFilterType.ALL);
     this._statisticComponent = new StaitsticView();
-    this._statisticRankComponent = new StatisticRankView(userRanks[getRandomInteger(0, userRanks.length - 1)]);
+    this._statisticRankComponent = new StatisticRankView(this._rank);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
     this._statisticChartView = new StatisticChartView();
     this._statisticFiltersComponent.setPeriodChandeHandler(this._handelerChangePeriod);

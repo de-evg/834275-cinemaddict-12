@@ -2,7 +2,7 @@ import ProfileRangView from "../view/profile-rang.js";
 
 import {filter} from "../utils/filter.js";
 import {FilterType} from "../const.js";
-import {profileRang} from "../utils/profile-rang.js";
+import {setProfileRang} from "../utils/profile-rang.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 class ProfileRang {
@@ -34,13 +34,7 @@ class ProfileRang {
   }
 
   _setProfileRang() {
-    for (const entry of profileRang) {
-      const range = entry[0];
-      const rang = entry[1];
-      if (range[0] <= this._watchedFilmCount && range[1] >= this._watchedFilmCount) {
-        this._rang = rang;
-      }
-    }
+    this._rang = setProfileRang(this._watchedFilmCount);
   }
 
   _renderProfileRang() {

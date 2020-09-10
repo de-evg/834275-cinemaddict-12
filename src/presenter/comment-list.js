@@ -1,6 +1,5 @@
 import CommentPresenter from "./comment-item.js";
 import {UpdateType, UserAction} from "../const.js";
-import {remove} from "../utils/render.js";
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData, api) {
@@ -58,15 +57,15 @@ class CommentList {
   }
 
   _updateCommentsCount(update) {
-    const index = this._film.comments.findIndex((commentID) => commentID === update);
+    const index = update.film.comments.findIndex((commentID) => commentID === update.commentID);
 
     if (index === -1) {
       throw new Error(`Can't update unexisting film`);
     }
 
-    this._film.comments = [
-      ...this._film.comments.slice(0, index),
-      ...this._film.comments.slice(index + 1)
+    update.film.comments = [
+      ...update.film.comments.slice(0, index),
+      ...update.film.comments.slice(index + 1)
     ];
   }
 
@@ -76,11 +75,11 @@ class CommentList {
   }
 
   _handleDeleteBtnClick(commentID) {
-    this._updateCommentsCount(commentID);
     const update = {
       commentID,
       film: this._film,
-      delete: this._deleteComment
+      deleteComment: this._deleteComment,
+      updateCommentsCount: this._updateCommentsCount
     };
 
     this._changeData(
