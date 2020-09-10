@@ -262,7 +262,7 @@ class FilmList {
           });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update)
+        this._api.addComment(update.newComment)
           .then((response) => {
             const {updatedFilm, updatedComments} = response;
             this._commentModel.resetNewComment();
@@ -272,6 +272,10 @@ class FilmList {
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
             this._filmsModel.updateFilm(updateType, updatedFilm);
+          })
+          .fetch(() => {
+            update.film.mode = Mode.DETAILS;
+            update.film.loadCommentsError = true;
           });
         break;
     }

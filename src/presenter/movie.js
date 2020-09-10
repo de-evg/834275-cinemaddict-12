@@ -206,10 +206,14 @@ class Film {
     if (evt.ctrlKey && evt.key === `Enter`) {
       const newComment = this._commentModel.getNewComment();
       if (newComment.currentComment && newComment.currentEmoji) {
+        const update = {
+          newComment,
+          film: this._film,
+        }
         this._changeData(
             UserAction.ADD_COMMENT,
             UpdateType.MINOR,
-            newComment
+            update
         );
       }
     }

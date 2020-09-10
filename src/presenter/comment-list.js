@@ -1,5 +1,6 @@
 import CommentPresenter from "./comment-item.js";
 import {UpdateType, UserAction} from "../const.js";
+import {render, createElement, RenderPosition} from "../utils/render.js";
 
 class CommentList {
   constructor(popupComponent, film, commentModel, changeData, api) {
@@ -9,12 +10,11 @@ class CommentList {
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._api = api;
+    this._onLoadCommentsError = false;
 
     this._commentPresenter = {};
     this._comments = [];
-    this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
-    this._handleCommentModelChange = this._handleCommentModelChange.bind(this);
-    this._deleteComment = this._deleteComment.bind(this);
+    this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);    
     this._setComments();
   }
 
@@ -27,17 +27,12 @@ class CommentList {
     this._api.getComments(this._film.id)
       .then((comments) => {
         this._commentModel.setComments(this._film.id, comments);
-        this._handleCommentModelChange();
+        this._renderCommentList();
       })
       .catch(() =>{
-        this._commentModel.setComments(this._film.id, this._comments);
+        this._onLoadCommentsError = true;
+        this._renderCommentList();
       });
-  }
-
-  _clearCommentsBoard() {
-    Object
-      .values(this._commentPresenter)
-      .forEach((presenter) => presenter.destroy());
   }
 
   _renderComment(comment) {
@@ -52,8 +47,16 @@ class CommentList {
   }
 
   _renderCommentList() {
-    this._comments = this._commentModel.getComments(this._film.id);
-    this._renderComments(this._comments);
+    if (!this._onLoadCommentsError) {
+      this._comments = this._commentModel.getComments(this._film.id);
+      this._renderComments(this._comments);
+      return;
+    }
+    this._renderError();
+  }
+
+  _renderError() {
+    render(this._commentListContainer, createElement(`<li class="film-details__comment-text">Не удалось загрузить комментарии</li>`), RenderPosition.BEFOREEND);
   }
 
   _updateCommentsCount(update) {
@@ -69,16 +72,10 @@ class CommentList {
     ];
   }
 
-  _deleteComment(commentID) {
-    this._commentPresenter[commentID].destroy();
-    delete this._commentPresenter[commentID];
-  }
-
   _handleDeleteBtnClick(commentID) {
     const update = {
       commentID,
       film: this._film,
-      deleteComment: this._deleteComment,
       updateCommentsCount: this._updateCommentsCount
     };
 
@@ -87,11 +84,6 @@ class CommentList {
         UpdateType.MINOR,
         update
     );
-  }
-
-  _handleCommentModelChange() {
-    this._clearCommentsBoard();
-    this._renderCommentList();
   }
 }
 
