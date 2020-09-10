@@ -89,6 +89,7 @@ class FilmList {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenter = {};
 
+    remove(this._loadingMoreBtnComponent);
     this._topRatedFilmListPresenter.destroy();
     this._mostCommentedFilmsListPresenter.destroy();
 
@@ -258,7 +259,13 @@ class FilmList {
           .then(() => {
             update.updateCommentsCount(update);
             update.film.mode = Mode.DETAILS;
+            update.film.error.onCommentDelete = false;
             this._filmsModel.updateFilm(updateType, update.film);
+          })
+          .catch(() => {
+            update.film.mode = Mode.DETAILS;
+            update.film.error.onCommentDelete = true;
+            this._filmsModel.updateFilm(UpdateType.PATCH, update.film);
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -271,11 +278,13 @@ class FilmList {
           })
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
+            update.film.error.onCommentAdd = false;
             this._filmsModel.updateFilm(updateType, updatedFilm);
           })
-          .fetch(() => {
+          .catch(() => {
             update.film.mode = Mode.DETAILS;
-            update.film.loadCommentsError = true;
+            update.film.error.onCommentAdd = true;
+            this._filmsModel.updateFilm(UpdateType.MINOR, update.film);
           });
         break;
     }

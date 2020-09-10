@@ -3,7 +3,7 @@ import Observer from "../utils/observer.js";
 class Comment extends Observer {
   constructor() {
     super();
-    this._comments = new Map();
+    this._comments = {};
     this._newComment = {
       currentEmoji: ``,
       currentComment: ``
@@ -11,7 +11,7 @@ class Comment extends Observer {
   }
 
   getComments(filmID) {
-    return this._comments.get(filmID);
+    return this._comments[filmID];
   }
 
   getNewComment() {
@@ -34,16 +34,16 @@ class Comment extends Observer {
   }
 
   setComments(filmID, comments) {
-    this._comments.set(filmID, comments);
+    this._comments[filmID] = comments;
     this._notify();
   }
 
   addComment(filmID, update) {
-    this._comments.set(filmID, update);
+    this._comments[filmID].push(update);
   }
 
   deleteComment(film, update) {
-    let comments = this._comments.get(film.id);
+    let comments = this._comments[film.id];
     const index = comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {

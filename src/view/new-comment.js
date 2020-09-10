@@ -9,7 +9,8 @@ class NewComment extends SmartView {
     super();
     this._commentModel = commentModel;
     this._film = film;
-    this._data = this._commentModel.getNewComment();
+    this._data = NewComment.parseCommentToData(this._commentModel.getNewComment());
+    this._data.onCommentAddError = this._film.error.onCommentAdd;
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentMessageChangeHandler = this._commentMessageChangeHandler.bind(this);
@@ -111,12 +112,6 @@ class NewComment extends SmartView {
         {},
         comment
     );
-  }
-
-  static parseDataToComment(comment) {
-    return Object.assign(
-        {},
-        comment);
   }
 }
 
