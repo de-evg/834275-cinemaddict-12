@@ -16,7 +16,7 @@ class Comment {
     this._notDeletedCommmentID = this._commentModel.getNotDeletedComment();
     this._commentComponent = new CommentView(this._comment, this._notDeletedCommmentID);
     this._setCommentHandlers();
-    this._renderComment(this._comment);    
+    this._renderComment(this._comment);
   }
 
   destroy() {
