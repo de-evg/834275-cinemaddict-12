@@ -54,7 +54,7 @@ class Film {
       this._showPopup();
       if (this._prevFilmPopupComponent) {
         remove(this._prevFilmPopupComponent);
-      }      
+      }
       return;
     }
   }
