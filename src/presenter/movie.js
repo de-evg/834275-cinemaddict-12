@@ -129,7 +129,7 @@ class Film {
     this._mode = Mode.DEFAULT;
     this._changeData(
         UserAction.CLOSE_POPUP,
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,

@@ -256,9 +256,6 @@ class FilmList {
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.PATCH:
-        this._filmPresenter[film.id].init(film, container);
-        break;
       case UpdateType.MINOR:
         this._hanldeModeChange();
         this._clearBoard(data);
