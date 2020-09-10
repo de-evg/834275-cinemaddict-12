@@ -4,8 +4,6 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 const BAR_HEIGHT = 50;
 
-// Обязательно рассчитайте высоту canvas, она зависит от количества элементов диаграммы
-
 class StatisticChart extends SmartView {
   constructor() {
     super();

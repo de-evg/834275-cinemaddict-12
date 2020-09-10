@@ -1,8 +1,6 @@
-import {getRandomInteger} from "../utils/common.js";
-
 const Rating = {
-  MIN: 0,
-  MAX: 50
+  MIN: -Infinity,
+  MAX: +Infinity
 };
 
 const profileRang = new Map();
@@ -12,17 +10,16 @@ profileRang.set([1, 10], `Novice`);
 profileRang.set([11, 20], `Fan`);
 profileRang.set([21, Rating.MAX], `Movie Buff`);
 
-const generateProfileRang = () => {
-  const ratingCount = getRandomInteger(Rating.MIN, Rating.MAX);
-  let result;
+const setProfileRang = (watchedFilmCount) => {
+  let result = ``;
   for (const entry of profileRang) {
     const range = entry[0];
     const rang = entry[1];
-    if (range[0] <= ratingCount && range[1] >= ratingCount) {
+    if (range[0] <= watchedFilmCount && range[1] >= watchedFilmCount) {
       result = rang;
     }
   }
   return result;
 };
 
-export {generateProfileRang};
+export {setProfileRang};

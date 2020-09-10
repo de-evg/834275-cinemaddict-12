@@ -2,64 +2,83 @@ import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
 import CommentModel from "./model/comments.js";
 
-import SiteMenuView from "./view/site-menu.js";
-import UserProfileView from "./view/user-profile.js";
-import FilmsCountView from "./view/films-count.js";
-
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
 import StatisticPresenter from "./presenter/statistics.js";
+import FilmsCountPresenter from "./presenter/films-count.js";
+import ProfileRangPresenter from "./presenter/profile-rang.js";
 
-import {generateFilm} from "./mock/film.js";
-import {generateProfileRang} from "./mock/user-profile.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {UpdateType, Socket, FilterType} from "./const.js";
 
-import {MenuItem} from "./const.js";
+import Api from "./api.js";
 
-const ALL_FILMS_COUNT = 23;
+const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
 
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteFooterElement = document.querySelector(`.footer`);
-const footerStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
+const footerStatisticsElement = siteFooterElement.querySelector(`.footer__statistics`);
 
-const films = new Array(ALL_FILMS_COUNT).fill().map(generateFilm);
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(films);
 
+let statisticIsHidden = true;
+const switchToFilms = () => {
+  if (statisticIsHidden) {
+    return;
+  }
 
-const handleSiteMenuClick = (menuItem) => {
-  siteMenuComponent.setActiveMenuItem(menuItem);
-  switch (menuItem) {
-    case (MenuItem.STATISTIC):
-      filterPresenter.setCurrentFilterDisabled();
-      movieListPresenter.destroy();
-      statisticPresenter.init();
+  statisticPresenter.destroy();
+  movieListPresenter.init();
+
+  statisticIsHidden = true;
+};
+
+const switchToStatstic = () => {
+  if (!statisticIsHidden) {
+    return;
+  }
+
+  movieListPresenter.destroy();
+  statisticPresenter.init();
+
+  statisticIsHidden = false;
+};
+
+const handleSiteMenuClick = () => {
+  const filterType = filterModel.getFilter();
+  switch (filterType) {
+    case (FilterType.STATS):
+      switchToStatstic();
       break;
     default:
-      if (statisticPresenter.getStatisticInitStatus()) {
-        statisticPresenter.destroy();
-      }
+      switchToFilms();
   }
 };
 
-const siteMenuComponent = new SiteMenuView(MenuItem.ALL);
-siteMenuComponent.setMenuTypeChangeHandler(handleSiteMenuClick);
-render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
-
-const profileRang = generateProfileRang();
-render(siteHeaderElement, new UserProfileView(profileRang), RenderPosition.BEFOREEND);
+const profileRangPresenter = new ProfileRangPresenter(siteHeaderElement, filmsModel);
+profileRangPresenter.init();
 
 const filterModel = new FilterModel();
 
 const commentModel = new CommentModel();
 
-const filterPresenter = new FilterPresenter(siteMenuComponent, filterModel, filmsModel, handleSiteMenuClick);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, handleSiteMenuClick);
 filterPresenter.init();
+filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
 
-const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel);
-const statisticPresenter = new StatisticPresenter(siteMainElement, films);
+const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel, api);
 movieListPresenter.init();
 
-render(footerStatisticElement, new FilmsCountView(films.length), RenderPosition.BEFOREEND);
+const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
+
+const filmsCountPresenter = new FilmsCountPresenter(footerStatisticsElement, filmsModel);
+filmsCountPresenter.init();
+
+api.getFilms()
+  .then((films) => {
+    filmsModel.setFilms(UpdateType.INIT, films);
+  })
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
+  });

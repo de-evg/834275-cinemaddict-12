@@ -36,6 +36,8 @@ const DescritptionRange = {
 };
 
 const UserAction = {
+  SHOW_POPUP: `SHOW_POPUP`,
+  CLOSE_POPUP: `CLOSE_POPUP`,
   CHANGE_CONTROL: `CHANGE_CONTROL`,
   DELETE_COMMENT: `DELETE_COMMENT`,
   ADD_COMMENT: `ADD_COMMENT`
@@ -44,14 +46,16 @@ const UserAction = {
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 const FilterType = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
-  FAVORITES: `favorites`
+  FAVORITES: `favorites`,
+  STATS: `stats`
 };
 
 const StatisticFilterType = {
@@ -77,4 +81,19 @@ const Emoji = {
   [`EMOJI-SMILE`]: `smile`,
 };
 
-export {MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType};
+const Socket = {
+  AUTHORIZATION: `Basic aS2dfgSfer3fbrb3fw`,
+  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict/`
+};
+
+const ExtraFilmsType = {
+  TOP_RATED: `TOP_RATED`,
+  MOST_COMMENTED: `MOST_COMMENTED`
+};
+
+const Mode = {
+  DEFAULT: `default`,
+  DETAILS: `details`
+};
+
+export {Mode, MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket, ExtraFilmsType};

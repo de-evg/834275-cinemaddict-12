@@ -10,9 +10,9 @@ class Sort extends AbstractView {
 
   getTemplate() {
     return `<ul class="sort">
-              <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-              <li><a href="#" class="sort__button" data-sort-type=${SortType.RELEASE}>Sort by date</a></li>
-              <li><a href="#" class="sort__button" data-sort-type=${SortType.RATING}>Sort by rating</a></li>
+              <li><a href="#" class="sort__button ${this._isActive === SortType.DEFAULT ? `sort__button--active` : ``}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+              <li><a href="#" class="sort__button ${this._isActive === SortType.RELEASE ? `sort__button--active` : ``}" data-sort-type=${SortType.RELEASE}>Sort by date</a></li>
+              <li><a href="#" class="sort__button ${this._isActive === SortType.RATING ? `sort__button--active` : ``}" data-sort-type=${SortType.RATING}>Sort by rating</a></li>
             </ul>`;
   }
 

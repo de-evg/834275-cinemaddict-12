@@ -3,35 +3,91 @@ import Observer from "../utils/observer.js";
 class Comment extends Observer {
   constructor() {
     super();
-    this._comments = [];
+    this._comments = new Map();
+    this._newComment = {
+      currentEmoji: ``,
+      currentComment: ``
+    };
   }
 
-  getComments() {
-    return this._comments;
+  getComments(filmID) {
+    return this._comments.get(filmID);
   }
 
-  setComments(comments) {
-    this._comments = comments.slice();
+  getNewComment() {
+    return this._newComment;
   }
 
-  addComment(actionType, update) {
-    this._comments.push(update);
-    this._notify(actionType, update);
+  setNewComment(update) {
+    this._newComment = Object.assign(
+        {},
+        this._newComment,
+        update
+    );
   }
 
-  deleteComment(actionType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+  resetNewComment() {
+    this._newComment = {
+      currentEmoji: ``,
+      currentComment: ``
+    };
+  }
+
+  setComments(filmID, comments) {
+    this._comments.set(filmID, comments);
+    this._notify();
+  }
+
+  addComment(filmID, update) {
+    this._comments.set(filmID, update);
+  }
+
+  deleteComment(film, update) {
+    let comments = this._comments.get(film.id);
+    const index = comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
       throw new Error(`Can't update unexisting comment`);
     }
 
-    this._comments = [
-      ...this._comments.slice(0, index),
-      ...this._comments.slice(index + 1)
+    comments = [
+      ...comments.slice(0, index),
+      ...comments.slice(index + 1)
     ];
+  }
 
-    this._notify(actionType, update);
+  static adaptToClient(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+          emoji: comment.emotion,
+        }
+    );
+
+    delete adaptedComment.emotion;
+
+    return adaptedComment;
+  }
+
+  static adaptToServer(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+
+          emotion: comment.currentEmoji,
+          comment: comment.currentComment,
+
+        }
+    );
+
+    delete adaptedComment.emoji;
+    delete adaptedComment.filmID;
+    delete adaptedComment.currentEmoji;
+    delete adaptedComment.currentComment;
+    return adaptedComment;
+
   }
 }
 
