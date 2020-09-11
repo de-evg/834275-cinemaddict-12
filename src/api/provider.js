@@ -1,5 +1,4 @@
 import FilmsModel from "../model/films.js";
-import CommentModel from "../model/comments.js";
 
 const getSyncedFilms = (items) => {
   return items.filter(({success}) => success)
