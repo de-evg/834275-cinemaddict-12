@@ -5,16 +5,38 @@ class Film extends Observer {
   constructor() {
     super();
     this._films = [];
+    this._filmsToUpdate = [];
   }
 
   getFilms() {
     return this._films;
   }
 
+  getFilmsToUpdate() {
+    return this._filmsToUpdate;
+  }
+
   setFilms(actionType, films) {
     this._films = films.slice();
 
     this._notify(actionType);
+  }
+
+  addFilmsToUpdate(filmID) {
+    this._filmsToUpdate.push(filmID);
+  }
+
+  removeFilmFromToUpdate(update) {
+    const index = this._filmsToUpdate.findIndex((id) => id === update.id);
+
+    if (index === -1) {
+      throw new Error(`Can't update unexisting film`);
+    }
+
+    this._filmsToUpdate = [
+      ...this._filmsToUpdate.slice(0, index),
+      ...this._filmsToUpdate.slice(index + 1)
+    ];
   }
 
   updateFilm(actionType, update) {
@@ -111,7 +133,6 @@ class Film extends Observer {
             [`inWatchlist`]: film.inWatchlist,
             [`isWatched`]: film.isWatched,
             [`isFavorite`]: film.isFavorite,
-            [`watchedDate`]: film.watchedDate
           },
           [`comments`]: film.comments,
           [`user_details`]: {
@@ -144,6 +165,7 @@ class Film extends Observer {
     delete adaptedFilm.isControlsDisabled;
     delete adaptedFilm.isFormDisabled;
     delete adaptedFilm.error;
+    delete adaptedFilm.watchingDate;
 
     return adaptedFilm;
   }

@@ -4,32 +4,35 @@ class Store {
     this._storeKey = key;
   }
 
-  getItems() {
+  getItems(key) {
+    const storeKey = `${this._storeKey}/${key}`;
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey)) || {};
+      return JSON.parse(this._storage.getItem(storeKey)) || {};
     } catch (err) {
       return {};
     }
   }
 
-  setItems(items) {
+  setItems(items, key) {
+    const storeKey = `${this._storeKey}/${key}`;
     this._storage.setItem(
-        this._storeKey,
+        storeKey,
         JSON.stringify(items)
     );
   }
 
-  setItem(key, value) {
-    const store = this.getItems();
+  setItem(key, index, value) {
+    const storeKey = `${this._storeKey}/${key}`;
+    const store = this.getItems(key);
 
     this._storage.setItem(
-        this._storeKey,
+        storeKey,
         JSON.stringify(
             Object.assign(
                 {},
                 store,
                 {
-                  [key]: value
+                  [index]: value
                 }
             )
         )

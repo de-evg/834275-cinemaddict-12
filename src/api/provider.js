@@ -13,22 +13,28 @@ const createStoreStructure = (items) => {
   }, {});
 };
 
+const Key = {
+  ALL_FILMS: `allFilms`,
+  UPDATE: `update`
+};
+
 class Provider {
   constructor(api, store) {
     this._api = api;
     this._store = store;
+    this._isUpdateNeeded = false;
   }
 
   getFilms() {
     if (Provider.isOnline()) {
-      return this._api.getFilms()
+      return this._api.getFilms(Key.ALL_FILMS)
         .then((films) => {
           const items = createStoreStructure(films.map(FilmsModel.adaptToServer));
-          this._store.setItems(items);
+          this._store.setItems(items, Key.ALL_FILMS);
           return films;
         });
     }
-    const storeFilms = Object.values(this._store.getItems());
+    const storeFilms = Object.values(this._store.getItems(Key.ALL_FILMS));
 
     return Promise.resolve(storeFilms
       .map(FilmsModel.adaptToClient)
@@ -39,17 +45,14 @@ class Provider {
     if (Provider.isOnline()) {
       return this._api.updateFilm(film)
       .then((updatedFilm) => {
-        this._store.setItem(updatedFilm.id, FilmsModel.adaptToServer(updatedFilm));
+        this._store.setItem(Key.ALL_FILMS, updatedFilm.id, FilmsModel.adaptToServer(updatedFilm));
         return updatedFilm;
       });
     }
-    this._store.setItem(film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
+    this._isUpdateNeeded = true;
+    this._store.setItem(Key.UPDATE, film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
 
-    return Promise.resolve(
-        FilmsModel.adaptToOffline(
-            FilmsModel.adaptToClient(film)
-        )
-    );
+    return Promise.resolve(FilmsModel.adaptToOffline(film));
   }
 
   getComments(filmID) {
@@ -82,11 +85,12 @@ class Provider {
   }
 
   sync() {
-    if (Provider.isOnline()) {
-      const storeFilms = Object.values(this._store.getItems());
+    if (Provider.isOnline() && this._isUpdateNeeded) {
+      const storeFilms = Object.values(this._store.getItems(Key.UPDATE));
 
       return this._api.sync(storeFilms)
         .then((response) => {
+          this._isUpdateNeeded = false;
           const updatedFilms = getSyncedFilms(response.updated);
 
           const items = createStoreStructure([...updatedFilms]);
