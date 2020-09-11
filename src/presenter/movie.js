@@ -52,7 +52,9 @@ class Film {
 
     if (this._mode === Mode.DETAILS) {
       this._showPopup();
-      remove(this._prevFilmPopupComponent);
+      if (this._prevFilmPopupComponent) {
+        remove(this._prevFilmPopupComponent);
+      }
       return;
     }
   }
@@ -102,6 +104,7 @@ class Film {
   }
 
   _closePopup() {
+    this._commentModel.resetNewComment();
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keydown`, this._formSubmitHandle);
@@ -134,7 +137,12 @@ class Film {
             {},
             this._film,
             {
-              mode: this._mode
+              mode: this._mode,
+              error: {
+                onCommentDelete: false,
+                onCommentAdd: false,
+                onControlsChange: false
+              }
             }
         )
     );

@@ -13,17 +13,21 @@ class CommentList {
     this._onLoadCommentsError = false;
 
     this._commentPresenter = {};
-    this._comments = [];
+
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
-    this._setComments();
+
+    if (!this._film.error.atCommentDeleting) {
+      this._comments = [];
+      this._commentModel.setComments(this._film.id, this._comments);
+      this._loadComments();
+    }
   }
 
   init() {
     this._renderCommentList();
   }
 
-  _setComments() {
-    this._commentModel.setComments(this._film.id, this._comments);
+  _loadComments() {
     this._api.getComments(this._film.id)
       .then((comments) => {
         this._commentModel.setComments(this._film.id, comments);
@@ -37,8 +41,8 @@ class CommentList {
 
   _renderComment(comment) {
     this._comment = comment;
-    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._handleCommentSubmit);
-    commentPresenter.init(this._comment);
+    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._commentModel);
+    commentPresenter.init(this._comment, this._film.error.onCommentDelete);
     this._commentPresenter[this._comment.id] = commentPresenter;
   }
 

@@ -6,6 +6,8 @@ import MostCommentedListTitleView from "../view/most-commented-list-title.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {sortByComments} from "../utils/sort.js";
 
+import {Mode} from "../const.js";
+
 const EXTRA_FILMS_COUNT = 2;
 
 class MostCommentedFilmList {
@@ -16,6 +18,8 @@ class MostCommentedFilmList {
     this._changeData = changeData;
     this._modelChange = modelChange;
     this._api = api;
+
+    this._callback = {};
 
     this._mostCommentedFilmsPresenter = {};
   }
@@ -31,9 +35,9 @@ class MostCommentedFilmList {
     }
 
     this._mostCommentedFilmsListComponent = new ExtraFilmsListView();
-    const mostCommentedFilmsContainer = this._mostCommentedFilmsListComponent.getElement().querySelector(`.films-list__container`);
+    this._mostCommentedFilmsContainer = this._mostCommentedFilmsListComponent.getElement().querySelector(`.films-list__container`);
     this._renderTitle(this._mostCommentedFilmsListComponent, new MostCommentedListTitleView());
-    this._renderFilms(mostCommentedFilmsContainer, films);
+    this._renderFilms(this._mostCommentedFilmsContainer, films);
 
 
     if (prevMostCommenterdFilmsComponent) {
@@ -52,11 +56,19 @@ class MostCommentedFilmList {
   }
 
   _renderFilm(container, film) {
-    if (!this._mostCommentedFilmsPresenter[film.id]) {
+    const filmWithHiddenPopup = Object.assign(
+        {},
+        film,
+        {
+          mode: Mode.DEFAULT
+        }
+    );
+
+    if (!this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id]) {
       const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);
-      this._mostCommentedFilmsPresenter[film.id] = moviePresenter;
+      this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id] = moviePresenter;
     }
-    this._mostCommentedFilmsPresenter[film.id].init(film, container);
+    this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id].init(filmWithHiddenPopup, container);
   }
 
   _renderFilms(container, films) {
