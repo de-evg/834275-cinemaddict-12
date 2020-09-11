@@ -33,6 +33,19 @@ class Film extends Observer {
     this._notify(actionType, update);
   }
 
+  static adaptToOffline(film) {
+    const adaptedFilm = Object.assign(
+        {},
+        film,
+        {
+          isFormDisabled: true,
+        }
+    );
+
+    return adaptedFilm;
+  }
+
+
   static adaptToClient(film) {
     const adaptedFilm = Object.assign(
         {},

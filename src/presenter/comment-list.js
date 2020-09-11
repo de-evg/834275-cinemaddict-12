@@ -42,7 +42,7 @@ class CommentList {
   _renderComment(comment) {
     this._comment = comment;
     const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._commentModel);
-    commentPresenter.init(this._comment, this._film.error.onCommentDelete);
+    commentPresenter.init(this._comment, this._film.error.onCommentDelete, this._film.isFormDisabled);
     this._commentPresenter[this._comment.id] = commentPresenter;
   }
 

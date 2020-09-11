@@ -10,9 +10,17 @@ import ProfileRangPresenter from "./presenter/profile-rang.js";
 
 import {UpdateType, Socket, FilterType} from "./const.js";
 
-import Api from "./api.js";
+import Api from "./api/index.js";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
+
+const STORE_PREFIX = `cinemaddict-localstorage`;
+const STORE_VER = `v12`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new Api(Socket.END_POINT, Socket.AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const siteBodyElement = document.querySelector(`body`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
@@ -67,7 +75,7 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 filterPresenter.init();
 filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
 
-const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel, api);
+const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel, apiWithProvider);
 movieListPresenter.init();
 
 const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
@@ -75,10 +83,29 @@ const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
 const filmsCountPresenter = new FilmsCountPresenter(footerStatisticsElement, filmsModel);
 filmsCountPresenter.init();
 
-api.getFilms()
+apiWithProvider.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
   })
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+      .then(() => {
+        console.log(`ServiceWorker available`); // eslint-disable-line
+      })
+      .catch(() => {
+        console.error(`ServiceWorker isn't available`); // eslint-disable-line
+      });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline] `, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline] `;
+});

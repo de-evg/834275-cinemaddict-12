@@ -191,7 +191,7 @@ class FilmList {
 
   _renderNoFilms() {
     if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
-      replace(this._noFilmsComponent, this._mainMovieListComponent.querySelector(`.films-list__title`));
+      replace(this._noFilmsComponent, this._mainMovieListComponent.getElement().querySelector(`.films-list__title`));
       return;
     }
     render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
