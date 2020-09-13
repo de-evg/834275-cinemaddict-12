@@ -30,6 +30,7 @@ class Film {
     this._escKeyDownHandler = this._handleEscKeyDown.bind(this);
     this._formSubmitHandle = this._handleFormSubmit.bind(this);
     this._handlePopupControlsChange = this._handlePopupControlsChange.bind(this);
+    this._showPopup = this._showPopup.bind(this);
   }
 
   init(film, filmsContainer) {
@@ -93,6 +94,7 @@ class Film {
   }
 
   _showPopup() {
+    this._resetPopups();
     this._renderNewCommentFormComponent();
     this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
     this._commentListPresenter.init();
@@ -139,8 +141,6 @@ class Film {
             {
               mode: this._mode,
               error: {
-                onCommentDelete: false,
-                onCommentAdd: false,
                 onControlsChange: false
               }
             }
@@ -212,6 +212,7 @@ class Film {
 
   _handleFormSubmit(evt) {
     if (evt.ctrlKey && evt.key === `Enter`) {
+      this._newCommetFormComponent.getElement().classList.remove(`shake`);
       const newComment = this._commentModel.getNewComment();
       if (newComment.currentComment && newComment.currentEmoji) {
         const update = {

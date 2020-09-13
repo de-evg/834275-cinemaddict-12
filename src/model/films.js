@@ -96,8 +96,6 @@ class Film extends Observer {
           isControlsDisabled: false,
           isFormDisabled: false,
           error: {
-            atCommentAdding: false,
-            atCommentDeleting: false,
             onControlsChanging: false
           }
         }

@@ -42,6 +42,7 @@ class FilmList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._removePopups = this._removePopups.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -49,8 +50,8 @@ class FilmList {
   }
 
   init() {
-    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._api);
-    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._api);
+    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removePopups, this._api);
+    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removePopups, this._api);
 
     this._renderSort();
     this._renderFilmsContainer();
@@ -66,6 +67,12 @@ class FilmList {
     remove(this._sortComponent);
     remove(this._filmsContainerComponent);
     remove(this._mainMovieListComponent);
+  }
+
+  _removePopups() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
   }
 
   _getFilms() {
@@ -263,11 +270,13 @@ class FilmList {
             this._filmsModel.updateFilm(updateType, update.film);
           })
           .catch(() => {
-            update.film.mode = Mode.DETAILS;
-            update.film.error.atCommentDeleting = true;
-            this._commentModel.setNotDeletedComment(update.commentID);
-            this._filmsModel.updateFilm(UpdateType.MINOR, update.film);
-            this._commentModel.resetNotDeletedComment(update.commentID);
+            const commentElement = document.querySelector(`#comment${update.commentID}`);
+            const oldDeleteBtnElement = commentElement.querySelector(`.film-details__comment-delete`);
+            const newDeleteBtnElement = oldDeleteBtnElement.cloneNode();
+            newDeleteBtnElement.innerHTML = `Delete`;
+            newDeleteBtnElement.removeAttribute(`disabled`);
+            replace(newDeleteBtnElement, oldDeleteBtnElement);
+            commentElement.classList.add(`shake`);
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -284,9 +293,8 @@ class FilmList {
             this._filmsModel.updateFilm(updateType, updatedFilm);
           })
           .catch(() => {
-            update.film.mode = Mode.DETAILS;
-            update.film.error.atCommentAdding = true;
-            this._filmsModel.updateFilm(UpdateType.MINOR, update.film);
+            const newMessageFormElement = document.querySelector(`.film-details__new-comment`);
+            newMessageFormElement.classList.add(`shake`);
           });
         break;
     }

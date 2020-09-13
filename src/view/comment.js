@@ -13,7 +13,7 @@ class Comment extends SmartView {
 
   getTemplate() {
     const date = formatCommentDate(this._data.date);
-    return `<li class="film-details__comment ${this._notDeletedComment === this._data.id ? `shake` : ``}">
+    return `<li class="film-details__comment" id="comment${this._data.id}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-${this._data.emoji}">
     </span>
@@ -22,19 +22,19 @@ class Comment extends SmartView {
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${this._data.author}</span>
         <span class="film-details__comment-day">${date}</span>
-        <button class="film-details__comment-delete" ${this._data.isFormDisabled ? `disabled` : ``}>${this._data.isFormDisabled ? `Deleting…` : `Delete`}</button>
+        <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
   </li>`;
   }
 
   restoreHandlers() {
-    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
+    this.getElement().addEventListener(`click`, this._deleteBtnClickHandler);
   }
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._deleteBtnClickHandler);
+    this.getElement().addEventListener(`click`, this._deleteBtnClickHandler);
   }
 
   onErrorHandler() {
@@ -42,9 +42,8 @@ class Comment extends SmartView {
   }
 
   _deleteBtnClickHandler(evt) {
-    evt.preventDefault();
-    if (!this._data.isFormDisaled) {
-      this.updateData({isFormDisabled: true});
+    if (evt.target.tagName === `BUTTON`) {
+      evt.preventDefault();
       this._callback.deleteClick();
     }
   }
