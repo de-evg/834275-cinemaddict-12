@@ -84,7 +84,7 @@ const Emoji = {
 
 const Socket = {
   AUTHORIZATION: `Basic aS2dfgSfer3fbrb3fw`,
-  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict/`
+  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 
 const ExtraFilmsType = {

@@ -22,7 +22,7 @@ class Provider {
   constructor(api, store) {
     this._api = api;
     this._store = store;
-    this._isUpdateNeeded = false;
+    this._isSyncNeeded = false;
   }
 
   getFilms() {
@@ -49,7 +49,7 @@ class Provider {
         return updatedFilm;
       });
     }
-    this._isUpdateNeeded = true;
+    this._isSyncNeeded = true;
     this._store.setItem(Key.UPDATE, film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
 
     return Promise.resolve(FilmsModel.adaptToOffline(film));
@@ -85,8 +85,10 @@ class Provider {
   }
 
   sync() {
-    if (Provider.isOnline() && this._isUpdateNeeded) {
-      const storeFilms = Object.values(this._store.getItems(Key.UPDATE));
+    if (Provider.isOnline() && this._isSyncNeeded) {
+      const storeFilms = {
+        movies: Object.values(this._store.getItems(Key.ALL_FILMS))
+      };
 
       return this._api.sync(storeFilms)
         .then((response) => {
@@ -98,7 +100,7 @@ class Provider {
           this._store.setItems(items);
         });
     }
-    return Promise.reject(new Error(`Sync data faied`));
+    return Promise.reject(new Error(`Sync data failed`));
   }
 
   static isOnline() {

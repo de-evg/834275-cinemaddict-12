@@ -130,9 +130,6 @@ class Film extends Observer {
             [`director`]: film.director,
             [`actors`]: film.actors,
             [`writers`]: film.writers,
-            [`inWatchlist`]: film.inWatchlist,
-            [`isWatched`]: film.isWatched,
-            [`isFavorite`]: film.isFavorite,
           },
           [`comments`]: film.comments,
           [`user_details`]: {

@@ -28,7 +28,7 @@ class StatisticFilters extends AbstractView {
             </form>`;
   }
 
-  setPeriodChandeHandler(callback) {
+  setPeriodChangeHandler(callback) {
     this._callback.change = callback;
     this.getElement().addEventListener(`change`, this._handlePeriodChange);
   }
