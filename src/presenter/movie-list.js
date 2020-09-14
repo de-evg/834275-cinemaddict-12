@@ -42,7 +42,7 @@ class FilmList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._removePopups = this._removePopups.bind(this);
+    this._removeAllPopups = this._removeAllPopups.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -50,8 +50,8 @@ class FilmList {
   }
 
   init() {
-    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removePopups, this._api);
-    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removePopups, this._api);
+    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
+    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
 
     this._renderSort();
     this._renderFilmsContainer();
@@ -69,10 +69,16 @@ class FilmList {
     remove(this._mainMovieListComponent);
   }
 
-  _removePopups() {
+  _removePopups(filmPresenter = this._filmPresenter) {
     Object
-      .values(this._filmPresenter)
+      .values(filmPresenter)
       .forEach((presenter) => presenter.resetView());
+  }
+
+  _removeAllPopups(filmPresenter) {
+    this._removePopups();
+    this._topRatedFilmListPresenter.removeTopRatedPopups(filmPresenter);
+    this._mostCommentedFilmsListPresenter.removeMostCommentedPopups(filmPresenter);
   }
 
   _getFilms() {
@@ -156,7 +162,7 @@ class FilmList {
 
   _renderFilm(container, film) {
     if (!this._filmPresenter[film.id]) {
-      const moviePresenter = new MoviePresenter(this._commentModel, this._handleViewAction, this._removePopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
       this._filmPresenter[film.id] = moviePresenter;
     }
     this._filmPresenter[film.id].init(film, container);

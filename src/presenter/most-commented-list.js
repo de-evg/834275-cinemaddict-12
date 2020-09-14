@@ -12,17 +12,19 @@ import {Mode} from "../const.js";
 const EXTRA_FILMS_COUNT = 2;
 
 class MostCommentedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, changeData, removePopups, api) {
+  constructor(siteMainElement, filmsModel, commentModel, changeData, removeAllPopups, api) {
     this._siteMainElement = siteMainElement;
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
     this._changeData = changeData;
-    this._removePopups = removePopups;
+    this._removeAllPopups = removeAllPopups;
     this._api = api;
 
     this._callback = {};
 
     this._mostCommentedFilmsPresenter = {};
+
+    this.removeMostCommentedPopups = this.removeMostCommentedPopups.bind(this);
   }
 
   init(filmsContainer) {
@@ -58,6 +60,12 @@ class MostCommentedFilmList {
     this._mostCommentedFilmsPresenter = {};
   }
 
+  removeMostCommentedPopups() {
+    Object
+    .values(this._mostCommentedFilmsPresenter)
+    .forEach((presenter) => presenter.resetView());
+  }
+
   _renderFilm(container, film) {
     const filmWithHiddenPopup = Object.assign(
         {},
@@ -68,7 +76,7 @@ class MostCommentedFilmList {
     );
 
     if (!this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id]) {
-      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removeAllPopups, this._api);
       this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id] = moviePresenter;
     }
     this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id].init(filmWithHiddenPopup, container);

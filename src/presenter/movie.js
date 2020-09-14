@@ -30,7 +30,7 @@ class Film {
     this._escKeyDownHandler = this._handleEscKeyDown.bind(this);
     this._formSubmitHandle = this._handleFormSubmit.bind(this);
     this._handlePopupControlsChange = this._handlePopupControlsChange.bind(this);
-    this._showPopup = this._showPopup.bind(this);
+    
   }
 
   init(film, filmsContainer) {
