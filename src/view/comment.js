@@ -44,6 +44,7 @@ class Comment extends SmartView {
   _deleteBtnClickHandler(evt) {
     if (evt.target.tagName === `BUTTON`) {
       evt.preventDefault();
+      this.getElement().classList.remove(`shake`);
       this._callback.deleteClick();
     }
   }
