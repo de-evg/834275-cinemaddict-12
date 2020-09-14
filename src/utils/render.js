@@ -24,29 +24,10 @@ const render = (container, element, place) => {
   }
 };
 
-const renderTemplate = (container, template, place) => {
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
-  container.insertAdjacentHTML(place, template);
-};
-
 const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
   return newElement.firstChild;
-};
-
-const insert = (container, element) => {
-  if (element instanceof Abstract) {
-    element = element.getElement();
-  }
-
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
-
-  container.appendChild(element);
 };
 
 const remove = (component) => {
@@ -76,4 +57,4 @@ const replace = (newChild, oldChild) => {
   parent.replaceChild(newChild, oldChild);
 };
 
-export {RenderPosition, render, renderTemplate, createElement, insert, remove, replace};
+export {RenderPosition, render, createElement, remove, replace};

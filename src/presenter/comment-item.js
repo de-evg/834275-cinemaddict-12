@@ -13,8 +13,7 @@ class Comment {
 
   init(comment) {
     this._comment = comment;
-    this._notDeletedCommmentID = this._commentModel.getNotDeletedComment();
-    this._commentComponent = new CommentView(this._comment, this._notDeletedCommmentID);
+    this._commentComponent = new CommentView(this._comment);
     this._setCommentHandlers();
     this._renderComment(this._comment);
   }
@@ -31,14 +30,14 @@ class Comment {
     render(this._commentContainer, this._commentComponent, RenderPosition.BEFOREEND);
   }
 
-  _handelDeleteClick() {    
+  _handelDeleteClick() {
     const oldDeleteBtnElement = this._commentComponent.getElement().querySelector(`.film-details__comment-delete`);
     const newDeleteBtnElement = oldDeleteBtnElement.cloneNode();
-    
+
     newDeleteBtnElement.innerHTML = `Deleting`;
     newDeleteBtnElement.setAttribute(`disabled`, `disabled`);
     replace(newDeleteBtnElement, oldDeleteBtnElement);
-    
+
     this._removeData(this._comment.id);
   }
 }

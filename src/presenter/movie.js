@@ -30,7 +30,6 @@ class Film {
     this._escKeyDownHandler = this._handleEscKeyDown.bind(this);
     this._formSubmitHandle = this._handleFormSubmit.bind(this);
     this._handlePopupControlsChange = this._handlePopupControlsChange.bind(this);
-    
   }
 
   init(film, filmsContainer) {
@@ -215,6 +214,7 @@ class Film {
       this._newCommetFormComponent.getElement().classList.remove(`shake`);
       const newComment = this._commentModel.getNewComment();
       if (newComment.currentComment && newComment.currentEmoji) {
+        this._newCommetFormComponent.disableForm();
         const update = {
           newComment,
           film: this._film,

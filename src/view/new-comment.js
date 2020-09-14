@@ -9,11 +9,11 @@ class NewComment extends SmartView {
     this._commentModel = commentModel;
     this._film = film;
     this._data = NewComment.parseCommentToData(this._commentModel.getNewComment());
-    this._data.onCommentAddError = this._film.error.onCommentAdd;
-    this._data.isFormDisabled = this._film.isFormDisabled;
+    this._data.isFormDisabled = false;
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentMessageChangeHandler = this._commentMessageChangeHandler.bind(this);
+    this.disableForm = this.disableForm.bind(this);
 
     this._setInnerHandlers();
   }
@@ -84,6 +84,12 @@ class NewComment extends SmartView {
   }
   restoreHandlers() {
     this._setInnerHandlers();
+  }
+
+  disableForm() {
+    this.updateData({
+      isFormDisabled: true
+    }, true);
   }
 
   _setInnerHandlers() {

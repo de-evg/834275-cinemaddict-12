@@ -16,11 +16,9 @@ class CommentList {
 
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
 
-    if (!this._film.error.atCommentDeleting) {
-      this._comments = [];
-      this._commentModel.setComments(this._film.id, this._comments);
-      this._loadComments();
-    }
+    this._comments = [];
+    this._commentModel.setComments(this._film.id, this._comments);
+    this._loadComments();
   }
 
   init() {
@@ -42,7 +40,7 @@ class CommentList {
   _renderComment(comment) {
     this._comment = comment;
     const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._commentModel);
-    commentPresenter.init(this._comment, this._film.error.onCommentDelete, this._film.isFormDisabled);
+    commentPresenter.init(this._comment);
     this._commentPresenter[this._comment.id] = commentPresenter;
   }
 

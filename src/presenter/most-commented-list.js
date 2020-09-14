@@ -12,15 +12,12 @@ import {Mode} from "../const.js";
 const EXTRA_FILMS_COUNT = 2;
 
 class MostCommentedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, changeData, removeAllPopups, api) {
-    this._siteMainElement = siteMainElement;
+  constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._removeAllPopups = removeAllPopups;
     this._api = api;
-
-    this._callback = {};
 
     this._mostCommentedFilmsPresenter = {};
 

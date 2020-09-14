@@ -50,8 +50,8 @@ class FilmList {
   }
 
   init() {
-    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
-    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._siteMainElement, this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
+    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
+    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
 
     this._renderSort();
     this._renderFilmsContainer();
@@ -259,10 +259,16 @@ class FilmList {
         });
         break;
       case UserAction.CHANGE_POPUP_CONTROL:
-        this._api.updateFilm(update).then((updatedFilm) => {
-          updatedFilm.mode = Mode.DETAILS;
-          this._filmsModel.updateFilm(updateType, updatedFilm);
-        });
+        this._api.updateFilm(update)
+          .then((updatedFilm) => {
+            updatedFilm.mode = Mode.DETAILS;
+            this._filmsModel.updateFilm(updateType, updatedFilm);
+          })
+          .catch(() => {
+            update.mode = Mode.DETAILS;
+            update.isFormDisabled = true;
+            this._filmsModel.updateFilm(updateType, update);
+          });
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update.commentID)

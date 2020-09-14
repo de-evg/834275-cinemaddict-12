@@ -63,7 +63,7 @@ class Provider {
         });
     }
 
-    return Promise.reject([]);
+    return Promise.reject();
   }
 
   addComment(newComment) {
@@ -74,14 +74,14 @@ class Provider {
         });
     }
 
-    return Promise.reject([]);
+    return Promise.reject();
   }
 
   deleteComment(filmID) {
     if (Provider.isOnline()) {
       return this._api.deleteComment(filmID);
     }
-    return Promise.reject([]);
+    return Promise.reject();
   }
 
   sync() {

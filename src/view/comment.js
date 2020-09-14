@@ -3,11 +3,9 @@ import SmartView from "./smart.js";
 import {formatCommentDate} from "../utils/comment.js";
 
 class Comment extends SmartView {
-  constructor(comment, notDeletedComment, isFormDisabled) {
+  constructor(comment) {
     super();
     this._data = Comment.parseCommentToData(comment);
-    this._data.isFormDisabled = isFormDisabled;
-    this._notDeletedComment = notDeletedComment;
     this._deleteBtnClickHandler = this._deleteBtnClickHandler.bind(this);
   }
 
@@ -35,10 +33,6 @@ class Comment extends SmartView {
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().addEventListener(`click`, this._deleteBtnClickHandler);
-  }
-
-  onErrorHandler() {
-    this.updateData({isFormDisabled: false});
   }
 
   _deleteBtnClickHandler(evt) {

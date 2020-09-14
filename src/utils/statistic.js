@@ -76,7 +76,6 @@ const findTopGenre = (films) => {
         .sort((a, b) => b[1] - a[1]);
     };
     const topGanres = sortGenres(GenreMap);
-    console.log(topGanres);
     return topGanres[0][0];
   } else {
     return ``;

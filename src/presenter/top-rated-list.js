@@ -7,20 +7,17 @@ import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {sortByRating} from "../utils/sort.js";
 import {getRandomInteger} from "../utils/common.js";
 
-import {UpdateType, Mode} from "../const.js";
+import {UpdateType} from "../const.js";
 
 const EXTRA_FILMS_COUNT = 2;
 
 class TopRatedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, changeData, removeAllPopups, api) {
-    this._siteMainElement = siteMainElement;
+  constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
     this._changeData = changeData;
     this._removeAllPopups = removeAllPopups;
     this._api = api;
-
-    this._callback = {};
 
     this._topRatedFilmsPresenter = {};
 
@@ -67,7 +64,6 @@ class TopRatedFilmList {
   }
 
   _renderFilm(container, film) {
-  
     if (!this._topRatedFilmsPresenter[film.id]) {
       const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removeAllPopups, this._api);
       this._topRatedFilmsPresenter[film.id] = moviePresenter;
