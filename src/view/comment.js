@@ -26,12 +26,12 @@ class Comment extends SmartView {
   </li>`;
   }
 
-  restoreHandlers() {
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
     this.getElement().addEventListener(`click`, this._deleteBtnClickHandler);
   }
 
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
+  restoreHandlers() {
     this.getElement().addEventListener(`click`, this._deleteBtnClickHandler);
   }
 

@@ -12,7 +12,7 @@ const Controls = {
 
 const DescritptionRange = {
   MIN: 0,
-  MAX: 139
+  MAX: 140
 };
 
 const UserAction = {
