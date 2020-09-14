@@ -5,7 +5,8 @@ const Method = {
   GET: `GET`,
   PUT: `PUT`,
   POST: `POST`,
-  DELETE: `DELETE`
+  DELETE: `DELETE`,
+  OPTIONS: `OPTIONS`
 };
 
 const SuccessHTTPStatusRange = {
@@ -20,16 +21,17 @@ class Api {
   }
 
   getFilms() {
-    return this._load({url: `movies`})
+    return this._load({url: `/movies`})
       .then(Api.toJSON)
-      .then((films) => films.map(FilmsModel.adaptToClient))
+      .then((films) => films
+        .map(FilmsModel.adaptToClient))
       .catch((err) => {
         throw new Error(err);
       });
   }
 
   getComments(filmID) {
-    return this._load({url: `comments/${filmID}`})
+    return this._load({url: `/comments/${filmID}`})
       .then(Api.toJSON)
       .then((comments) => comments.map(CommentsModel.adaptToClient))
       .catch((err) => {
@@ -39,7 +41,7 @@ class Api {
 
   updateFilm(film) {
     return this._load({
-      url: `movies/${film.id}`,
+      url: `/movies/${film.id}`,
       method: Method.PUT,
       body: JSON.stringify(FilmsModel.adaptToServer(film)),
       headers: new Headers({"Content-Type": `application/json`})
@@ -54,7 +56,7 @@ class Api {
   addComment(comment) {
     const filmID = comment.filmID;
     return this._load({
-      url: `comments/${filmID}`,
+      url: `/comments/${filmID}`,
       method: Method.POST,
       body: JSON.stringify(CommentsModel.adaptToServer(comment)),
       headers: new Headers({"Content-Type": `application/json`})
@@ -73,16 +75,16 @@ class Api {
 
   deleteComment(commentID) {
     return this._load({
-      url: `comments/${commentID}`,
+      url: `/comments/${commentID}`,
       method: Method.DELETE
     });
   }
 
-  sync({movies}) {
+  sync(films) {
     return this._load({
-      url: `movies/sync`,
+      url: `/movies/sync`,
       method: Method.POST,
-      body: JSON.stringify(movies),
+      body: JSON.stringify(films),
       headers: new Headers({"Content-Type": `application\json`})
     })
     .then(Api.toJSON);
@@ -94,14 +96,17 @@ class Api {
     body = null,
     headers = new Headers()
   }) {
-    headers.append(`Authorization`, this._authorization);
+    headers.set(`Authorization`, this._authorization);
 
-    return fetch(
-        `${this._endPoint}/${url}`,
-        {method, body, headers}
-    )
+    return fetch(`${this._endPoint}${url}`, {
+      method,
+      body,
+      headers
+    })
       .then(Api.checkStatus)
-      .catch(Api.catchError);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   static checkStatus(response) {

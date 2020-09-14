@@ -1,53 +1,86 @@
 class Store {
   constructor(key, storage) {
     this._storage = storage;
-    this._storeKey = key;
+    this._key = key;
+    this._syncKey = `${this._key}-need-sync`;
+    this._updateKey = `${this._key}-to-update`;
   }
 
-  getItems(key) {
-    const storeKey = `${this._storeKey}/${key}`;
+  getItems(key = this._key) {
     try {
-      return JSON.parse(this._storage.getItem(storeKey)) || {};
+      return JSON.parse(this._storage.getItem(key)) || {};
     } catch (err) {
       return {};
     }
   }
 
-  setItems(items, key) {
-    const storeKey = `${this._storeKey}/${key}`;
+  getItem(key) {
+    const store = this.getItems();
+
+    return store[key];
+  }
+
+  setItems(items) {
     this._storage.setItem(
-        storeKey,
+        this._key,
         JSON.stringify(items)
     );
   }
 
-  setItem(key, index, value) {
-    const storeKey = `${this._storeKey}/${key}`;
-    const store = this.getItems(key);
+  getUpdateKey() {
+    return this._updateKey;
+  }
+
+  setUpdatedItem(key, value) {
+    const store = this.getItems(this._updateKey);
 
     this._storage.setItem(
-        storeKey,
+        this._updateKey,
         JSON.stringify(
             Object.assign(
                 {},
                 store,
                 {
-                  [index]: value
+                  [key]: value
                 }
             )
         )
     );
   }
 
-  removeItem(key) {
+  setItem(key, value) {
     const store = this.getItems();
 
-    delete store[key];
-
     this._storage.setItem(
-        this._storeKey,
-        JSON.stringify(store)
+        this._key,
+        JSON.stringify(
+            Object.assign(
+                {},
+                store,
+                {
+                  [key]: value
+                }
+            )
+        )
     );
+  }
+
+  switchSyncFlagOn() {
+    this._storage.setItem(
+        this._syncKey,
+        JSON.stringify(true)
+    );
+  }
+
+  switchSyncFlagOff() {
+    this._storage.setItem(
+        this._syncKey,
+        JSON.stringify(false)
+    );
+  }
+
+  getSyncFlag() {
+    return JSON.parse(this._storage.getItem(this._syncKey)) || false;
   }
 }
 

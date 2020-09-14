@@ -95,6 +95,7 @@ class Film extends Observer {
           mode: Mode.DEFAULT,
           isControlsDisabled: false,
           isFormDisabled: false,
+          commentsData: [],
           error: {
             onControlsChanging: false
           }
@@ -135,7 +136,8 @@ class Film extends Observer {
             [`already_watched`]: film.isWatched,
             [`watching_date`]: film.watchingDate,
             [`favorite`]: film.isFavorite
-          }
+          },
+          [`comments_data`]: film.commentsData
         }
     );
 
@@ -161,6 +163,7 @@ class Film extends Observer {
     delete adaptedFilm.isFormDisabled;
     delete adaptedFilm.error;
     delete adaptedFilm.watchingDate;
+    delete adaptedFilm.commentsData;
 
     return adaptedFilm;
   }

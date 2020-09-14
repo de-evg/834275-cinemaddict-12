@@ -21,7 +21,7 @@ self.addEventListener(`install`, (evt) => {
         `/images/bitmap@3x.png`,
         `/images/emoji/angry.png`,
         `/images/emoji/puke.png`,
-        `/images/emoji/sleeping`,
+        `/images/emoji/sleeping.png`,
         `/images/emoji/smile.png`,
         `/images/icons/icon-favorite.svg`,
         `/images/icons/icon-favorite-active.svg`,

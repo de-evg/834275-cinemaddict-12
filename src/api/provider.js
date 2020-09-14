@@ -13,28 +13,22 @@ const createStoreStructure = (items) => {
   }, {});
 };
 
-const Key = {
-  ALL_FILMS: `allFilms`,
-  UPDATE: `update`
-};
-
 class Provider {
   constructor(api, store) {
     this._api = api;
     this._store = store;
-    this._isSyncNeeded = false;
   }
 
   getFilms() {
     if (Provider.isOnline()) {
-      return this._api.getFilms(Key.ALL_FILMS)
+      return this._api.getFilms()
         .then((films) => {
-          const items = createStoreStructure(films.map(FilmsModel.adaptToServer));
-          this._store.setItems(items, Key.ALL_FILMS);
+          const storeFilms = createStoreStructure(films.map(FilmsModel.adaptToServer));
+          this._store.setItems(storeFilms);
           return films;
         });
     }
-    const storeFilms = Object.values(this._store.getItems(Key.ALL_FILMS));
+    const storeFilms = Object.values(this._store.getItems());
 
     return Promise.resolve(storeFilms
       .map(FilmsModel.adaptToClient)
@@ -45,12 +39,13 @@ class Provider {
     if (Provider.isOnline()) {
       return this._api.updateFilm(film)
       .then((updatedFilm) => {
-        this._store.setItem(Key.ALL_FILMS, updatedFilm.id, FilmsModel.adaptToServer(updatedFilm));
+        this._store.setItem(updatedFilm.id, FilmsModel.adaptToServer(updatedFilm));
         return updatedFilm;
       });
     }
-    this._isSyncNeeded = true;
-    this._store.setItem(Key.UPDATE, film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
+    this._store.setItem(film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
+    this._store.setUpdatedItem(film.id, FilmsModel.adaptToServer(Object.assign({}, film)));
+    this._store.switchSyncFlagOn();
 
     return Promise.resolve(FilmsModel.adaptToOffline(film));
   }
@@ -85,19 +80,18 @@ class Provider {
   }
 
   sync() {
-    if (Provider.isOnline() && this._isSyncNeeded) {
-      const storeFilms = {
-        movies: Object.values(this._store.getItems(Key.ALL_FILMS))
-      };
+    if (!this._store.getSyncFlag()) {
+      return null;
+    }
+    if (Provider.isOnline()) {
+      const storeFilms = Object.values(this._store.getItems(this._store.getUpdateKey()));
 
       return this._api.sync(storeFilms)
-        .then((response) => {
-          this._isUpdateNeeded = false;
-          const updatedFilms = getSyncedFilms(response.updated);
+        .then((films) => {
+          const updatedFilms = getSyncedFilms(films.updated);
 
-          const items = createStoreStructure([...updatedFilms]);
-
-          this._store.setItems(items);
+          this._store.setItems(updatedFilms);
+          this._store.switchSyncFlagOff();
         });
     }
     return Promise.reject(new Error(`Sync data failed`));

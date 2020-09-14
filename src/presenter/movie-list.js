@@ -103,6 +103,7 @@ class FilmList {
     this._filmPresenter = {};
 
     remove(this._loadingMoreBtnComponent);
+
     this._topRatedFilmListPresenter.destroy();
     this._mostCommentedFilmsListPresenter.destroy();
 
@@ -148,8 +149,12 @@ class FilmList {
     .forEach((presenter) => presenter.resetView());
   }
 
-  _renderTitle(container, title) {
-    render(container, title, RenderPosition.AFTERBEGIN);
+  _renderTitle() {
+    if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
+      replace(this._titleMainListComponent, this._noFilmsComponent);
+      return;
+    }
+    render(this._mainMovieListComponent, this._titleMainListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilters() {
@@ -204,7 +209,7 @@ class FilmList {
 
   _renderNoFilms() {
     if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
-      replace(this._noFilmsComponent, this._mainMovieListComponent.getElement().querySelector(`.films-list__title`));
+      replace(this._noFilmsComponent, this._titleMainListComponent);
       return;
     }
     render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
@@ -255,6 +260,7 @@ class FilmList {
         break;
       case UserAction.CHANGE_CONTROL:
         this._api.updateFilm(update).then((updatedFilm) => {
+          updatedFilm.commentsData = this._commentModel.getComments(updatedFilm.id);
           this._filmsModel.updateFilm(updateType, updatedFilm);
         });
         break;
@@ -262,11 +268,13 @@ class FilmList {
         this._api.updateFilm(update)
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
+            updatedFilm.commentsData = this._commentModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
           })
           .catch(() => {
             update.mode = Mode.DETAILS;
             update.isFormDisabled = true;
+            update.commentsData = this._commentModel.getComments(update.id);
             this._filmsModel.updateFilm(updateType, update);
           });
         break;
@@ -278,7 +286,7 @@ class FilmList {
           .then(() => {
             update.updateCommentsCount(update);
             update.film.mode = Mode.DETAILS;
-            update.film.error.atCommentDeleting = false;
+            update.film.commentsData = this._commentModel.getComments(update.film.id);
             this._filmsModel.updateFilm(updateType, update.film);
           })
           .catch(() => {
@@ -301,7 +309,7 @@ class FilmList {
           })
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
-            update.film.error.atCommentAdding = false;
+            updatedFilm.commentsData = this._commentModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
           })
           .catch(() => {
