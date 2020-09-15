@@ -19,7 +19,7 @@ class Statistics {
     this._statisticContainer = statisticContainer;
     this._isStatisticInit = false;
 
-    this._handelerChangePeriodOfTime = this._handelerChangePeriodOfTime.bind(this);
+    this._handlerChangePeriodOfTime = this._handlerChangePeriodOfTime.bind(this);
   }
 
   getStatisticInitStatus() {
@@ -35,7 +35,7 @@ class Statistics {
     this._statisticRankComponent = new StatisticRankView(this._rank);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
     this._statisticChartComponent = new StatisticChartView(this._statisics);
-    this._statisticFiltersComponent.setPeriodOfTimeChangeHandler(this._handelerChangePeriodOfTime);
+    this._statisticFiltersComponent.setPeriodOfTimeChangeHandler(this._handlerChangePeriodOfTime);
     this._initContent();
     this._renderStatistics();
     this._isStatisticInit = true;
@@ -112,7 +112,7 @@ class Statistics {
     };
   }
 
-  _handelerChangePeriod(filterType) {
+  _handlerChangePeriodOfTime(filterType) {
     this._setStatistic(filterType);
     this._initChart();
     this._initContent();
