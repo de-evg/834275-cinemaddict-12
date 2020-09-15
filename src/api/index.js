@@ -85,7 +85,7 @@ class Api {
       url: `/movies/sync`,
       method: Method.POST,
       body: JSON.stringify(films),
-      headers: new Headers({"Content-Type": `application\json`})
+      headers: new Headers({"Content-Type": `application/json`})
     })
     .then(Api.toJSON);
   }
