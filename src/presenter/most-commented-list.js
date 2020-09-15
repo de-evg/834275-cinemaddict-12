@@ -88,16 +88,16 @@ class MostCommentedList {
   }
 
   _sortFilms() {
-    const result = [];
     const films = this._films.slice().sort(sortByComments);
     const maxCommentsCount = films[0].comments.length;
     const isCommentCountSame = films.every((film) => film.comments.length === maxCommentsCount);
     if (isCommentCountSame) {
+      const randomFilms = [];
       for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
         const start = getRandomInteger(0, films.length - 1);
-        result.push(...films.splice(start, 1));
+        randomFilms.push(...films.splice(start, 1));
       }
-      return result;
+      return randomFilms;
     }
     return films.slice(0, EXTRA_FILMS_COUNT);
   }

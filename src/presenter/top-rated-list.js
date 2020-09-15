@@ -80,16 +80,16 @@ class TopRatedList {
   }
 
   _sortFilms() {
-    const result = [];
     const films = this._films.slice().sort(sortByRating);
     const maxRating = films[0].rating;
     const isRatingSame = films.every((film) => film.rating === maxRating);
     if (isRatingSame) {
+      const randomFilms = [];
       for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
         const index = getRandomInteger(0, films.length - 1);
-        result.push(...films.splice(index, 1));
+        randomFilms.push(...films.splice(index, 1));
       }
-      return result;
+      return randomFilms;
     }
     return films.slice(0, EXTRA_FILMS_COUNT);
   }

@@ -247,7 +247,6 @@ class MovieList {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    const origin = Object.assign({}, update);
     switch (actionType) {
       case UserAction.CLOSE_POPUP:
         this._filmsModel.updateFilm(updateType, update);
@@ -263,7 +262,7 @@ class MovieList {
         this._api.updateFilm(update)
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
-            origin.isFormDisabled = true;
+            updatedFilm.isFormDisabled = true;
             updatedFilm.commentsData = this._commentsModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
           });

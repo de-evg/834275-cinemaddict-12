@@ -14,7 +14,7 @@ class Film extends AbstractView {
   }
 
   getTemplate() {
-    const {title, rating, release, duration, genres, poster, description, comments, inWatchlist, isWatched, isFavorite} = this._film;
+    const {title, rating, release, duration, genres, poster, description, comments, inWatchlist, isWatched, isFavorite, isFormDisabled} = this._film;
     const year = formatReleaseDate(release);
     const genre = genres.length ? genres[0] : ``;
     const watchlistClassName = inWatchlist ? `film-card__controls-item--active` : null;
@@ -36,9 +36,9 @@ class Film extends AbstractView {
         <p class="film-card__description">${shortDescription}</p>
         <a class="film-card__comments">${comments.length} comments</a>
         <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClassName}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedClassName}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistClassName}" ${isFormDisabled ? `disabled` : ``}>Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedClassName}" ${isFormDisabled ? `disabled` : ``}>Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteClassName}" ${isFormDisabled ? `disabled` : ``}>Mark as favorite</button>
         </form>
     </article>`;
   }
