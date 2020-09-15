@@ -1,23 +1,3 @@
-const DescCount = {
-  MIN: 1,
-  MAX: 5
-};
-
-const CommentCount = {
-  MIN: 0,
-  MAX: 5
-};
-
-const Year = {
-  MIN: 1900,
-  MAX: 2020
-};
-
-const GenresCount = {
-  MIN: 1,
-  MAX: 3
-};
-
 const SortType = {
   DEFAULT: `default`,
   RELEASE: `release`,
@@ -32,11 +12,10 @@ const Controls = {
 
 const DescritptionRange = {
   MIN: 0,
-  MAX: 139
+  MAX: 140
 };
 
 const UserAction = {
-  SHOW_POPUP: `SHOW_POPUP`,
   CLOSE_POPUP: `CLOSE_POPUP`,
   CHANGE_CONTROL: `CHANGE_CONTROL`,
   CHANGE_POPUP_CONTROL: `CHANGE_POPUP_CONTROL`,
@@ -45,7 +24,6 @@ const UserAction = {
 };
 
 const UpdateType = {
-  PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
   INIT: `INIT`
@@ -67,14 +45,6 @@ const StatisticFilterType = {
   YEAR: `year`
 };
 
-const MenuItem = {
-  ALL: `all`,
-  WATCHLIST: `watchlist`,
-  HISTORY: `history`,
-  FAVORITES: `favorites`,
-  STATISTIC: `stats`
-};
-
 const Emoji = {
   [`EMOJI-ANGRY`]: `angry`,
   [`EMOJI-PUKE`]: `puke`,
@@ -84,7 +54,7 @@ const Emoji = {
 
 const Socket = {
   AUTHORIZATION: `Basic aS2dfgSfer3fbrb3fw`,
-  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict/`
+  END_POINT: `https://12.ecmascript.pages.academy/cinemaddict`
 };
 
 const ExtraFilmsType = {
@@ -97,4 +67,4 @@ const Mode = {
   DETAILS: `details`
 };
 
-export {Mode, MenuItem, DescritptionRange, DescCount, CommentCount, Year, GenresCount, SortType, Controls, UserAction, UpdateType, FilterType, Emoji, StatisticFilterType, Socket, ExtraFilmsType};
+export {SortType, Controls, DescritptionRange, UserAction, UpdateType, FilterType, StatisticFilterType, Emoji, Socket, ExtraFilmsType, Mode};

@@ -1,19 +1,5 @@
 import moment from "moment";
 
-const generateSortedFilms = (films) => {
-  return {
-    default: films.slice(),
-    rating: films
-      .slice()
-      .sort((a, b) => b.rating - a.rating)
-      .filter((film) => film.rating),
-    comments: films
-      .slice()
-      .sort((a, b) => b.comments.length - a.comments.length)
-      .filter((film) => film.comments.length)
-  };
-};
-
 const formatReleaseDate = (date, isFullDate) => {
   return isFullDate ? moment(date).format(`DD MMMM YYYY`) : moment(date).format(`YYYY`);
 };
@@ -35,4 +21,4 @@ const formatDuration = (duration) => {
   return result;
 };
 
-export {generateSortedFilms, formatReleaseDate, formatDuration};
+export {formatReleaseDate, formatDuration};

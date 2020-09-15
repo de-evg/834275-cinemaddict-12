@@ -4,12 +4,12 @@ import StatisticFiltersView from "../view/statistic-filters";
 import StatisticContentView from "../view/statistic-content";
 import StatisticChartView from "../view/statistic-chart";
 
-import {statisticFilter, countDurationWatchedFilms, findTopGenre} from "../utils/statistic.js";
-
 import {filter} from "../utils/filter.js";
-import {StatisticFilterType, FilterType} from "../const.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {setProfileRang} from "../utils/profile-rang.js";
+import {statisticFilter, countDurationWatchedFilms, findTopGenre, WatchedGenre, Genre} from "../utils/statistic.js";
+
+import {StatisticFilterType, FilterType} from "../const.js";
 
 class Staitstics {
   constructor(statisticContainer, filmsModel) {
@@ -34,15 +34,15 @@ class Staitstics {
     this._statisticComponent = new StaitsticView();
     this._statisticRankComponent = new StatisticRankView(this._rank);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
-    this._statisticChartView = new StatisticChartView();
-    this._statisticFiltersComponent.setPeriodChandeHandler(this._handelerChangePeriod);
+    this._statisticChartComponent = new StatisticChartView(this._statisics);
+    this._statisticFiltersComponent.setPeriodChangeHandler(this._handelerChangePeriod);
     this._initContent();
     this._renderStatistics();
     this._isStatisticInit = true;
   }
 
   destroy() {
-    remove(this._statisticChartView);
+    remove(this._statisticChartComponent);
     remove(this._statisticContentComponent);
     remove(this._statisticFiltersComponent);
     remove(this._statisticRankComponent);
@@ -53,7 +53,7 @@ class Staitstics {
     render(this._statisticComponent, this._statisticRankComponent, RenderPosition.BEFOREEND);
     render(this._statisticComponent, this._statisticFiltersComponent, RenderPosition.BEFOREEND);
     render(this._statisticComponent, this._statisticContentComponent, RenderPosition.BEFOREEND);
-    render(this._statisticComponent, this._statisticChartView, RenderPosition.BEFOREEND);
+    render(this._statisticComponent, this._statisticChartComponent, RenderPosition.BEFOREEND);
     render(this._statisticContainer, this._statisticComponent, RenderPosition.BEFOREEND);
   }
 
@@ -71,22 +71,50 @@ class Staitstics {
     remove(this._prevStatisticContentComponent);
   }
 
+  _initChart() {
+    this._prevStatisticChartComponent = this._statisticChartComponent;
+
+    this._statisticChartComponent = new StatisticChartView(this._getStatistic(this._statisics));
+    if (!this._prevStatisticChartComponent) {
+      this._renderStatistics();
+      return;
+    }
+
+    replace(this._statisticChartComponent, this._prevStatisticChartComponent);
+
+    remove(this._prevStatisticChartComponent);
+  }
+
   _getStatistic() {
     return this._statisics;
   }
 
   _setStatistic(filterType) {
-    const statistics = statisticFilter[filterType](this._films.slice());
+    const filmsForPeriod = statisticFilter[filterType](this._films);
+    const watchedGenre = {
+      [`Sci-Fi`]: WatchedGenre[Genre[`Sci-Fi`]](filmsForPeriod),
+      [`Animation`]: WatchedGenre[Genre[`Animation`]](filmsForPeriod),
+      [`Fantasy`]: WatchedGenre[Genre[`Fantasy`]](filmsForPeriod),
+      [`Comedy`]: WatchedGenre[Genre[`Comedy`]](filmsForPeriod),
+      [`TV Series`]: WatchedGenre[Genre[`TV Series`]](filmsForPeriod),
+      [`Adventure`]: WatchedGenre[Genre[`Adventure`]](filmsForPeriod),
+      [`Family`]: WatchedGenre[Genre[`Family`]](filmsForPeriod),
+      [`Action`]: WatchedGenre[Genre[`Action`]](filmsForPeriod),
+      [`Drama`]: WatchedGenre[Genre[`Drama`]](filmsForPeriod),
+      [`Thriller`]: WatchedGenre[Genre[`Thriller`]](filmsForPeriod)
+    };
     this._statisics = {
       type: filterType,
-      count: statistics.length,
-      duration: countDurationWatchedFilms(statistics),
-      genre: findTopGenre(statistics)
+      count: filmsForPeriod.length,
+      duration: countDurationWatchedFilms(filmsForPeriod),
+      genre: findTopGenre(filmsForPeriod),
+      watchedGenre
     };
   }
 
   _handelerChangePeriod(filterType) {
     this._setStatistic(filterType);
+    this._initChart();
     this._initContent();
   }
 }

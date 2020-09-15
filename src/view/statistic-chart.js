@@ -5,10 +5,11 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 const BAR_HEIGHT = 50;
 
 class StatisticChart extends SmartView {
-  constructor() {
+  constructor(statistic) {
     super();
+    this._watchedGenre = statistic.watchedGenre;
     this._statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    this._statisticCtx.height = BAR_HEIGHT * 5;
+    this._statisticCtx.height = BAR_HEIGHT * Object.keys(this._watchedGenre).length;
     this._createChart();
   }
 
@@ -25,9 +26,9 @@ class StatisticChart extends SmartView {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
-        labels: [`Sci-Fi`, `Animation`, `Fantasy`, `Comedy`, `TV Series`],
+        labels: [...Object.keys(this._watchedGenre)],
         datasets: [{
-          data: [11, 8, 7, 4, 3],
+          data: [...Object.values(this._watchedGenre)],
           backgroundColor: `#ffe800`,
           hoverBackgroundColor: `#ffe800`,
           anchor: `start`
@@ -55,8 +56,7 @@ class StatisticChart extends SmartView {
             gridLines: {
               display: false,
               drawBorder: false
-            },
-            barThickness: 24
+            }
           }],
           xAxes: [{
             ticks: {
@@ -75,7 +75,10 @@ class StatisticChart extends SmartView {
         tooltips: {
           enabled: false
         }
-      }
+      },
+      datasets: [{
+        barThickness: 24
+      }],
     });
   }
 }

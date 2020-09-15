@@ -5,39 +5,41 @@ import MostCommentedListTitleView from "../view/most-commented-list-title.js";
 
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 import {sortByComments} from "../utils/sort.js";
+import {getRandomInteger} from "../utils/common.js";
 
 import {Mode} from "../const.js";
 
 const EXTRA_FILMS_COUNT = 2;
 
 class MostCommentedFilmList {
-  constructor(siteMainElement, filmsModel, commentModel, changeData, modelChange, api) {
-    this._siteMainElement = siteMainElement;
+  constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
     this._changeData = changeData;
-    this._modelChange = modelChange;
+    this._removeAllPopups = removeAllPopups;
     this._api = api;
 
-    this._callback = {};
-
     this._mostCommentedFilmsPresenter = {};
+
+    this.removeMostCommentedPopups = this.removeMostCommentedPopups.bind(this);
   }
 
   init(filmsContainer) {
     this._filmsContainer = filmsContainer;
-    const films = this._getSortedFilms();
+    this._films = this._filmsModel.getFilms();
 
     const prevMostCommenterdFilmsComponent = this._mostCommentedFilmsListComponent;
 
-    if (!films.length) {
+    if (!this._films.length) {
       return;
     }
+
+    this._films = this._sortFilms();
 
     this._mostCommentedFilmsListComponent = new ExtraFilmsListView();
     this._mostCommentedFilmsContainer = this._mostCommentedFilmsListComponent.getElement().querySelector(`.films-list__container`);
     this._renderTitle(this._mostCommentedFilmsListComponent, new MostCommentedListTitleView());
-    this._renderFilms(this._mostCommentedFilmsContainer, films);
+    this._renderFilms(this._mostCommentedFilmsContainer, this._films);
 
 
     if (prevMostCommenterdFilmsComponent) {
@@ -55,6 +57,12 @@ class MostCommentedFilmList {
     this._mostCommentedFilmsPresenter = {};
   }
 
+  removeMostCommentedPopups() {
+    Object
+    .values(this._mostCommentedFilmsPresenter)
+    .forEach((presenter) => presenter.resetView());
+  }
+
   _renderFilm(container, film) {
     const filmWithHiddenPopup = Object.assign(
         {},
@@ -65,7 +73,7 @@ class MostCommentedFilmList {
     );
 
     if (!this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id]) {
-      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removePopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removeAllPopups, this._api);
       this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id] = moviePresenter;
     }
     this._mostCommentedFilmsPresenter[filmWithHiddenPopup.id].init(filmWithHiddenPopup, container);
@@ -79,12 +87,19 @@ class MostCommentedFilmList {
     render(container, title, RenderPosition.AFTERBEGIN);
   }
 
-  _getSortedFilms() {
-    return this._filmsModel
-      .getFilms()
-      .slice()
-      .sort(sortByComments)
-      .slice(0, EXTRA_FILMS_COUNT);
+  _sortFilms() {
+    let result = [];
+    const films = this._films.slice().sort(sortByComments);
+    const maxCommentsCount = films[0].comments.length;
+    const isCommentCountSame = films.every((film) => film.comments.length === maxCommentsCount);
+    if (isCommentCountSame) {
+      for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
+        const start = getRandomInteger(0, films.length - 1);
+        result.push(...films.splice(start, 1));
+      }
+      return result;
+    }
+    return films.slice(0, EXTRA_FILMS_COUNT);
   }
 }
 

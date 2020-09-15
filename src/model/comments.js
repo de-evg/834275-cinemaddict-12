@@ -4,7 +4,6 @@ class Comment extends Observer {
   constructor() {
     super();
     this._comments = {};
-    this._notDeletedComment = null;
     this._newComment = {
       currentEmoji: ``,
       currentComment: ``
@@ -26,10 +25,6 @@ class Comment extends Observer {
     return this._newComment;
   }
 
-  getNotDeletedComment() {
-    return this._notDeletedComment;
-  }
-
   setComments(filmID, comments) {
     this._comments[filmID] = comments;
     this._notify();
@@ -42,20 +37,11 @@ class Comment extends Observer {
         update
     );
   }
-
-  setNotDeletedComment(id) {
-    this._notDeletedComment = id;
-  }
-
   resetNewComment() {
     this._newComment = {
       currentEmoji: ``,
       currentComment: ``
     };
-  }
-
-  resetNotDeletedComment() {
-    this._notDeletedComment = null;
   }
 
   addComment(filmID, update) {

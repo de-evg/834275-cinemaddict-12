@@ -33,13 +33,12 @@ class FilmPopup extends SmartView {
       inWatchlist,
       isWatched,
       isFavorite,
-      isControlsDisabled,
-      error} = this._data;
+      isControlsDisabled} = this._data;
     const releaseDate = formatReleaseDate(release, this._isFullDate);
     const filmDuration = formatDuration(duration);
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
 
-    return `<section class="film-details ${error.atCommentAdding ? `shake` : ``}">
+    return `<section class="film-details">
               <form class="film-details__inner" action="" method="get">
                 <div class="form-details__top-container">
                   <div class="film-details__close">
