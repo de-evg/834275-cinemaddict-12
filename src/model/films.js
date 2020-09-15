@@ -1,7 +1,7 @@
 import Observer from "../utils/observer.js";
 import {Mode} from "../const.js";
 
-class Film extends Observer {
+class Films extends Observer {
   constructor() {
     super();
     this._films = [];
@@ -169,4 +169,4 @@ class Film extends Observer {
   }
 }
 
-export default Film;
+export default Films;

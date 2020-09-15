@@ -41,6 +41,9 @@ class Provider {
       .then((updatedFilm) => {
         this._store.setItem(updatedFilm.id, FilmsModel.adaptToServer(updatedFilm));
         return updatedFilm;
+      })
+      .catch((err) => {
+        throw new Error(`${err}`);
       });
     }
     this._store.setItem(film.id, FilmsModel.adaptToServer(Object.assign({}, film)));

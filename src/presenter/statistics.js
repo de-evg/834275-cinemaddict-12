@@ -11,7 +11,7 @@ import {statisticFilter, countDurationWatchedFilms, findTopGenre, WatchedGenre, 
 
 import {StatisticFilterType, FilterType} from "../const.js";
 
-class Staitstics {
+class Statistics {
   constructor(statisticContainer, filmsModel) {
     this._statisics = null;
     this._filmsModel = filmsModel;
@@ -119,5 +119,5 @@ class Staitstics {
   }
 }
 
-export default Staitstics;
+export default Statistics;
 

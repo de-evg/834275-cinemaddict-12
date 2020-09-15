@@ -1,6 +1,6 @@
 import AbstractView from "./abstract.js";
 
-class UserProfile extends AbstractView {
+class ProfileRang extends AbstractView {
   constructor(rang) {
     super();
     this._rang = rang;
@@ -14,4 +14,4 @@ class UserProfile extends AbstractView {
   }
 }
 
-export default UserProfile;
+export default ProfileRang;

@@ -10,10 +10,10 @@ import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
 const siteBodyElement = document.querySelector(`body`);
 
-class Film {
-  constructor(commentModel, changeData, resetPopups, api) {
+class Movie {
+  constructor(commentsModel, changeData, resetPopups, api) {
     this._popupContainer = siteBodyElement;
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._resetPopups = resetPopups;
     this._api = api;
@@ -89,13 +89,13 @@ class Film {
 
   _initPopup() {
     this._filmPopupComponent = new FilmPopupView(this._film, this._handlePopupControlsChange);
-    this._newCommetFormComponent = new NewCommentFormView(this._commentModel, this._film);
+    this._newCommetFormComponent = new NewCommentFormView(this._commentsModel, this._film);
   }
 
   _showPopup() {
     this._resetPopups();
     this._renderNewCommentFormComponent();
-    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentModel, this._changeData, this._api);
+    this._commentListPresenter = new CommentListPresenter(this._filmPopupComponent, this._film, this._commentsModel, this._changeData, this._api);
     this._commentListPresenter.init();
     this._setPopupHandlers();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
@@ -105,7 +105,7 @@ class Film {
   }
 
   _closePopup() {
-    this._commentModel.resetNewComment();
+    this._commentsModel.resetNewComment();
     remove(this._filmPopupComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keydown`, this._formSubmitHandle);
@@ -212,7 +212,7 @@ class Film {
   _handleFormSubmit(evt) {
     if (evt.ctrlKey && evt.key === `Enter`) {
       this._newCommetFormComponent.getElement().classList.remove(`shake`);
-      const newComment = this._commentModel.getNewComment();
+      const newComment = this._commentsModel.getNewComment();
       if (newComment.currentComment && newComment.currentEmoji) {
         this._newCommetFormComponent.disableForm();
         const update = {
@@ -230,4 +230,4 @@ class Film {
   }
 }
 
-export default Film;
+export default Movie;

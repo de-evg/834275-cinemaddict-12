@@ -12,9 +12,9 @@ import {UpdateType} from "../const.js";
 const EXTRA_FILMS_COUNT = 2;
 
 class TopRatedList {
-  constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
+  constructor(filmsModel, commentsModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._removeAllPopups = removeAllPopups;
     this._api = api;
@@ -65,7 +65,7 @@ class TopRatedList {
 
   _renderFilm(container, film) {
     if (!this._topRatedFilmsPresenter[film.id]) {
-      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removeAllPopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentsModel, this._changeData, this._removeAllPopups, this._api);
       this._topRatedFilmsPresenter[film.id] = moviePresenter;
     }
     this._topRatedFilmsPresenter[film.id].init(film, container);
