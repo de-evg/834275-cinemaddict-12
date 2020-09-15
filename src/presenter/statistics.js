@@ -11,7 +11,7 @@ import {statisticFilter, countDurationWatchedFilms, findTopGenre, WatchedGenre, 
 
 import {StatisticFilterType, FilterType} from "../const.js";
 
-class Staitstics {
+class Statistics {
   constructor(statisticContainer, filmsModel) {
     this._statisics = null;
     this._filmsModel = filmsModel;
@@ -19,7 +19,7 @@ class Staitstics {
     this._statisticContainer = statisticContainer;
     this._isStatisticInit = false;
 
-    this._handelerChangePeriod = this._handelerChangePeriod.bind(this);
+    this._handlerChangePeriodOfTime = this._handlerChangePeriodOfTime.bind(this);
   }
 
   getStatisticInitStatus() {
@@ -35,7 +35,7 @@ class Staitstics {
     this._statisticRankComponent = new StatisticRankView(this._rank);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
     this._statisticChartComponent = new StatisticChartView(this._statisics);
-    this._statisticFiltersComponent.setPeriodChangeHandler(this._handelerChangePeriod);
+    this._statisticFiltersComponent.setPeriodOfTimeChangeHandler(this._handlerChangePeriodOfTime);
     this._initContent();
     this._renderStatistics();
     this._isStatisticInit = true;
@@ -112,12 +112,12 @@ class Staitstics {
     };
   }
 
-  _handelerChangePeriod(filterType) {
+  _handlerChangePeriodOfTime(filterType) {
     this._setStatistic(filterType);
     this._initChart();
     this._initContent();
   }
 }
 
-export default Staitstics;
+export default Statistics;
 

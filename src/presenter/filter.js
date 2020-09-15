@@ -3,7 +3,7 @@ import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {filter} from "../utils/filter.js";
 import {FilterType, UpdateType} from "../const.js";
 
-class SiteFilter {
+class Filter {
   constructor(filterContainer, filterModel, filmsModel, menuChangeHandler) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
@@ -84,4 +84,4 @@ class SiteFilter {
 
 }
 
-export default SiteFilter;
+export default Filter;

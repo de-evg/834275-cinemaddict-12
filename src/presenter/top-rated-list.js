@@ -12,9 +12,9 @@ import {UpdateType} from "../const.js";
 const EXTRA_FILMS_COUNT = 2;
 
 class TopRatedList {
-  constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
+  constructor(filmsModel, commentsModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._removeAllPopups = removeAllPopups;
     this._api = api;
@@ -65,7 +65,7 @@ class TopRatedList {
 
   _renderFilm(container, film) {
     if (!this._topRatedFilmsPresenter[film.id]) {
-      const moviePresenter = new MoviePresenter(this._commentModel, this._changeData, this._removeAllPopups, this._api);
+      const moviePresenter = new MoviePresenter(this._commentsModel, this._changeData, this._removeAllPopups, this._api);
       this._topRatedFilmsPresenter[film.id] = moviePresenter;
     }
     this._topRatedFilmsPresenter[film.id].init(film, container);
@@ -80,16 +80,16 @@ class TopRatedList {
   }
 
   _sortFilms() {
-    const result = [];
     const films = this._films.slice().sort(sortByRating);
     const maxRating = films[0].rating;
     const isRatingSame = films.every((film) => film.rating === maxRating);
     if (isRatingSame) {
+      const randomFilms = [];
       for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
         const index = getRandomInteger(0, films.length - 1);
-        result.push(...films.splice(index, 1));
+        randomFilms.push(...films.splice(index, 1));
       }
-      return result;
+      return randomFilms;
     }
     return films.slice(0, EXTRA_FILMS_COUNT);
   }

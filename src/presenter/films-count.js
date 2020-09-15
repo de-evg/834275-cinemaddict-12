@@ -1,7 +1,7 @@
 import FilmsCountView from "../view/films-count.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
-class FooterStatistic {
+class FilmsCount {
   constructor(statisticContainer, filmsModel) {
     this._statisticContainer = statisticContainer;
     this._filmsModel = filmsModel;
@@ -36,5 +36,4 @@ class FooterStatistic {
   }
 }
 
-export default FooterStatistic;
-
+export default FilmsCount;

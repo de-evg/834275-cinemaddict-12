@@ -33,7 +33,7 @@ class FilmPopup extends SmartView {
       inWatchlist,
       isWatched,
       isFavorite,
-      isControlsDisabled} = this._data;
+      isFormDisabled} = this._data;
     const releaseDate = formatReleaseDate(release, this._isFullDate);
     const filmDuration = formatDuration(duration);
     const genreElements = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`);
@@ -108,7 +108,7 @@ class FilmPopup extends SmartView {
                       name="watchlist" 
                       value="${Controls.LIST}" 
                       ${inWatchlist ? `checked` : ``}
-                      ${isControlsDisabled ? `disabled` : ``}>
+                      ${isFormDisabled ? `disabled` : ``}>
                     <label for="list" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
                     <input 
@@ -118,7 +118,7 @@ class FilmPopup extends SmartView {
                       name="watched" 
                       value="${Controls.WATCHED}" 
                       ${isWatched ? `checked` : ``}
-                      ${isControlsDisabled ? `disabled` : ``}>
+                      ${isFormDisabled ? `disabled` : ``}>
                     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
       
                     <input type="checkbox" 
@@ -127,7 +127,7 @@ class FilmPopup extends SmartView {
                       name="favorite" 
                       value="${Controls.FAVORITE}" 
                       ${isFavorite ? `checked` : ``}
-                      ${isControlsDisabled ? `disabled` : ``}>
+                      ${isFormDisabled ? `disabled` : ``}>
                     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                   </section>
                 </div>
@@ -177,7 +177,7 @@ class FilmPopup extends SmartView {
           update = {isFavorite: !this._data.isFavorite};
           break;
       }
-      this.updateData({isControlsDisabled: true,
+      this.updateData({isFormDisabled: true,
         update
       });
       update.mode = Mode.DETAILS;

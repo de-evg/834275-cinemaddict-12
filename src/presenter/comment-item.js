@@ -1,11 +1,11 @@
 import CommentView from "../view/comment.js";
 import {render, RenderPosition, remove, replace} from "../utils/render.js";
 
-class Comment {
-  constructor(commentContainer, removeData, commentModel) {
+class CommentItem {
+  constructor(commentContainer, removeData, commentsModel) {
     this._commentContainer = commentContainer;
     this._removeData = removeData;
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._comment = null;
 
     this._handelDeleteClick = this._handelDeleteClick.bind(this);
@@ -42,4 +42,4 @@ class Comment {
   }
 }
 
-export default Comment;
+export default CommentItem;

@@ -58,6 +58,12 @@ const WatchedGenre = {
 };
 
 const findTopGenre = (films) => {
+  let topGenre = ``;
+  const sortGenres = (genre) => {
+    return Object.entries(genre)
+      .sort((a, b) => b[1] - a[1]);
+  };
+
   if (films.length) {
     const generateGenreMap = () => {
       const GenreMap = {};
@@ -71,15 +77,11 @@ const findTopGenre = (films) => {
       return GenreMap;
     };
     const GenreMap = generateGenreMap();
-    const sortGenres = (genre) => {
-      return Object.entries(genre)
-        .sort((a, b) => b[1] - a[1]);
-    };
-    const topGanres = sortGenres(GenreMap);
-    return topGanres[0][0];
-  } else {
-    return ``;
+
+    const topGenres = sortGenres(GenreMap);
+    topGenre = topGenres[0][0];
   }
+  return topGenre;
 };
 
 const statisticFilter = {

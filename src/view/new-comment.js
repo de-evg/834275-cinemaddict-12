@@ -4,11 +4,11 @@ import {Emoji} from "../const.js";
 const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
 
 class NewComment extends SmartView {
-  constructor(commentModel, film) {
+  constructor(commentsModel, film) {
     super();
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._film = film;
-    this._data = NewComment.parseCommentToData(this._commentModel.getNewComment());
+    this._data = NewComment.parseCommentToData(this._commentsModel.getNewComment());
     this._data.isFormDisabled = false;
 
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
@@ -103,7 +103,7 @@ class NewComment extends SmartView {
     this.updateData({
       currentComment: newCommentText
     }, true);
-    this._commentModel.setNewComment({
+    this._commentsModel.setNewComment({
       currentComment: newCommentText,
       filmID: this._film.id,
       id: generateId().toString()
@@ -118,7 +118,7 @@ class NewComment extends SmartView {
       this.updateData({
         currentEmoji: Emoji[emojyName]
       });
-      this._commentModel.setNewComment({
+      this._commentsModel.setNewComment({
         currentEmoji: Emoji[emojyName]
       });
     }

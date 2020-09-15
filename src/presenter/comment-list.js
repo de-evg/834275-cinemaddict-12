@@ -4,11 +4,11 @@ import {UpdateType, UserAction} from "../const.js";
 import {render, createElement, RenderPosition, remove} from "../utils/render.js";
 
 class CommentList {
-  constructor(popupComponent, film, commentModel, changeData, api) {
+  constructor(popupComponent, film, commentsModel, changeData, api) {
     this._popupComponent = popupComponent;
     this._film = film;
     this._commentListContainer = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
-    this._commentModel = commentModel;
+    this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._api = api;
 
@@ -22,7 +22,7 @@ class CommentList {
     this._handleDeleteBtnClick = this._handleDeleteBtnClick.bind(this);
 
     this._comments = [];
-    this._commentModel.setComments(this._film.id, this._comments);
+    this._commentsModel.setComments(this._film.id, this._comments);
     this._loadComments();
   }
 
@@ -33,7 +33,7 @@ class CommentList {
   _loadComments() {
     this._api.getComments(this._film.id)
       .then((comments) => {
-        this._commentModel.setComments(this._film.id, comments);
+        this._commentsModel.setComments(this._film.id, comments);
         this._isLoading = false;
         this._renderCommentList();
       })
@@ -46,7 +46,7 @@ class CommentList {
 
   _renderComment(comment) {
     this._comment = comment;
-    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._commentModel);
+    const commentPresenter = new CommentPresenter(this._commentListContainer, this._handleDeleteBtnClick, this._commentsModel);
     commentPresenter.init(this._comment);
     this._commentPresenter[this._comment.id] = commentPresenter;
   }
@@ -62,7 +62,7 @@ class CommentList {
     }
     remove(this._loadingCommentsComponent);
     if (!this._onLoadCommentsError) {
-      this._comments = this._commentModel.getComments(this._film.id);
+      this._comments = this._commentsModel.getComments(this._film.id);
       this._renderComments(this._comments);
       return;
     }

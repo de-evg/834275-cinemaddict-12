@@ -1,6 +1,6 @@
 import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
-import CommentModel from "./model/comments.js";
+import CommentsModel from "./model/comments.js";
 
 import MovieListPresenter from "./presenter/movie-list.js";
 import FilterPresenter from "./presenter/filter.js";
@@ -69,13 +69,13 @@ profileRangPresenter.init();
 
 const filterModel = new FilterModel();
 
-const commentModel = new CommentModel();
+const commentsModel = new CommentsModel();
 
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel, handleSiteMenuClick);
 filterPresenter.init();
 filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
 
-const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentModel, apiWithProvider);
+const movieListPresenter = new MovieListPresenter(siteMainElement, filmsModel, filterModel, commentsModel, apiWithProvider);
 movieListPresenter.init();
 
 const statisticPresenter = new StatisticPresenter(siteMainElement, filmsModel);
