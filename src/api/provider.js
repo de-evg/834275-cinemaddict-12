@@ -1,10 +1,5 @@
 import FilmsModel from "../model/films.js";
 
-const getSyncedFilms = (items) => {
-  return items.filter(({success}) => success)
-    .map(({payload}) => payload.film);
-};
-
 const createStoreStructure = (items) => {
   return items.reduce((acc, current) => {
     return Object.assign({}, acc, {
@@ -91,9 +86,11 @@ class Provider {
 
       return this._api.sync(storeFilms)
         .then((films) => {
-          const updatedFilms = getSyncedFilms(films.updated);
-
-          this._store.setItems(updatedFilms);
+          const updatedFilms = createStoreStructure(films.updated);
+          Object.values(updatedFilms).forEach((film) => {
+            this._store.setItem(film.id, film);
+          });
+          this._store.resetUpdateStore();
           this._store.switchSyncFlagOff();
         });
     }

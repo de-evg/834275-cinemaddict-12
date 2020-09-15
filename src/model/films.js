@@ -93,11 +93,7 @@ class Films extends Observer {
           isFavorite: film.user_details.favorite,
           watchingDate: film.user_details.watching_date,
           mode: Mode.DEFAULT,
-          isFormDisabled: false,
-          commentsData: [],
-          error: {
-            onControlsChanging: false
-          }
+          isFormDisabled: false
         }
     );
 

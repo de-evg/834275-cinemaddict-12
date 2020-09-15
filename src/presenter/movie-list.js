@@ -254,6 +254,7 @@ class MovieList {
       case UserAction.CHANGE_CONTROL:
         this._api.updateFilm(update)
           .then((updatedFilm) => {
+            updatedFilm.isFormDisabled = false;
             updatedFilm.commentsData = this._commentsModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
           });
@@ -262,7 +263,7 @@ class MovieList {
         this._api.updateFilm(update)
           .then((updatedFilm) => {
             updatedFilm.mode = Mode.DETAILS;
-            updatedFilm.isFormDisabled = true;
+            updatedFilm.isFormDisabled = false;
             updatedFilm.commentsData = this._commentsModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
           });

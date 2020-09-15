@@ -48,6 +48,13 @@ class Store {
     );
   }
 
+  resetUpdateStore() {
+    this._storage.setItem(
+        this._updateKey,
+        JSON.stringify({})
+    );
+  }
+
   setItem(key, value) {
     const store = this.getItems();
 
