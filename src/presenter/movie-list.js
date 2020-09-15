@@ -1,6 +1,6 @@
 import MoviePresenter from "./movie.js";
-import TopRatedFilmListPresenter from "./top-rated-list.js";
-import MostCommentedFilmsListPresenter from "./most-commented-list.js";
+import TopRatedListPresenter from "./top-rated-list.js";
+import MostCommentedListPresenter from "./most-commented-list.js";
 
 import FilmsContainerView from "../view/films-container.js";
 import FilmListView from "../view/films-list.js";
@@ -50,8 +50,8 @@ class FilmList {
   }
 
   init() {
-    this._topRatedFilmListPresenter = new TopRatedFilmListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
-    this._mostCommentedFilmsListPresenter = new MostCommentedFilmsListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
+    this._topRatedFilmListPresenter = new TopRatedListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
+    this._mostCommentedFilmsListPresenter = new MostCommentedListPresenter(this._filmsModel, this._commentModel, this._handleViewAction, this._removeAllPopups, this._api);
 
     this._renderSort();
     this._renderFilmsContainer();
