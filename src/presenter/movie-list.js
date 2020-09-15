@@ -102,6 +102,14 @@ class FilmList {
       .forEach((presenter) => presenter.destroy());
     this._filmPresenter = {};
 
+    if (this._titleMainListComponent) {
+      remove(this._titleMainListComponent);
+    }
+
+    remove(this._loadingFilmsComponent);
+
+    remove(this._noFilmsComponent);
+
     remove(this._loadingMoreBtnComponent);
 
     this._topRatedFilmListPresenter.destroy();
@@ -150,11 +158,15 @@ class FilmList {
   }
 
   _renderTitle() {
-    if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
-      replace(this._titleMainListComponent, this._noFilmsComponent);
-      return;
-    }
-    render(this._mainMovieListComponent, this._titleMainListComponent, RenderPosition.BEFOREEND);
+    render(this._mainMovieListComponent, this._titleMainListComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderLoading() {
+    render(this._mainMovieListComponent, this._loadingFilmsComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderNoFilms() {
+    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderFilters() {
@@ -191,28 +203,12 @@ class FilmList {
       return;
     }
 
-    this._renderTitle(this._mainMovieListComponent, this._titleMainListComponent);
+    this._renderTitle();
 
     this._renderFilms(this._filmsContainer, films.slice(0, Math.min(filmsCount, this._renderedFilmCount)));
     if (films.length > this._renderedFilmCount) {
       this._renderLoadMoreBtn();
     }
-  }
-
-  _renderLoading() {
-    if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
-      replace(this._loadingFilmsComponent, this._mainMovieListComponent.querySelector(`.films-list__title`));
-      return;
-    }
-    render(this._mainMovieListComponent, this._loadingFilmsComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderNoFilms() {
-    if (this._mainMovieListComponent.getElement().querySelector(`.films-list__title`)) {
-      replace(this._noFilmsComponent, this._titleMainListComponent);
-      return;
-    }
-    render(this._mainMovieListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoadMoreBtn() {
