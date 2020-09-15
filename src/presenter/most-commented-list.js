@@ -11,7 +11,7 @@ import {Mode} from "../const.js";
 
 const EXTRA_FILMS_COUNT = 2;
 
-class MostCommentedFilmList {
+class MostCommentedList {
   constructor(filmsModel, commentModel, changeData, removeAllPopups, api) {
     this._filmsModel = filmsModel;
     this._commentModel = commentModel;
@@ -88,7 +88,7 @@ class MostCommentedFilmList {
   }
 
   _sortFilms() {
-    let result = [];
+    const result = [];
     const films = this._films.slice().sort(sortByComments);
     const maxCommentsCount = films[0].comments.length;
     const isCommentCountSame = films.every((film) => film.comments.length === maxCommentsCount);
@@ -103,4 +103,4 @@ class MostCommentedFilmList {
   }
 }
 
-export default MostCommentedFilmList;
+export default MostCommentedList;

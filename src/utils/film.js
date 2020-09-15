@@ -5,7 +5,7 @@ const formatReleaseDate = (date, isFullDate) => {
 };
 
 const formatDuration = (duration) => {
-  let hours = Math.trunc(duration / 60);
+  const hours = Math.trunc(duration / 60);
   let minutes = duration % 60;
   minutes = minutes > 10 ? minutes : `0${minutes}`;
   let time = moment(`${hours}${minutes}`, `hmm`).format(`H:mm`);
