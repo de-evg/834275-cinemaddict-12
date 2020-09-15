@@ -5,7 +5,7 @@ class StatisticFilters extends AbstractView {
   constructor(activeFilter) {
     super();
     this._activeFilter = activeFilter;
-    this._handlePeriodChange = this._handlePeriodChange.bind(this);
+    this._handlePeriodOfTimeChange = this._handlePeriodOfTimeChange.bind(this);
   }
   getTemplate() {
     return `<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -28,12 +28,12 @@ class StatisticFilters extends AbstractView {
             </form>`;
   }
 
-  setPeriodChangeHandler(callback) {
+  setPeriodOfTimeChangeHandler(callback) {
     this._callback.change = callback;
-    this.getElement().addEventListener(`change`, this._handlePeriodChange);
+    this.getElement().addEventListener(`change`, this._handlePeriodOfTimeChange);
   }
 
-  _handlePeriodChange(evt) {
+  _handlePeriodOfTimeChange(evt) {
     evt.preventDefault();
     this._callback.change(evt.target.value);
   }

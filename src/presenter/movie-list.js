@@ -257,9 +257,6 @@ class MovieList {
           .then((updatedFilm) => {
             updatedFilm.commentsData = this._commentsModel.getComments(updatedFilm.id);
             this._filmsModel.updateFilm(updateType, updatedFilm);
-          })
-          .catch(() => {
-            updatedFilm.error.onControlsChange = true;
           });
         break;
       case UserAction.CHANGE_POPUP_CONTROL:
