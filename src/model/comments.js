@@ -11,10 +11,7 @@ class Comment extends Observer {
   }
 
   getComments(filmID) {
-    if (this._comments[filmID]) {
-      return this._comments[filmID];
-    }
-    return [];
+    return this._comments[filmID];
   }
 
   getNewComment() {

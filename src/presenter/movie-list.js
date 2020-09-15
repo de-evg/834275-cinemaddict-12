@@ -107,9 +107,7 @@ class FilmList {
     }
 
     remove(this._loadingFilmsComponent);
-
     remove(this._noFilmsComponent);
-
     remove(this._loadingMoreBtnComponent);
 
     this._topRatedFilmListPresenter.destroy();
