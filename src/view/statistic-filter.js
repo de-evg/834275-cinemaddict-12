@@ -5,7 +5,7 @@ class StatisticFilter extends AbstractView {
   constructor(activeFilter) {
     super();
     this._activeFilter = activeFilter;
-    this._handleStatisticFilterChange = this._handleStatisticFilterChange.bind(this);
+    this._statisticFilterChangeHandler = this._statisticFilterChangeHandler.bind(this);
   }
   getTemplate() {
     return `<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -30,10 +30,10 @@ class StatisticFilter extends AbstractView {
 
   setStatisticFilterChangeHandler(callback) {
     this._callback.change = callback;
-    this.getElement().addEventListener(`change`, this._handleStatisticFilterChange);
+    this.getElement().addEventListener(`change`, this._statisticFilterChangeHandler);
   }
 
-  _handleStatisticFilterChange(evt) {
+  _statisticFilterChangeHandler(evt) {
     evt.preventDefault();
     this._callback.change(evt.target.value);
   }
