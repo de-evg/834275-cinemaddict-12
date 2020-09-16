@@ -1,11 +1,11 @@
 import AbstractView from "./abstract.js";
 import {StatisticFilterType} from "../const.js";
 
-class StatisticFilters extends AbstractView {
+class StatisticFilter extends AbstractView {
   constructor(activeFilter) {
     super();
     this._activeFilter = activeFilter;
-    this._handlePeriodOfTimeChange = this._handlePeriodOfTimeChange.bind(this);
+    this._handleStatisticFilterChange = this._handleStatisticFilterChange.bind(this);
   }
   getTemplate() {
     return `<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -28,15 +28,15 @@ class StatisticFilters extends AbstractView {
             </form>`;
   }
 
-  setPeriodOfTimeChangeHandler(callback) {
+  setStatisticFilterChangeHandler(callback) {
     this._callback.change = callback;
-    this.getElement().addEventListener(`change`, this._handlePeriodOfTimeChange);
+    this.getElement().addEventListener(`change`, this._handleStatisticFilterChange);
   }
 
-  _handlePeriodOfTimeChange(evt) {
+  _handleStatisticFilterChange(evt) {
     evt.preventDefault();
     this._callback.change(evt.target.value);
   }
 }
 
-export default StatisticFilters;
+export default StatisticFilter;

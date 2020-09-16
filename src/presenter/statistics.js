@@ -1,6 +1,6 @@
 import StaitsticView from "../view/statistic.js";
 import StatisticRankView from "../view/statistic-rank";
-import StatisticFiltersView from "../view/statistic-filters";
+import StatisticFiltersView from "../view/statistic-filter";
 import StatisticContentView from "../view/statistic-content";
 import StatisticChartView from "../view/statistic-chart";
 
@@ -19,7 +19,7 @@ class Statistics {
     this._statisticContainer = statisticContainer;
     this._isStatisticInit = false;
 
-    this._handlerChangePeriodOfTime = this._handlerChangePeriodOfTime.bind(this);
+    this._handleStatisticFilterChange = this._handleStatisticFilterChange.bind(this);
   }
 
   getStatisticInitStatus() {
@@ -35,7 +35,7 @@ class Statistics {
     this._statisticRankComponent = new StatisticRankView(this._rank);
     this._statisticFiltersComponent = new StatisticFiltersView(this._getStatistic(this._statisics).type);
     this._statisticChartComponent = new StatisticChartView(this._statisics);
-    this._statisticFiltersComponent.setPeriodOfTimeChangeHandler(this._handlerChangePeriodOfTime);
+    this._statisticFiltersComponent.setStatisticFilterChangeHandler(this._handleStatisticFilterChange);
     this._initContent();
     this._renderStatistics();
     this._isStatisticInit = true;
@@ -112,7 +112,7 @@ class Statistics {
     };
   }
 
-  _handlerChangePeriodOfTime(filterType) {
+  _handleStatisticFilterChange(filterType) {
     this._setStatistic(filterType);
     this._initChart();
     this._initContent();
